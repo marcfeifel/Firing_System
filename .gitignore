@@ -73,3 +73,11 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+*.bak
+Firmware/Master/uVision_Project/*.mfeifel
+Firmware/Master/uVision_Project/Listings
+Firmware/Master/uVision_Project/Objects
+
+Firmware/Slave/uVision_Project/*.mfeifel
+Firmware/Slave/uVision_Project/Listings
+Firmware/Slave/uVision_Project/Objects
