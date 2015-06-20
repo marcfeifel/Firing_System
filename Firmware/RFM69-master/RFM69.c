@@ -30,8 +30,6 @@
 // **********************************************************************************
 #include <stdio.h>
 
-#include "mf_c51_target.h"
-
 #include "RFM69.h"
 #include "RFM69registers.h"
 
@@ -49,13 +47,6 @@ static uint8_t _address;
 static bool _promiscuousMode;
 static uint8_t _powerLevel;
 static bool _isRFM69HW;
-
-#define NODEID 1
-#define NETWORKID 1
-
-void interrupts(void);
-void noInterrupts(void);
-uint32_t millis(void);
 
 static uint8_t SPI_transfer(uint8_t out)
 {   

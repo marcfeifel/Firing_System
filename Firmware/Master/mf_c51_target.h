@@ -8,19 +8,10 @@ extern "C" {
 #include "compiler_defs.h"
 #include "c8051f930_defs.h"
 
-typedef unsigned char  uint8_t;
-typedef unsigned short uint16_t;
-typedef unsigned long  uint32_t;
-typedef char  int8_t;
-typedef short int16_t;
-typedef long  int32_t;
-typedef bit bool;
+// definition for the master device
+#define NODEID 1
+#define NETWORKID 1
 
-#define HIGH 1
-#define LOW 0
-#define false 0
-#define true (!false)
-    
 /* GPIO assignments */
 SBIT(PIN_SWITCH_TEST_I, P0, 0); // Switch Input - "Test"
 SBIT(PIN_SWITCH_ARMED_I, P0, 1); // Switch Input - "Armed" 

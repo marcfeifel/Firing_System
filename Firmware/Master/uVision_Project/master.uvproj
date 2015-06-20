@@ -351,9 +351,9 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>STARTUP.A51</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\STARTUP.A51</FilePath>
+              <FileName>config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Configurator_Project\config.c</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
@@ -361,9 +361,9 @@
               <FilePath>..\main.c</FilePath>
             </File>
             <File>
-              <FileName>config.c</FileName>
+              <FileName>mf_common.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Configurator_Project\config.c</FilePath>
+              <FilePath>..\..\mf_common.c</FilePath>
             </File>
             <File>
               <FileName>retarget.c</FileName>
@@ -374,6 +374,11 @@
               <FileName>RFM69.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\RFM69-master\RFM69.c</FilePath>
+            </File>
+            <File>
+              <FileName>STARTUP.A51</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\STARTUP.A51</FilePath>
             </File>
           </Files>
         </Group>
