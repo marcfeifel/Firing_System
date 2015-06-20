@@ -1,6 +1,7 @@
-#include "mf_c51_target.h"
-
 #include <stdio.h>
+
+#include "mf_c51_target.h"
+#include "rfm69.h"
 
 typedef enum
 {
@@ -11,93 +12,7 @@ typedef enum
     
 } KEYSWITCH_STATE_t;
 
-code U8 init[] =
-{
-    0xFF, // dummy
-    0x04, // 0x01
-    0x00,
-    0x1A,
-    0x0B,
-    0x00,
-    0x52,
-    0xE4,
-    0xC0,
-    0x00,
-    0x41,
-    0x00,
-    0x02,
-    0x92,
-    0xF5,
-    0x20, // 0x0F
-    0x24,
-    0x9F,
-    0x09,
-    0x1A,
-    0x40,
-    0xB0,
-    0x7B,
-    0x9B,
-    0x08,
-    0x86,
-    0x8A,
-    0x40,
-    0x80,
-    0x06,
-    0x10,
-    0x00, // 0x1F
-    0x00,
-    0x00,
-    0x00,
-    0x02,
-    0xFF,
-    0x00,
-    0x05,
-    0x80,
-    0x00,
-    0xFF,
-    0x00,
-    0x00,
-    0x00,
-    0x03,
-    0x98,
-    0x00, // 0x2F
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x10,
-    0x40,
-    0x00,
-    0x00,
-    0x00,
-    0x0F,
-    0x02,
-    0x00,
-    0x00, // 0x3F
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x00,
-    0x01,
-    0x00 // 0x4F
-};
-
-U8 resp[sizeof(init)];
-
-
+uint32_t millis(void);
 void Init_Device(void);
 KEYSWITCH_STATE_t Get_Keyswitch_State(void);
 
@@ -116,86 +31,13 @@ void main(void)
     
     printf("Start.\r\n");
     
-    do
-    {
-        U8 i;
-        
-        // write it all
-        for (i = 1; i < 0x50; i++)
-        {
-            // set chip-select low
-            NSS0MD0 = 0;
+    printf("Pre-init.\r\n");
+    RFM69__readAllRegs();
+    RFM69_construct(true);
+    RFM69_initialize();
+    printf("Post-init.\r\n");
+    RFM69__readAllRegs();
 
-            // clear the interrupt flat
-            SPIF0 = 0;
-            
-            // write the address
-            SPI0DAT = i | 0x80;
-            
-            while (!SPIF0)
-            {
-                // wait for the xfer to complete
-            }
-            
-            // clear the interrupt flag
-            SPIF0 = 0;
-            
-            // start the transfer
-            SPI0DAT = init[i];
-            
-            while (!SPIF0)
-            {
-                // wait for the xfer to complete
-            }
-            
-            // set chip-select high
-            NSS0MD0 = 1;
-
-        } // for (registers);
-
-
-        // read it all back
-        for (i = 1; i < 0x50; i++)
-        {
-            // set chip-select low
-            NSS0MD0 = 0;
-
-            // clear the interrupt flat
-            SPIF0 = 0;
-            
-            // write the address
-            SPI0DAT = i;
-            
-            while (!SPIF0)
-            {
-                // wait for the xfer to complete
-            }
-            
-            // clear the interrupt flag
-            SPIF0 = 0;
-            
-            // start the transfer
-            SPI0DAT = 0;
-            
-            while (!SPIF0)
-            {
-                // wait for the xfer to complete
-            }
-            
-            resp[i] = SPI0DAT;
-            
-            // set chip-select high
-            NSS0MD0 = 1;
-
-        } // for (registers);
-
-        for (i = 1; i < 0x50; i++)
-        {
-            // print it
-            printf("Reg: 0x%02X = 0x%02X, Expected 0x%02X\r\n", (U16)i, (U16)resp[i], (U16)init[i]);
-        }
-    } while (0);
-    
     while (1)
     {
         // get the current 
@@ -273,3 +115,70 @@ KEYSWITCH_STATE_t Get_Keyswitch_State(void)
     return state;
     
 } // Get_Keyswitch_State()
+
+static volatile uint32_t _millis = 0;
+
+uint32_t millis(void)
+{
+    // this is not atomic, so need to disable interrupts
+    
+    // will store the count
+    uint32_t millis = 0;
+
+    // store the previous interrupt-enable state
+    bit old_ET2 = ET2;
+    
+    // disable interrupt
+    ET2 = 0;
+    
+    // get the count
+    millis = _millis;
+    
+    // restore the interrupt enable
+    ET2 = old_ET2;
+    
+    // return the count
+    return millis;
+}
+
+static volatile bit RFM69_DIO0_last = LOW;
+static volatile bit RFM69_ISR_Enabled = false;
+static volatile bit RFM69_ISR_Pending = false;
+INTERRUPT(timer0_ISR, INTERRUPT_TIMER2)
+{
+    // get this bit
+    bit RFM69_DIO0_this = PIN_RFM69HW_DIO0_I;
+    
+    // clear the flag
+    TF2H = 0;
+    
+    // increment
+    _millis++;
+
+    // if was low and now is high, then ISR is pending
+    if (!RFM69_DIO0_last && RFM69_DIO0_this)
+    {
+        RFM69_ISR_Pending = true;
+    }
+    RFM69_DIO0_last = RFM69_DIO0_this;
+
+    // if ISR is enabled and ISR is pending, call handler
+    if (RFM69_ISR_Enabled && RFM69_ISR_Pending)
+    {
+        RFM69_interruptHandler();
+        
+        RFM69_ISR_Pending = false;
+    }
+        
+}
+
+void Interrupts(void)
+{
+    RFM69_ISR_Enabled = 1;
+}
+
+void noInterrupts(void)
+{
+    RFM69_ISR_Enabled = 0;
+}
+

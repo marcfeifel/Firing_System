@@ -18,6 +18,11 @@ void Timer_Init()
     TCON      = 0x40;
     TMOD      = 0x20;
     TH1       = 0x96;
+    TMR2CN    = 0x04;
+    TMR2RLL   = 0x06;
+    TMR2RLH   = 0xF8;
+    TMR2L     = 0x06;
+    TMR2H     = 0xF8;
 }
 
 void UART_Init()
@@ -73,13 +78,18 @@ void Port_IO_Init()
 
 void Oscillator_Init()
 {
-    U8 i;
+    char i;
     
     FLSCL     = 0x40;
     REG0CN    |= 0x10;  // Enable OSCBIAS bit in voltage regulator
     for (i = 0; i < 14; i++);  // Wait 4us before enabling oscillator
     OSCICN    |= 0x8F;
     CLKSEL    = 0x00;
+}
+
+void Interrupts_Init()
+{
+    IE        = 0xA0;
 }
 
 // Initialization function for device,
@@ -92,4 +102,5 @@ void Init_Device(void)
     SPI_Init();
     Port_IO_Init();
     Oscillator_Init();
+    Interrupts_Init();
 }
