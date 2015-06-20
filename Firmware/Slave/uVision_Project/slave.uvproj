@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Master</TargetName>
+      <TargetName>Slave</TargetName>
       <ToolsetNumber>0x0</ToolsetNumber>
       <ToolsetName>MCS-51</ToolsetName>
       <TargetOption>
@@ -44,7 +44,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>master</OutputName>
+          <OutputName>slave</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -160,7 +160,7 @@
         <Utilities>
           <Flash1>
             <UseTargetDll>0</UseTargetDll>
-            <UseExternalTool>1</UseExternalTool>
+            <UseExternalTool>0</UseExternalTool>
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
@@ -373,7 +373,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Master</GroupName>
+          <GroupName>Slave</GroupName>
           <Files>
             <File>
               <FileName>config.c</FileName>
