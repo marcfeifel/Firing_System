@@ -15,19 +15,11 @@ void PCA_Init()
 
 void Timer_Init()
 {
-    TCON      = 0x40;
-    TMOD      = 0x20;
-    TH1       = 0x96;
     TMR2CN    = 0x04;
     TMR2RLL   = 0x06;
     TMR2RLH   = 0xF8;
     TMR2L     = 0x06;
     TMR2H     = 0xF8;
-}
-
-void UART_Init()
-{
-    SCON0     = 0x10;
 }
 
 void SPI_Init()
@@ -39,12 +31,12 @@ void SPI_Init()
 
 void Port_IO_Init()
 {
-    // P0.0  -  Skipped,     Open-Drain, Digital
-    // P0.1  -  Skipped,     Open-Drain, Digital
-    // P0.2  -  Skipped,     Open-Drain, Digital
-    // P0.3  -  Skipped,     Open-Drain, Digital
-    // P0.4  -  TX0 (UART0), Push-Pull,  Digital
-    // P0.5  -  RX0 (UART0), Open-Drain, Digital
+    // P0.0  -  Skipped,     Push-Pull,  Digital
+    // P0.1  -  Skipped,     Push-Pull,  Digital
+    // P0.2  -  Skipped,     Push-Pull,  Digital
+    // P0.3  -  Skipped,     Push-Pull,  Digital
+    // P0.4  -  Skipped,     Push-Pull,  Digital
+    // P0.5  -  Skipped,     Push-Pull,  Digital
     // P0.6  -  Skipped,     Push-Pull,  Digital
     // P0.7  -  Skipped,     Open-Drain, Digital
 
@@ -59,20 +51,20 @@ void Port_IO_Init()
 
     // P2.0  -  MOSI (SPI0), Push-Pull,  Digital
     // P2.1  -  NSS  (SPI0), Push-Pull,  Digital
-    // P2.2  -  Unassigned,  Open-Drain, Digital
-    // P2.3  -  Unassigned,  Open-Drain, Digital
-    // P2.4  -  Unassigned,  Open-Drain, Digital
+    // P2.2  -  Skipped,     Push-Pull,  Digital
+    // P2.3  -  Skipped,     Push-Pull,  Digital
+    // P2.4  -  Skipped,     Open-Drain, Digital
     // P2.5  -  Skipped,     Push-Pull,  Digital
-    // P2.6  -  Unassigned,  Open-Drain, Digital
+    // P2.6  -  Skipped,     Push-Pull,  Digital
     // P2.7  -  Skipped,     Open-Drain, Digital
 
-    P0MDOUT   = 0x50;
+    P0MDOUT   = 0x7F;
     P1MDOUT   = 0x40;
-    P2MDOUT   = 0x23;
-    P0SKIP    = 0xCF;
+    P2MDOUT   = 0x6F;
+    P0SKIP    = 0xFF;
     P1SKIP    = 0x3F;
-    P2SKIP    = 0xA0;
-    XBR0      = 0x03;
+    P2SKIP    = 0xFC;
+    XBR0      = 0x02;
     XBR2      = 0x40;
 }
 
@@ -98,7 +90,6 @@ void Init_Device(void)
 {
     PCA_Init();
     Timer_Init();
-    UART_Init();
     SPI_Init();
     Port_IO_Init();
     Oscillator_Init();

@@ -16,19 +16,19 @@ typedef bit bool;
 #define false 0
 #define true (!false)
 
-typedef enum
-{
-    KEYSWITCH_STATE_OFF,
-    KEYSWITCH_STATE_ARMED,
-    KEYSWITCH_STATE_TEST,
-    KEYSWITCH_STATE_FAULT,
-    
-} KEYSWITCH_STATE_t;
+#define BIT0 0x01
+#define BIT1 0x02
+#define BIT2 0x04
+#define BIT3 0x08
+#define BIT4 0x10
+#define BIT5 0x20
+#define BIT6 0x40
+#define BIT7 0x80
 
 void Init_Device(void);
-KEYSWITCH_STATE_t Get_Keyswitch_State(void);
 void interrupts(void);
 void noInterrupts(void);
 uint32_t millis(void);
+void Sleep(uint32_t millis);
 
 #endif // MF_COMMON_H_INCLUDED

@@ -3,6 +3,17 @@
 #include "mf_common.h"
 #include "rfm69.h"
 
+typedef enum
+{
+    KEYSWITCH_STATE_OFF,
+    KEYSWITCH_STATE_ARMED,
+    KEYSWITCH_STATE_TEST,
+    KEYSWITCH_STATE_FAULT,
+    
+} KEYSWITCH_STATE_t;
+
+KEYSWITCH_STATE_t Get_Keyswitch_State(void);
+
 void main(void)
 {
     KEYSWITCH_STATE_t keyswitch_state_prev = KEYSWITCH_STATE_FAULT;
@@ -63,3 +74,43 @@ void main(void)
         }
     }
 } // main()
+
+
+// read the key-switch inputs and interpret
+KEYSWITCH_STATE_t Get_Keyswitch_State(void)
+{
+    // get the state of the pins
+    const bit pin_armed = PIN_SWITCH_ARMED_I;
+    const bit pin_test = PIN_SWITCH_TEST_I;
+    
+    // assume a faulted state
+    KEYSWITCH_STATE_t state = KEYSWITCH_STATE_FAULT;
+    
+    if (!pin_armed && !pin_test)
+    {
+        // both pins low
+        state = KEYSWITCH_STATE_OFF;
+        
+    }
+    else if (pin_armed && !pin_test)
+    {
+        // armed high, test low
+        state = KEYSWITCH_STATE_ARMED;
+        
+    }
+    else if (!pin_armed && pin_test)
+    {
+        // armed low, test high
+        state = KEYSWITCH_STATE_TEST;
+        
+    }
+    else
+    {
+        // both pins high
+        // do nothing - already assumed faulted state
+    } // if (switch pins)
+    
+    // return the state
+    return state;
+    
+} // Get_Keyswitch_State()

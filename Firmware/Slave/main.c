@@ -1,65 +1,69 @@
-#include <stdio.h>
-
 #include "mf_common.h"
 #include "rfm69.h"
 
+void Cue_Select(uint8_t socket, uint8_t cue);
+bool Cue_Is_Present(void);
+void Cue_Fire(void);
+
 void main(void)
 {
-    KEYSWITCH_STATE_t keyswitch_state_prev = KEYSWITCH_STATE_FAULT;
-    
     Init_Device();
     
     // put the HopeRF into reset
     PIN_RFM69HW_RST_O = 1;
     PIN_RFM69HW_RST_O = 0;
     
-    // clear the CTS signal so the FTDI will transmit
-    PIN_UART_RTS_O = 0;
-    
-    printf("Start.\r\n");
-    
-    printf("Pre-init.\r\n");
-    RFM69__readAllRegs();
     RFM69_construct(true);
     RFM69_initialize();
-    printf("Post-init.\r\n");
-    RFM69__readAllRegs();
 
     while (1)
     {
-        // get the current 
-        const KEYSWITCH_STATE_t keyswitch_state_this = Get_Keyswitch_State();
-
-        if (keyswitch_state_this != keyswitch_state_prev)
+/*        uint8_t i = 0;
+        for (i = 1; i < 2; i++)
         {
-            switch (keyswitch_state_this)
+            uint8_t j;
+            for (j = 0; j < 16; j++)
             {
-                case KEYSWITCH_STATE_OFF:
-                    printf("Keyswitch: Off\r\n");
-                    break;
+                Cue_Select(i, j);
+        
+                Sleep(10);
                 
-                case KEYSWITCH_STATE_TEST:
-                    printf("Keyswitch: Test\r\n");
-                    break;
-                
-                case KEYSWITCH_STATE_ARMED:
-                    printf("Keyswitch: Armed\r\n");
-                    break;
-                
-                case KEYSWITCH_STATE_FAULT:
-                default:
-                    printf("Keyswitch: Fault\r\n");
-                    break;
-                
-            } // switch (mode change)
-            
-            // store it for next time
-            keyswitch_state_prev = keyswitch_state_this;
-            
+                if (Cue_Is_Present())
+                {
+                    Sleep(10);
+                }
+                else
+                {
+                    // do nothing
+                }
+            }
         }
-        else
-        {
-            // do nothing
-        }
+        Cue_Select(0, 0);*/
     }
 } // main()
+
+
+void Cue_Select(uint8_t socket, uint8_t cue)
+{
+    PIN_ADDRESS_CUEb0_O = cue & BIT0 ? 1 : 0;
+    PIN_ADDRESS_CUEb1_O = cue & BIT1 ? 1 : 0;
+    PIN_ADDRESS_CUEb2_O = cue & BIT2 ? 1 : 0;
+    PIN_ADDRESS_CUEb3_O = cue & BIT3 ? 1 : 0;
+    
+    PIN_ADDRESS_SOCKb0_O = socket & BIT0 ? 1 : 0;
+    PIN_ADDRESS_SOCKb1_O = socket & BIT1 ? 1 : 0;
+    PIN_ADDRESS_SOCKb2_O = socket & BIT2 ? 1 : 0;
+    
+} // Cue_Select()
+
+
+bool Cue_Is_Present(void)
+{
+    return PIN_CUE_PRESENT_I;
+    
+} // Cur_Is_Present()
+
+
+void Cue_Fire(void)
+{
+} // Cue_Fire()
