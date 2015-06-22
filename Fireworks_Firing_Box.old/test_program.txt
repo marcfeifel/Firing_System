@@ -1,0 +1,8 @@
+SelectTime(ms):	10
+FireTime(ms):	100
+
+Socket: 1	Queue: 1	Delay(ms): 0		Description: The_Description_Must_Not
+Socket: 1	Queue: 2	Delay(ms): 1000		Description: Have_Any_Blank_Spaces
+Socket: 1	Queue: 3	Delay(ms): 500		Description: Use_The_Underscore_Instead
+Socket: 1	Queue: 4	Delay(ms): 1500		Description: Test_Item_4
+Socket: 1	Queue: 5	Delay(ms): 0		Description: Test_Item_5
