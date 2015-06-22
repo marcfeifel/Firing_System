@@ -5,6 +5,11 @@ void Cue_Select(uint8_t socket, uint8_t cue);
 bool Cue_Is_Present(void);
 void Cue_Fire(void);
 
+#define NUM_SOCKETS 8
+#define NUM_CUES    16
+
+static xdata uint8_t cues[NUM_SOCKETS][NUM_CUES] = { 0 };
+
 void main(void)
 {
     Init_Device();
@@ -12,25 +17,44 @@ void main(void)
     // put the HopeRF into reset
     PIN_RFM69HW_RST_O = 1;
     PIN_RFM69HW_RST_O = 0;
+
+    {
+        uint8_t i = 0;
+        
+        // take the ripple-counters out of reset
+        PIN_COUNTER_CLEAR_O = 1;
+        Sleep(5);
+        PIN_COUNTER_CLEAR_O = 0;
+        Sleep(5);
+        
+        for (i = 0; i < 8; i++)
+        {
+            PIN_TEST_CLK_O = 1;
+            Sleep(5);
+            PIN_TEST_CLK_O = 0;
+            Sleep(5);
+        }
+    }        
     
     RFM69_construct(true);
     RFM69_initialize();
 
     while (1)
     {
-/*        uint8_t i = 0;
-        for (i = 1; i < 2; i++)
+        
+        uint8_t socket = 0;
+        for (socket = 0; socket < NUM_SOCKETS; socket++)
         {
-            uint8_t j;
-            for (j = 0; j < 16; j++)
+            uint8_t cue;
+            for (cue = 0; cue < NUM_CUES; cue++)
             {
-                Cue_Select(i, j);
+                Cue_Select(socket, cue);
         
                 Sleep(10);
                 
                 if (Cue_Is_Present())
                 {
-                    Sleep(10);
+                    cues[socket][cue] = 1;
                 }
                 else
                 {
@@ -38,7 +62,6 @@ void main(void)
                 }
             }
         }
-        Cue_Select(0, 0);*/
     }
 } // main()
 

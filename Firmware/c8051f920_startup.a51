@@ -35,7 +35,7 @@ XDATASTART      EQU     0
 ;
 ; <o> XDATALEN: XDATA memory size <0x0-0xFFFF> 
 ;     <i> The length of XDATA memory in bytes.
-XDATALEN        EQU     0      
+XDATALEN        EQU     4096      
 ;
 ; <o> PDATASTART: PDATA memory start address <0x0-0xFFFF> 
 ;     <i> The absolute start address of PDATA memory
@@ -109,6 +109,7 @@ B       DATA    0F0H
 SP      DATA    81H
 DPL     DATA    82H
 DPH     DATA    83H
+PCA0MD  DATA    0D9H; used to disable the watchdog
 
                 NAME    ?C_STARTUP
 
@@ -128,6 +129,9 @@ DPH     DATA    83H
                 RSEG    ?C_C51STARTUP
 
 STARTUP1:
+                ; disable the watchdog
+                ANL     PCA0MD,#0xBF; PCA0MD &= ~0x40;
+                MOV     PCA0MD,#0x00; PCA0MD = 0x00;
 
 IF IDATALEN <> 0
                 MOV     R0,#IDATALEN - 1

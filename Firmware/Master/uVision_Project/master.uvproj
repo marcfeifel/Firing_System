@@ -351,6 +351,11 @@
           <GroupName>Common</GroupName>
           <Files>
             <File>
+              <FileName>c8051f920_startup.a51</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\c8051f920_startup.a51</FilePath>
+            </File>
+            <File>
               <FileName>mf_common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\mf_common.c</FilePath>
@@ -364,11 +369,6 @@
               <FileName>RFM69.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\RFM69-master\RFM69.c</FilePath>
-            </File>
-            <File>
-              <FileName>STARTUP.A51</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\STARTUP.A51</FilePath>
             </File>
           </Files>
         </Group>
