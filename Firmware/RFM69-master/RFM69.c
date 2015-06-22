@@ -128,6 +128,14 @@ bool RFM69_initialize(/*uint8_t freqBand, uint8_t nodeID, uint8_t networkID*/)
     {255, 0}
   };
 
+  // put the HopeRF into reset
+  PIN_RFM69HW_RST_O = 1;
+  Sleep(100);
+
+  // take the HopeRF out of reset
+  PIN_RFM69HW_RST_O = 0;
+  Sleep(100);
+
   do RFM69_writeReg(REG_SYNCVALUE1, 0xAA); while (RFM69_readReg(REG_SYNCVALUE1) != 0xAA);
   do RFM69_writeReg(REG_SYNCVALUE1, 0x55); while (RFM69_readReg(REG_SYNCVALUE1) != 0x55);
 

@@ -16,26 +16,21 @@ KEYSWITCH_STATE_t Get_Keyswitch_State(void);
 
 void main(void)
 {
+    // will store the keyswitch state
     KEYSWITCH_STATE_t keyswitch_state_prev = KEYSWITCH_STATE_FAULT;
     
+    // initialize the C8051F920
     Init_Device();
-    
-    // put the HopeRF into reset
-    PIN_RFM69HW_RST_O = 1;
-    PIN_RFM69HW_RST_O = 0;
-    
     // clear the CTS signal so the FTDI will transmit
     PIN_UART_RTS_O = 0;
     
     printf("Start.\r\n");
-    
-    printf("Pre-init.\r\n");
-    RFM69__readAllRegs();
+
+    // initialize the HopeRF radio
     RFM69_construct(true);
     RFM69_initialize();
-    printf("Post-init.\r\n");
-    RFM69__readAllRegs();
 
+    printf("Super loop started.\r\n");
     while (1)
     {
         // get the current 
