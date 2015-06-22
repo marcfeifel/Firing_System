@@ -8,8 +8,8 @@ extern "C" {
 #include "compiler_defs.h"
 #include "c8051f930_defs.h"
 
-// definition for the master device
-#define NODEID 1
+// definition for the slave device
+#define NODEID    NODEID_REMOTE0
 #define NETWORKID 1
 
 /* GPIO assignments */
@@ -20,7 +20,7 @@ SBIT(PIN_ADDRESS_CUEb3_O,  P0, 3); // Cue select bit 3 ("Row" select bit 1)
 SBIT(PIN_ADDRESS_SOCKb0_O, P0, 4); // Socket select bit 0
 SBIT(PIN_ADDRESS_SOCKb1_O, P0, 5); // Socket select bit 1
 SBIT(PIN_ADDRESS_SOCKb2_O, P0, 6); // Socket select bit 2
-SBIT(PIN_CUE_PRESENT_I,    P0, 7); // High if Cue is populated
+SBIT(PIN_CUE_EMPTY_I,      P0, 7); // High if Cue is empty
 
 SBIT(PIN_RFM69HW_DIO0_I,   P1, 0); // RFM69HW DIO0
 SBIT(PIN_RFM69HW_DIO1_I,   P1, 1); // RFM69HW DIO1

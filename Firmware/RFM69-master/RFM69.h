@@ -80,6 +80,12 @@ void RFM69_sleep();
 uint8_t RFM69_readTemperature(uint8_t calFactor/*=0*/); // get CMOS temperature (8bit)
 void RFM69_rcCalibration(); // calibrate the internal RC oscillator for use in wide temperature variations - see datasheet section [4.3.5. RC Timer Accuracy]
 
+uint8_t const * RFM69_getDataPtr(void);
+uint8_t RFM69_getDataLen(void);
+uint8_t RFM69_getSenderID(void);
+uint8_t RFM69_getTargetID(void);
+uint16_t RFM69_getRSSI(void);
+
 // allow hacking registers by making these public
 uint8_t RFM69_readReg(uint8_t addr);
 void RFM69_writeReg(uint8_t addr, uint8_t val);

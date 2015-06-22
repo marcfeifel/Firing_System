@@ -16,6 +16,8 @@ KEYSWITCH_STATE_t Get_Keyswitch_State(void);
 
 void main(void)
 {
+    uint32_t ping_timer = 0;
+    
     // will store the keyswitch state
     KEYSWITCH_STATE_t keyswitch_state_prev = KEYSWITCH_STATE_FAULT;
     
@@ -29,8 +31,11 @@ void main(void)
     // initialize the HopeRF radio
     RFM69_construct(true);
     RFM69_initialize();
-
+    
     printf("Super loop started.\r\n");
+    
+    ping_timer = millis() + 1000;
+    
     while (1)
     {
         // get the current 
@@ -67,6 +72,22 @@ void main(void)
         {
             // do nothing
         }
+        
+        if (ping_timer < millis())
+        {
+            uint16_t response_time_ms = 0;
+            uint16_t rssi = 0;
+            
+            ping_timer += 2000;
+            
+            printf("Ping... ");
+            if (Ping(NODEID_REMOTE0, 1000, &response_time_ms, &rssi))
+                printf("Pong time: %3dms, RSSI: %3ddBm\r\n", response_time_ms, rssi);
+            else
+                printf("<silence>\r\n");
+
+        }
+        
     }
 } // main()
 

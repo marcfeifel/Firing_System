@@ -64,6 +64,41 @@ static uint8_t SPI_transfer(uint8_t out)
   return SPI0DAT;
 }
 
+
+uint8_t const * RFM69_getDataPtr(void)
+{
+    return DATA;
+    
+}
+
+
+uint8_t RFM69_getDataLen(void)
+{
+    return DATALEN;
+    
+}
+
+
+uint8_t RFM69_getSenderID(void)
+{
+    return SENDERID;
+    
+}
+
+
+uint8_t RFM69_getTargetID(void)
+{
+    return TARGETID;
+    
+}
+
+
+uint16_t RFM69_getRSSI(void)
+{
+    return RSSI;
+    
+}
+
 void RFM69_sendFrame(uint8_t toAddress, const void* buffer, uint8_t size, bool requestACK/*=false*/, bool sendACK/*=false*/);
 
 void RFM69_receiveBegin();
@@ -94,9 +129,9 @@ bool RFM69_initialize(/*uint8_t freqBand, uint8_t nodeID, uint8_t networkID*/)
 //    /* 0x07 */ { REG_FRFMSB, (uint8_t) (freqBand==RF69_315MHZ ? RF_FRFMSB_315 : (freqBand==RF69_433MHZ ? RF_FRFMSB_433 : (freqBand==RF69_868MHZ ? RF_FRFMSB_868 : RF_FRFMSB_915))) },
 //    /* 0x08 */ { REG_FRFMID, (uint8_t) (freqBand==RF69_315MHZ ? RF_FRFMID_315 : (freqBand==RF69_433MHZ ? RF_FRFMID_433 : (freqBand==RF69_868MHZ ? RF_FRFMID_868 : RF_FRFMID_915))) },
 //    /* 0x09 */ { REG_FRFLSB, (uint8_t) (freqBand==RF69_315MHZ ? RF_FRFLSB_315 : (freqBand==RF69_433MHZ ? RF_FRFLSB_433 : (freqBand==RF69_868MHZ ? RF_FRFLSB_868 : RF_FRFLSB_915))) },
-    /* 0x07 */ { REG_FRFMSB, (uint8_t) RF_FRFMSB_315 },
-    /* 0x08 */ { REG_FRFMID, (uint8_t) RF_FRFMID_315 },
-    /* 0x09 */ { REG_FRFLSB, (uint8_t) RF_FRFLSB_315 },
+    /* 0x07 */ { REG_FRFMSB, (uint8_t) RF_FRFMSB_433 },
+    /* 0x08 */ { REG_FRFMID, (uint8_t) RF_FRFMID_433 },
+    /* 0x09 */ { REG_FRFLSB, (uint8_t) RF_FRFLSB_433 },
 
     // looks like PA1 and PA2 are not implemented on RFM69W, hence the max output power is 13dBm
     // +17dBm and +20dBm are possible on RFM69HW
