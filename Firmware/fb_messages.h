@@ -8,6 +8,17 @@ typedef enum
     FB_MSG_PING,
     FB_MSG_PONG,
     
+    FB_MSG_ACK,
+    FB_MSG_NACK,
+    
+    FB_MSG_CMD_SCAN_ALL_CUES, 
+    FB_MSG_RESP_SCAN_ALL_CUES,
+    
+    FB_MSG_CMD_FIRE_CUE,
+    FB_MSG_RESP_FIRE_CUE,
+    
+    FB_MSG_CUE_FIRED,
+    
     FB_MSG_NUM_OF
     
 } FB_MSG_ID_ENUM_t;
@@ -15,13 +26,17 @@ typedef enum
 
 typedef struct
 {
-    uint8_t dummy;
+    FB_MSG_ID_ENUM_t id;
     
-} FB_MSG_EMPTY_t;
+    int16_t         rssi;
+    
+} FB_MSG_BASE_t;
 
 
 typedef struct
 {
+    FB_MSG_BASE_t   base;
+
     CUE_ENUM_t      cue;
     
     SOCKET_ENUM_t   socket;
@@ -30,27 +45,29 @@ typedef struct
 
 
 // ping and pong
-typedef FB_MSG_EMPTY_t FB_MSG_PING_t;
-typedef FB_MSG_EMPTY_t FB_MSG_PONG_t;
+typedef FB_MSG_BASE_t FB_MSG_PING_t;
+typedef FB_MSG_BASE_t FB_MSG_PONG_t;
 
 // ack and nack
-typedef FB_MSG_EMPTY_t FB_MSG_ACK_t;
-typedef FB_MSG_EMPTY_t FB_MSG_NACK_t;
+typedef FB_MSG_BASE_t FB_MSG_ACK_t;
+typedef FB_MSG_BASE_t FB_MSG_NACK_t;
 
 // arm the system
-typedef FB_MSG_EMPTY_t FB_CMD_SYS_ARM_t;  // command the system to arm
-typedef FB_MSG_EMPTY_t FB_RESP_SYS_ARM_t; // response request confirmation
-typedef FB_MSG_EMPTY_t FB_CONF_SYS_ARM_t; // confirmation of command to arm
-typedef FB_MSG_EMPTY_t FB_SYS_ARMED_t;    // system is armed
+typedef FB_MSG_BASE_t FB_CMD_SYS_ARM_t;  // command the system to arm
+typedef FB_MSG_BASE_t FB_RESP_SYS_ARM_t; // response request confirmation
+typedef FB_MSG_BASE_t FB_CONF_SYS_ARM_t; // confirmation of command to arm
+typedef FB_MSG_BASE_t FB_SYS_ARMED_t;    // system is armed
 
 // disarm the system
-typedef FB_MSG_EMPTY_t FB_CMD_SYS_DISARM_t;
-typedef FB_MSG_EMPTY_t FB_RESP_SYS_DISARM_t;
+typedef FB_MSG_BASE_t FB_CMD_SYS_DISARM_t;
+typedef FB_MSG_BASE_t FB_RESP_SYS_DISARM_t;
 
 // scan all cues and response
-typedef FB_MSG_EMPTY_t FB_MSG_CMD_SCAN_ALL_CUES_t;
+typedef FB_MSG_BASE_t FB_MSG_CMD_SCAN_ALL_CUES_t;
 typedef struct 
 {
+    FB_MSG_BASE_t   base;
+
     REMOTE_CUES_t   cues_present;
     
 } FB_MSG_RESP_SCAN_ALL_CUES_t;
@@ -72,6 +89,8 @@ typedef FB_MSG_CUE_t FB_MSG_CUE_FIRED_t;
 // the time was set correctly
 typedef struct
 {
+    FB_MSG_BASE_t   base;
+
     uint32_t        time_ms;
     
 } FB_MSG_KEEP_ALIVE_t, FB_MSG_CMD_SET_TIME_t, FB_MSG_RESP_SET_TIME_t;
@@ -83,7 +102,7 @@ typedef struct _FB_MSG_XMIT_DESCRIPTOR
     
     uint8_t         payload_size;
     
-    void    const * payload;
+    void const    * payload;
     
     uint8_t         transmit_complete;
     
@@ -99,7 +118,7 @@ bool Msg_Is_For_Me(void);
 uint8_t Msg_Get_Sender(void);
 uint8_t Msg_Get_Payload_Size(void);
 void const * Msg_Get_Payload_Ptr(void);
-uint16_t Msg_Get_Sender_RSSI(void);
+int16_t Msg_Get_RSSI(void);
 void Msg_Enqueue_for_Xmit(uint8_t dest, void const * payload, uint8_t payload_size, FB_MSG_XMIT_DESCRIPTOR * p_message);
 bool Msg_Xmit_Is_Complete(FB_MSG_XMIT_DESCRIPTOR const * p_message);
 

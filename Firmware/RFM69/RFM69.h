@@ -84,7 +84,7 @@ uint8_t const * RFM69_getDataPtr(void);
 uint8_t RFM69_getDataLen(void);
 uint8_t RFM69_getSenderID(void);
 uint8_t RFM69_getTargetID(void);
-uint16_t RFM69_getRSSI(void);
+int16_t RFM69_getRSSI(void);
 
 // allow hacking registers by making these public
 uint8_t RFM69_readReg(uint8_t addr);

@@ -93,7 +93,7 @@ uint8_t RFM69_getTargetID(void)
 }
 
 
-uint16_t RFM69_getRSSI(void)
+int16_t RFM69_getRSSI(void)
 {
     return RSSI;
     

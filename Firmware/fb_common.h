@@ -5,9 +5,9 @@
 
 #define NODEID_MASTER  2
 #define NODEID_REMOTE0 3
-#define NODEID_REMOTE1 4
-#define NODEID_REMOTE2 5
-#define NODEID_REMOTE3 6
+//#define NODEID_REMOTE1 4
+//#define NODEID_REMOTE2 5
+//#define NODEID_REMOTE3 6
 
 typedef unsigned char  uint8_t;
 typedef unsigned short uint16_t;
@@ -87,6 +87,8 @@ typedef struct
 
 
 void Init_Device(void);
+
+char _kbhit(void);
 
 void interrupts(void);
 void noInterrupts(void);

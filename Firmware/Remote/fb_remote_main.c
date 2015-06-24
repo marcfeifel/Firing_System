@@ -3,9 +3,21 @@
 #include "fb_messages.h"
 #include "fb_common.h"
 #include "rfm69.h"
+#include "fb_tasks.h"
 
 #define CLOCKS_TO_TEST 8
 #define CLOCKS_TO_FIRE 8
+
+typedef enum
+{
+    FB_STATE_DISARMED,
+    FB_STATE_RECEIVED_ARM_CMD,
+    FB_STATE_SENDING_ARM_RESP,
+    FB_STATE_WAITING_FOR_ARM_CONF,
+    FB_STATE_SENDING_ARMED_CONF,
+    FB_STATE_ARMED
+    
+} FB_REMOTE_STATES_ARMING_t;
 
 void FireTest_Clear(void);
 void FireTest_Assert_Fire(void);
@@ -17,8 +29,7 @@ void Cue_Fire(void);
 void Cue_Scan_All(REMOTE_CUES_t * p_remote);
 
 static REMOTE_CUES_t cues_present = { 0 };
-
-static bool system_is_armed = true;
+static FB_REMOTE_STATES_ARMING_t system_state = FB_STATE_DISARMED;
 
 void main(void)
 {
@@ -38,14 +49,85 @@ void main(void)
     {
         // process any incoming and outgoing messages
         Msg_Run();
-        
-        // message received?
+/*
+#if 1 
+        Task_Scan_Cues();
+        Task_Ping();
+        Task_Pong();
+        Task_Arming();
+        Task_Scan_Cues();
+        Task_Run_Program();
+#else        
+        Task_Echo();
+#endif // 0*/
         if (Msg_Received())
         {
-            // do stuff with it
-            Msg_Enqueue_for_Xmit(Msg_Get_Sender(), Msg_Get_Payload_Ptr(), Msg_Get_Payload_Size(), &msg);
+            const FB_MSG_BASE_t * payload = Msg_Get_Payload_Ptr();
             
-        }
+            switch (payload->id)
+            {
+                case FB_MSG_PING:
+                    {
+                        static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
+                        static FB_MSG_PONG_t               msg_pong = {0};
+                       
+                        msg_pong.id = FB_MSG_PONG;
+                        msg_pong.rssi = Msg_Get_RSSI();
+                        Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_pong, sizeof(msg_pong), &msg_descriptor);
+                       
+                    }
+                    break;
+                case FB_MSG_PONG:
+                    {
+                        // do something about receiving a pong
+                    }
+                    break;
+                case FB_MSG_ACK:
+                    break;
+                case FB_MSG_NACK:
+                    break;
+                case FB_MSG_CMD_SCAN_ALL_CUES:
+                    {
+                        static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
+                        static FB_MSG_RESP_SCAN_ALL_CUES_t msg_report = {0};
+                        
+                        Cue_Scan_All(&msg_report.cues_present);
+                        
+                        msg_report.base.id = FB_MSG_RESP_SCAN_ALL_CUES;
+                        msg_report.base.rssi = Msg_Get_RSSI();
+                        Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_report, sizeof(msg_report), &msg_descriptor);
+                        
+                    }
+                    break;
+                case FB_MSG_CMD_FIRE_CUE:
+                    {
+                        const FB_MSG_CMD_FIRE_CUE_t * fire_cue_cmd = (FB_MSG_CMD_FIRE_CUE_t*)payload;
+                        
+                        FireTest_Clear();
+                        Cue_Select(fire_cue_cmd->socket, fire_cue_cmd->cue);
+                        FireTest_Assert_Test();
+                        FireTest_Assert_Fire();
+                        Sleep(100);
+                        FireTest_Clear();
+                        
+                        {
+                            static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
+                            static FB_MSG_CUE_FIRED_t          msg_cue_fired = {0};
+                           
+                            msg_cue_fired.base.id   = FB_MSG_CUE_FIRED;
+                            msg_cue_fired.base.rssi = Msg_Get_RSSI();
+                            msg_cue_fired.socket = fire_cue_cmd->socket;
+                            msg_cue_fired.cue    = fire_cue_cmd->cue;
+                            Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_cue_fired, sizeof(msg_cue_fired), &msg_descriptor);
+                           
+                        }
+                        
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }   
     } // while (true)
 } // main()
 
@@ -70,7 +152,8 @@ void FireTest_Clear(void)
 
 void FireTest_Assert_Fire(void)
 {
-    if (system_is_armed)
+//    if (FB_STATE_ARMED == system_state)
+    if (1)
     {
         uint8_t i = 0;
         
@@ -175,3 +258,32 @@ void Cue_Scan_All(REMOTE_CUES_t * p_remote)
         } // for (cue)
     } // for (socket)
 } // Cue_Scan_All()
+
+
+void Task_Arming_Remote(void)
+{
+    switch (system_state)
+    {
+        case FB_STATE_DISARMED:
+            break;
+        
+        case FB_STATE_RECEIVED_ARM_CMD:
+            break;
+        
+        case FB_STATE_SENDING_ARM_RESP:
+            break;
+        
+        case FB_STATE_WAITING_FOR_ARM_CONF:
+            break;
+        
+        case FB_STATE_SENDING_ARMED_CONF:
+            break;
+        
+        case FB_STATE_ARMED:
+            break;
+        
+        default:
+            system_state = FB_STATE_DISARMED;
+            break;
+    }
+} // Task_Arming_Remote()

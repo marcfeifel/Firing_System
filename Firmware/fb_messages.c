@@ -63,11 +63,11 @@ void const * Msg_Get_Payload_Ptr(void)
 } // Msg_Get_Ptr()
 
 
-uint16_t Msg_Get_Sender_RSSI(void)
+int16_t Msg_Get_RSSI(void)
 {
     return RFM69_getRSSI();
     
-} // Msg_Get_Sender_RSSI()
+} // Msg_Get_RSSI()
 
 
 void Msg_Enqueue_for_Xmit(uint8_t dest, void const * payload, uint8_t payload_size, FB_MSG_XMIT_DESCRIPTOR * p_message)
@@ -120,7 +120,7 @@ static void Msg_Run_Xmit(void)
         if (RFM69_canSend())
         {
             // send
-            RFM69_send(p_xmit_queue->dest, &p_xmit_queue->payload, p_xmit_queue->payload_size, false);
+            RFM69_send(p_xmit_queue->dest, p_xmit_queue->payload, p_xmit_queue->payload_size, false);
             
             // indicate message is transmitted
             p_xmit_queue->transmit_complete = true;

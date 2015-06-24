@@ -370,6 +370,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\RFM69\RFM69.c</FilePath>
             </File>
+            <File>
+              <FileName>fb_tasks.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_tasks.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -384,6 +389,11 @@
               <FileName>fb_remote_main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fb_remote_main.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_remote_tasks.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_remote_tasks.c</FilePath>
             </File>
           </Files>
         </Group>

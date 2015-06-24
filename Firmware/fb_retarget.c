@@ -42,6 +42,17 @@ char _getkey(void)
 } // _getkey()
 
 
+char _kbhit(void)
+{
+    // make sure we're ready for this
+    if (!first_pass_complete)
+        retarget_init();
+    
+    return RI;
+    
+} // _kbhit()
+
+
 char putchar(char c)
 {
     // make sure we're ready for this
