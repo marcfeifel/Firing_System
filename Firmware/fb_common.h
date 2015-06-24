@@ -22,6 +22,8 @@ typedef bit bool;
 #define false 0
 #define true (!false)
 
+typedef uint16_t CRC16_t;
+
 #define BIT(_bit) (1 << (_bit))
 #define BIT_SET(_val, _bit) ((_val) |= BIT(_bit))
 #define BIT_CLR(_val, _bit) ((_val) &= ~BIT(_bit))
@@ -37,7 +39,7 @@ typedef bit bool;
 #define BIT6 0x40
 #define BIT7 0x80
 
-typedef enum _CUE_ENUM_t
+typedef enum 
 {
     CUE0,
     CUE1,
@@ -59,7 +61,7 @@ typedef enum _CUE_ENUM_t
     
 } CUE_ENUM_t;
 
-typedef enum _SOCKET_ENUM_t
+typedef enum 
 {
     SOCKET0,
     SOCKET1,
@@ -77,20 +79,27 @@ typedef enum _SOCKET_ENUM_t
 typedef uint16_t SOCKET_t;
 
 // structure which holds a single bit about a remote module's sockets' cues
-typedef struct _REMOTE_t
+typedef struct 
 {
     SOCKET_t sockets[SOCKETS_NUM_OF];
 
-} REMOTE_t;
+} REMOTE_CUES_t;
 
 
 void Init_Device(void);
+
 void interrupts(void);
 void noInterrupts(void);
+
+bool millis_expired(uint32_t timer_ms);
 uint32_t millis(void);
+
 void Sleep(uint32_t millis);
 
 bool Ping(uint32_t target, uint32_t timeout_ms, uint16_t * p_response_time_ms, uint16_t * p_rssi);
+void Ping_Handler(void);
+void Pong_Handler(void);
+
 void Disbatcher(void);
 void Pong(void);
 

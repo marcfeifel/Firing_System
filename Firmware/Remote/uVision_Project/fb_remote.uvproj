@@ -361,9 +361,9 @@
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
-              <FileName>fb_retarget.c</FileName>
+              <FileName>fb_messages.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_retarget.c</FilePath>
+              <FilePath>..\..\fb_messages.c</FilePath>
             </File>
             <File>
               <FileName>RFM69.c</FileName>

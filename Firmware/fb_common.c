@@ -5,9 +5,9 @@
 static volatile uint32_t _millis = 0;
 
 // used by the RFM69 ISR handler
-static volatile bit RFM69_DIO0_last = LOW;
-static volatile bit RFM69_ISR_Enabled = false;
-static volatile bit RFM69_ISR_Pending = false;
+static volatile bool RFM69_DIO0_last = LOW;
+static volatile bool RFM69_ISR_Enabled = false;
+static volatile bool RFM69_ISR_Pending = false;
 
 // get the number of milliseconds since power-on
 uint32_t millis(void)
@@ -18,7 +18,7 @@ uint32_t millis(void)
     uint32_t millis = 0;
 
     // store the previous interrupt-enable state
-    bit old_ET2 = ET2;
+    bool old_ET2 = ET2;
     
     // disable interrupt
     ET2 = 0;
@@ -33,6 +33,13 @@ uint32_t millis(void)
     return millis;
     
 } // millis()
+
+
+bool millis_expired(uint32_t timer_ms)
+{
+    return millis() > timer_ms ? true : false;
+    
+} // millis_expired()
 
 
 // used by the RFM69 to enable its interrupt handler
@@ -68,7 +75,7 @@ void Sleep(uint32_t ms)
 INTERRUPT(timer2_ISR, INTERRUPT_TIMER2)
 {
     // get this bit
-    bit RFM69_DIO0_this = PIN_RFM69HW_DIO0_I;
+    bool RFM69_DIO0_this = PIN_RFM69HW_DIO0_I;
     
     // clear the flag
     TF2H = 0;
@@ -141,28 +148,3 @@ bool Ping(uint32_t target, uint32_t timeout_ms, uint16_t * p_response_time_ms, u
     return pong_received;
     
 } // Ping()
-
-
-
-void Disbatcher(void)
-{
-    if (RFM69_receiveDone())
-    {
-//        Sleep(10);
-        Pong();
-    }
-}
-
-
-#include <string.h>
-
-void Pong(void)
-{
-    if (!strcmp(RFM69_getDataPtr(), "Ping"))
-    {
-        RFM69_send(RFM69_getSenderID(), "Pong", 4, false);
-        
-        RFM69_receiveDone();
-        
-    }    
-}

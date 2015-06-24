@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "fb_common.h"
+#include "fb_messages.h"
 #include "rfm69.h"
 
 typedef enum

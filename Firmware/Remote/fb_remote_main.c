@@ -1,5 +1,6 @@
 #include <string.h>
 
+#include "fb_messages.h"
 #include "fb_common.h"
 #include "rfm69.h"
 
@@ -13,52 +14,38 @@ void FireTest_Assert_Test(void);
 void Cue_Select(SOCKET_ENUM_t socket, CUE_ENUM_t cue);
 bool Cue_Is_Present(void);
 void Cue_Fire(void);
-void Cue_Scan_All(REMOTE_t * p_remote);
+void Cue_Scan_All(REMOTE_CUES_t * p_remote);
 
-static REMOTE_t cues_present = { 0 };
+static REMOTE_CUES_t cues_present = { 0 };
 
-static bit system_is_armed = true;
+static bool system_is_armed = true;
 
 void main(void)
 {
+    FB_MSG_XMIT_DESCRIPTOR msg = {0};
+
     // initialize the C8051F920
     Init_Device();
     
     // clear the fire and test signals
     FireTest_Clear();
-    
-    // initialize the HopeRF radio
-    RFM69_construct(true);
-    RFM69_initialize();
+
+    // initialize the message module
+    Msg_Init();
 
     // super loop
     while (true)
     {
-/*        if (RFM69_receiveDone())
-        {
-            REMOTE_t remote = {0};
-            
-            if (RFM69_ACKRequested());
-            {
-                Sleep(100);
-                RFM69_sendACK("", 0);
-            }
-            
-            Cue_Scan_All(&remote);
-            
-            RFM69_send(NODEID_MASTER, &remote, sizeof(remote), false);
-            
-//            while (!RFM69_ACKReceived(NODEID_MASTER))
-            {
-                // loop while waiting
-            }
-        }
-        else
-        {
-            // do nothing
-        }*/
+        // process any incoming and outgoing messages
+        Msg_Run();
         
-        Disbatcher();
+        // message received?
+        if (Msg_Received())
+        {
+            // do stuff with it
+            Msg_Enqueue_for_Xmit(Msg_Get_Sender(), Msg_Get_Payload_Ptr(), Msg_Get_Payload_Size(), &msg);
+            
+        }
     } // while (true)
 } // main()
 
@@ -137,7 +124,7 @@ void Cue_Select(SOCKET_ENUM_t socket, CUE_ENUM_t cue)
 bool Cue_Is_Present(void)
 {
     // will store whether the cue is present or not
-    bit cue_is_present = false;
+    bool cue_is_present = false;
     
     // assert the test signal
     FireTest_Assert_Test();
@@ -155,13 +142,13 @@ bool Cue_Is_Present(void)
 } // Cur_Is_Present()
 
 
-void Cue_Scan_All(REMOTE_t * p_remote)
+void Cue_Scan_All(REMOTE_CUES_t * p_remote)
 {
     // will iterate through the sockets
     uint8_t socket = 0;
     
     // assume all cues empty by clearing all memory
-    memset(p_remote, 0, sizeof(REMOTE_t));
+    memset(p_remote, 0, sizeof(REMOTE_CUES_t));
     
     // iterate through the sockets
     for (socket = 0; socket < SOCKETS_NUM_OF; socket++)

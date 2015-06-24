@@ -356,9 +356,14 @@
               <FilePath>..\..\fb_c8051f920_startup.a51</FilePath>
             </File>
             <File>
-              <FileName>fb_master_main.c</FileName>
+              <FileName>fb_common.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\fb_master_main.c</FilePath>
+              <FilePath>..\..\fb_common.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_messages.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_messages.c</FilePath>
             </File>
             <File>
               <FileName>fb_retarget.c</FileName>
@@ -376,9 +381,9 @@
           <GroupName>Master</GroupName>
           <Files>
             <File>
-              <FileName>fb_common.c</FileName>
+              <FileName>fb_master_main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_common.c</FilePath>
+              <FilePath>..\fb_master_main.c</FilePath>
             </File>
             <File>
               <FileName>fb_master_config.c</FileName>
