@@ -31,7 +31,7 @@
 #ifndef RFM69_h
 #define RFM69_h
 
-#include "mf_common.h"
+#include "fb_common.h"
 
 #define RF69_MAX_DATA_LEN       61 // to take advantage of the built in AES/CRC we want to limit the frame size to the internal FIFO size (66 bytes - 3 bytes overhead - 2 bytes crc)
 

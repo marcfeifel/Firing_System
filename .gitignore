@@ -78,6 +78,6 @@ Firmware/Master/uVision_Project/*.mfeifel
 Firmware/Master/uVision_Project/Listings
 Firmware/Master/uVision_Project/Objects
 
-Firmware/Slave/uVision_Project/*.mfeifel
-Firmware/Slave/uVision_Project/Listings
-Firmware/Slave/uVision_Project/Objects
+Firmware/Remote/uVision_Project/*.mfeifel
+Firmware/Remote/uVision_Project/Listings
+Firmware/Remote/uVision_Project/Objects

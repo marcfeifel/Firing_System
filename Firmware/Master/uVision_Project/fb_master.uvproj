@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Slave</TargetName>
+      <TargetName>Master</TargetName>
       <ToolsetNumber>0x0</ToolsetNumber>
       <ToolsetName>MCS-51</ToolsetName>
       <TargetOption>
@@ -44,7 +44,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>slave</OutputName>
+          <OutputName>master</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -160,7 +160,7 @@
         <Utilities>
           <Flash1>
             <UseTargetDll>0</UseTargetDll>
-            <UseExternalTool>0</UseExternalTool>
+            <UseExternalTool>1</UseExternalTool>
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
@@ -298,7 +298,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>.;..;..\..;C:\Silabs\MCU\INC;..\..\RFM69-master</IncludePath>
+              <IncludePath>.;..;..\..;C:\Silabs\MCU\INC;..\..\RFM69</IncludePath>
             </VariousControls>
           </C51>
           <Ax51>
@@ -351,39 +351,39 @@
           <GroupName>Common</GroupName>
           <Files>
             <File>
-              <FileName>c8051f920_startup.a51</FileName>
+              <FileName>fb_c8051f920_startup.a51</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\c8051f920_startup.a51</FilePath>
+              <FilePath>..\..\fb_c8051f920_startup.a51</FilePath>
             </File>
             <File>
-              <FileName>mf_common.c</FileName>
+              <FileName>fb_master_main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\mf_common.c</FilePath>
+              <FilePath>..\fb_master_main.c</FilePath>
             </File>
             <File>
-              <FileName>retarget.c</FileName>
+              <FileName>fb_retarget.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\retarget.c</FilePath>
+              <FilePath>..\..\fb_retarget.c</FilePath>
             </File>
             <File>
               <FileName>RFM69.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\RFM69-master\RFM69.c</FilePath>
+              <FilePath>..\..\RFM69\RFM69.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Slave</GroupName>
+          <GroupName>Master</GroupName>
           <Files>
             <File>
-              <FileName>config.c</FileName>
+              <FileName>fb_common.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Configurator_Project\config.c</FilePath>
+              <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
-              <FileName>main.c</FileName>
+              <FileName>fb_master_config.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\main.c</FilePath>
+              <FilePath>..\Configurator_Project\fb_master_config.c</FilePath>
             </File>
           </Files>
         </Group>

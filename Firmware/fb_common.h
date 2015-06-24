@@ -1,7 +1,7 @@
-#ifndef MF_COMMON_H_INCLUDED
-#define MF_COMMON_H_INCLUDED
+#ifndef FB_COMMON_H_INCLUDED
+#define FB_COMMON_H_INCLUDED
 
-#include "mf_c51_target.h"
+#include "fb_c51_target.h"
 
 #define NODEID_MASTER  2
 #define NODEID_REMOTE0 3
@@ -94,4 +94,4 @@ bool Ping(uint32_t target, uint32_t timeout_ms, uint16_t * p_response_time_ms, u
 void Disbatcher(void);
 void Pong(void);
 
-#endif // MF_COMMON_H_INCLUDED
+#endif // FB_COMMON_H_INCLUDED

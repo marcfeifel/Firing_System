@@ -1,5 +1,5 @@
-#ifndef MF_C51_TARGET_H_INCLUDED
-#define MF_C51_TARGET_H_INCLUDED
+#ifndef FB_C51_TARGET_H_INCLUDED
+#define FB_C51_TARGET_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,4 +44,4 @@ SBIT(PIN_RFM69HW_RST_O, P2, 5); // RFM69HW RST
 }
 #endif // __cplusplus
 
-#endif // MF_C51_TARGET_H_INCLUDED
+#endif // FB_C51_TARGET_H_INCLUDED
