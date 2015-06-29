@@ -56,7 +56,7 @@ void main(void)
     printf("Start.\r\n");
 
     Msg_Init();
-    
+
     printf("Super loop started.\r\n");
     
     ping_timer = millis() + 1000;
@@ -209,7 +209,7 @@ void main(void)
                     msg_ping.rssi = Msg_Get_RSSI();
                     Msg_Enqueue_for_Xmit(NODEID_REMOTE0, &msg_ping, sizeof(msg_ping), &msg_descriptor);
                    
-                    ping_timer += 500;
+                    ping_timer = millis() + 500;
 
                 }
             }
@@ -227,7 +227,7 @@ void main(void)
                 msg_scan_req.rssi = Msg_Get_RSSI();
                 Msg_Enqueue_for_Xmit(NODEID_REMOTE0, &msg_scan_req, sizeof(msg_scan_req), &msg_descriptor);
 
-                ping_timer += 10000;
+                ping_timer = millis() + 10000;
                 
             }
         }
@@ -275,7 +275,7 @@ void main(void)
                     msg_cmd_fire.cue = local_cue;
                     Msg_Enqueue_for_Xmit(NODEID_REMOTE0, &msg_cmd_fire, sizeof(msg_cmd_fire), &msg_descriptor);
 
-                    ping_timer += 2000;
+                    ping_timer = millis() + 2000;
                     
                     if (128 == cue_index)
                     {

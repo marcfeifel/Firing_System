@@ -107,7 +107,7 @@ void main(void)
                         Cue_Select(fire_cue_cmd->socket, fire_cue_cmd->cue);
                         FireTest_Assert_Test();
                         FireTest_Assert_Fire();
-                        Sleep(100);
+                        Sleep(5);
                         FireTest_Clear();
                         
                         {

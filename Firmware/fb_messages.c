@@ -124,7 +124,7 @@ static void Msg_Run_Xmit(void)
             
             // indicate message is transmitted
             p_xmit_queue->transmit_complete = true;
-            
+                
             // is there another message?
             if (NULL != p_xmit_queue->p_next_message)
             {
