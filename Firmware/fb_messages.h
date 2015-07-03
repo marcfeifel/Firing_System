@@ -17,6 +17,7 @@ typedef enum
     FB_MSG_CMD_FIRE_CUE,
     FB_MSG_RESP_FIRE_CUE,
     
+    FB_MSG_CMD_FIRE_PROGRAM,
     FB_MSG_CUE_FIRED,
     
     FB_MSG_NUM_OF
@@ -77,6 +78,8 @@ typedef struct
 typedef FB_MSG_CUE_t FB_MSG_CMD_FIRE_CUE_t;  // issue the command to fire
 typedef FB_MSG_CUE_t FB_MSG_RESP_FIRE_CUE_t; // response to the command to fire
 typedef FB_MSG_CUE_t FB_MSG_CONF_FIRE_CUE_t; // confirm command to fire
+
+typedef FB_MSG_BASE_t FB_MSG_CMD_FIRE_PROGRAM_t;
 
 // a cue was fired
 typedef FB_MSG_CUE_t FB_MSG_CUE_FIRED_t;

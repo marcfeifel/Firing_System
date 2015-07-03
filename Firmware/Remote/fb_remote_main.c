@@ -19,6 +19,50 @@ typedef enum
     
 } FB_REMOTE_STATES_ARMING_t;
 
+static struct
+{
+    SOCKET_ENUM_t socket;
+    CUE_ENUM_t    cue;
+    uint32_t      delay_ms;
+    
+} program[SOCKETS_NUM_OF * CUES_NUM_OF] = 
+{
+    { SOCKET0, CUE0,     0 },
+    { SOCKET1, CUE0,  5000 },
+    { SOCKET0, CUE1,  4000 },
+    { SOCKET0, CUE2,   100 },
+    { SOCKET1, CUE1,  4000 },
+    { SOCKET1, CUE2,   100 },
+    { SOCKET0, CUE3,  3000 },
+    { SOCKET0, CUE4,   100 },
+    { SOCKET0, CUE5,   100 },
+    { SOCKET1, CUE3,  3000 },
+    { SOCKET1, CUE4,   100 },
+    { SOCKET1, CUE5,   100 },
+    { SOCKET0, CUE6,  3000 },
+    { SOCKET1, CUE6,    50 },
+    { SOCKET0, CUE7,    50 },
+    { SOCKET1, CUE7,    50 },
+    { SOCKET0, CUE8,    50 },
+    { SOCKET1, CUE8,    50 },
+    { SOCKET0, CUE9,    50 },
+    { SOCKET1, CUE9,    50 },
+    { SOCKET0, CUE10,   50 },
+    { SOCKET1, CUE10,   50 },
+    { SOCKET0, CUE11,   50 },
+    { SOCKET1, CUE11,   50 },
+    { SOCKET0, CUE12,   50 },
+    { SOCKET1, CUE12,   50 },
+    { SOCKET0, CUE13,   50 },
+    { SOCKET1, CUE13,   50 },
+    { SOCKET0, CUE14,   50 },
+    { SOCKET1, CUE14,   50 },
+    { SOCKET0, CUE15,   50 },
+    { SOCKET1, CUE15,   50 },
+    
+    { SOCKETS_NUM_OF, CUES_NUM_OF, -1 }
+};
+
 void FireTest_Clear(void);
 void FireTest_Assert_Fire(void);
 void FireTest_Assert_Test(void);
@@ -100,7 +144,7 @@ void main(void)
                     }
                     break;
                 case FB_MSG_CMD_FIRE_CUE:
-                    {
+/*                    {
                         const FB_MSG_CMD_FIRE_CUE_t * fire_cue_cmd = (FB_MSG_CMD_FIRE_CUE_t*)payload;
                         
                         FireTest_Clear();
@@ -121,6 +165,46 @@ void main(void)
                             Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_cue_fired, sizeof(msg_cue_fired), &msg_descriptor);
                            
                         }
+                        
+                    }
+                    break;*/
+                case FB_MSG_CMD_FIRE_PROGRAM:
+                    {
+                        uint32_t next_event_time_ms = millis();
+                        uint32_t next_step = 0;
+                        
+                        while ((program[next_step].socket != SOCKETS_NUM_OF) && (program[next_step].cue != CUES_NUM_OF))
+                        {
+                            next_event_time_ms += program[next_step].delay_ms;
+                            
+                            while (millis() < next_event_time_ms)
+                            {
+                                // loop
+                            }
+                            
+                            FireTest_Clear();
+                            Cue_Select(program[next_step].socket, program[next_step].cue);
+                            FireTest_Assert_Test();
+                            FireTest_Assert_Fire();
+                            Sleep(5);
+                            
+                            {
+                                static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
+                                static FB_MSG_CUE_FIRED_t          msg_cue_fired = {0};
+                               
+                                msg_cue_fired.base.id   = FB_MSG_CUE_FIRED;
+                                msg_cue_fired.base.rssi = Msg_Get_RSSI();
+                                msg_cue_fired.socket =    program[next_step].socket;
+                                msg_cue_fired.cue    =    program[next_step].cue;
+                                Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_cue_fired, sizeof(msg_cue_fired), &msg_descriptor);
+                               
+                            }
+
+                            next_step++;
+                            
+                        }
+                        
+                        FireTest_Clear();
                         
                     }
                     break;
