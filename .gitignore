@@ -23,9 +23,9 @@
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
+# *.exe
 
 # =========================
 # Operating System Files
@@ -74,10 +74,11 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 *.bak
-Firmware/Master/uVision_Project/*.mfeifel
+*.mfeifel
+*.MarcF
+
 Firmware/Master/uVision_Project/Listings
 Firmware/Master/uVision_Project/Objects
 
-Firmware/Remote/uVision_Project/*.mfeifel
 Firmware/Remote/uVision_Project/Listings
 Firmware/Remote/uVision_Project/Objects
