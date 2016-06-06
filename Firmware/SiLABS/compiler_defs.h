@@ -65,13 +65,13 @@
 // Target:         C8051xxxx
 // Tool chain:     Generic
 // Command Line:   None
-// 
+//
 // Release 2.7 - 25 JUN 2014 (JM)
 //    -Added SI_GENERIC_PTR struct for accessing generic pointers
 //    -Added SI_GPTR_MTYPE_XXXX definitions for determining the memory type
 //     pointed at by a generic poitner
 // Release 2.6 - 14 DEC 2012 (GO)
-// 	  -Added define for deprecated SDCC keyword 'at'
+//       -Added define for deprecated SDCC keyword 'at'
 // Release 2.5 - 12 SEP 2012 (TP)
 //    -Added defines for deprecated SDCC keywords bit and code
 // Release 2.4 - 27 AUG 2012 (TP)
@@ -394,7 +394,7 @@ typedef union SI_GENERIC_PTR
 # define SEGMENT_POINTER(name, vartype, locsegment) vartype * locsegment name
 # define LOCATED_VARIABLE_NO_INIT(name, vartype, locsegment, addr) vartype locsegment name _at_ addr
 
-# else	// __SLS_IDE__
+# else    // __SLS_IDE__
 
 # define INTERRUPT(name, vector) void name (void)
 # define INTERRUPT_USING(name, vector, regnum) void name (void)
@@ -411,7 +411,7 @@ typedef union SI_GENERIC_PTR
 # define SEGMENT_POINTER(name, vartype, locsegment) vartype * name
 # define LOCATED_VARIABLE_NO_INIT(name, vartype, locsegment, addr) vartype name
 
-# endif	// __SLS_IDE__
+# endif    // __SLS_IDE__
 
 // used with UU16
 # define LSB 1

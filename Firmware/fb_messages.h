@@ -7,30 +7,30 @@ typedef enum
 {
     FB_MSG_PING,
     FB_MSG_PONG,
-    
+
     FB_MSG_ACK,
     FB_MSG_NACK,
-    
-    FB_MSG_CMD_SCAN_ALL_CUES, 
+
+    FB_MSG_CMD_SCAN_ALL_CUES,
     FB_MSG_RESP_SCAN_ALL_CUES,
-    
+
     FB_MSG_CMD_FIRE_CUE,
     FB_MSG_RESP_FIRE_CUE,
-    
+
     FB_MSG_CMD_FIRE_PROGRAM,
     FB_MSG_CUE_FIRED,
-    
+
     FB_MSG_NUM_OF
-    
+
 } FB_MSG_ID_ENUM_t;
 
 
 typedef struct
 {
     FB_MSG_ID_ENUM_t id;
-    
+
     int16_t         rssi;
-    
+
 } FB_MSG_BASE_t;
 
 
@@ -39,9 +39,9 @@ typedef struct
     FB_MSG_BASE_t   base;
 
     CUE_ENUM_t      cue;
-    
+
     SOCKET_ENUM_t   socket;
-    
+
 } FB_MSG_CUE_t;
 
 
@@ -65,14 +65,14 @@ typedef FB_MSG_BASE_t FB_RESP_SYS_DISARM_t;
 
 // scan all cues and response
 typedef FB_MSG_BASE_t FB_MSG_CMD_SCAN_ALL_CUES_t;
-typedef struct 
+typedef struct
 {
     FB_MSG_BASE_t   base;
 
     REMOTE_CUES_t   cues_present;
-    
+
 } FB_MSG_RESP_SCAN_ALL_CUES_t;
-        
+
 
 // single-cue firing command and response
 typedef FB_MSG_CUE_t FB_MSG_CMD_FIRE_CUE_t;  // issue the command to fire
@@ -84,7 +84,7 @@ typedef FB_MSG_BASE_t FB_MSG_CMD_FIRE_PROGRAM_t;
 // a cue was fired
 typedef FB_MSG_CUE_t FB_MSG_CUE_FIRED_t;
 
-// keep-alive and set-time commands 
+// keep-alive and set-time commands
 // - keep-alive commands must be within some tolerance of the system time and are only
 // relevant during shows (they are intended to correct drift)
 // - set-time commands are arbitrary but can only occur outside the scope of a running show
@@ -95,22 +95,22 @@ typedef struct
     FB_MSG_BASE_t   base;
 
     uint32_t        time_ms;
-    
+
 } FB_MSG_KEEP_ALIVE_t, FB_MSG_CMD_SET_TIME_t, FB_MSG_RESP_SET_TIME_t;
 
 
 typedef struct _FB_MSG_XMIT_DESCRIPTOR
 {
     uint8_t         dest;
-    
+
     uint8_t         payload_size;
-    
+
     void const    * payload;
-    
+
     uint8_t         transmit_complete;
-    
+
     struct _FB_MSG_XMIT_DESCRIPTOR * p_next_message;
-    
+
 } FB_MSG_XMIT_DESCRIPTOR;
 
 

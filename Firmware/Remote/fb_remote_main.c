@@ -16,7 +16,7 @@ typedef enum
     FB_STATE_WAITING_FOR_ARM_CONF,
     FB_STATE_SENDING_ARMED_CONF,
     FB_STATE_ARMED
-    
+
 } FB_REMOTE_STATES_ARMING_t;
 
 static struct
@@ -24,8 +24,8 @@ static struct
     SOCKET_ENUM_t socket;
     CUE_ENUM_t    cue;
     uint32_t      delay_ms;
-    
-} program[SOCKETS_NUM_OF * CUES_NUM_OF] = 
+
+} program[SOCKETS_NUM_OF * CUES_NUM_OF] =
 {
     { SOCKET0, CUE0,     0 },
     { SOCKET1, CUE0,  5000 },
@@ -59,7 +59,7 @@ static struct
     { SOCKET1, CUE14,   50 },
     { SOCKET0, CUE15,   50 },
     { SOCKET1, CUE15,   50 },
-    
+
     { SOCKETS_NUM_OF, CUES_NUM_OF, -1 }
 };
 
@@ -81,7 +81,7 @@ void main(void)
 
     // initialize the C8051F920
     Init_Device();
-    
+
     // clear the fire and test signals
     FireTest_Clear();
 
@@ -94,31 +94,31 @@ void main(void)
         // process any incoming and outgoing messages
         Msg_Run();
 /*
-#if 1 
+#if 1
         Task_Scan_Cues();
         Task_Ping();
         Task_Pong();
         Task_Arming();
         Task_Scan_Cues();
         Task_Run_Program();
-#else        
+#else
         Task_Echo();
 #endif // 0*/
         if (Msg_Received())
         {
             const FB_MSG_BASE_t * payload = Msg_Get_Payload_Ptr();
-            
+
             switch (payload->id)
             {
                 case FB_MSG_PING:
                     {
                         static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
                         static FB_MSG_PONG_t               msg_pong = {0};
-                       
+
                         msg_pong.id = FB_MSG_PONG;
                         msg_pong.rssi = Msg_Get_RSSI();
                         Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_pong, sizeof(msg_pong), &msg_descriptor);
-                       
+
                     }
                     break;
                 case FB_MSG_PONG:
@@ -134,84 +134,84 @@ void main(void)
                     {
                         static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
                         static FB_MSG_RESP_SCAN_ALL_CUES_t msg_report = {0};
-                        
+
                         Cue_Scan_All(&msg_report.cues_present);
-                        
+
                         msg_report.base.id = FB_MSG_RESP_SCAN_ALL_CUES;
                         msg_report.base.rssi = Msg_Get_RSSI();
                         Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_report, sizeof(msg_report), &msg_descriptor);
-                        
+
                     }
                     break;
                 case FB_MSG_CMD_FIRE_CUE:
 /*                    {
                         const FB_MSG_CMD_FIRE_CUE_t * fire_cue_cmd = (FB_MSG_CMD_FIRE_CUE_t*)payload;
-                        
+
                         FireTest_Clear();
                         Cue_Select(fire_cue_cmd->socket, fire_cue_cmd->cue);
                         FireTest_Assert_Test();
                         FireTest_Assert_Fire();
                         Sleep(5);
                         FireTest_Clear();
-                        
+
                         {
                             static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
                             static FB_MSG_CUE_FIRED_t          msg_cue_fired = {0};
-                           
+
                             msg_cue_fired.base.id   = FB_MSG_CUE_FIRED;
                             msg_cue_fired.base.rssi = Msg_Get_RSSI();
                             msg_cue_fired.socket = fire_cue_cmd->socket;
                             msg_cue_fired.cue    = fire_cue_cmd->cue;
                             Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_cue_fired, sizeof(msg_cue_fired), &msg_descriptor);
-                           
+
                         }
-                        
+
                     }
                     break;*/
                 case FB_MSG_CMD_FIRE_PROGRAM:
                     {
                         uint32_t next_event_time_ms = millis();
                         uint32_t next_step = 0;
-                        
+
                         while ((program[next_step].socket != SOCKETS_NUM_OF) && (program[next_step].cue != CUES_NUM_OF))
                         {
                             next_event_time_ms += program[next_step].delay_ms;
-                            
+
                             while (millis() < next_event_time_ms)
                             {
                                 // loop
                             }
-                            
+
                             FireTest_Clear();
                             Cue_Select(program[next_step].socket, program[next_step].cue);
                             FireTest_Assert_Test();
                             FireTest_Assert_Fire();
                             Sleep(5);
-                            
+
                             {
                                 static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
                                 static FB_MSG_CUE_FIRED_t          msg_cue_fired = {0};
-                               
+
                                 msg_cue_fired.base.id   = FB_MSG_CUE_FIRED;
                                 msg_cue_fired.base.rssi = Msg_Get_RSSI();
                                 msg_cue_fired.socket =    program[next_step].socket;
                                 msg_cue_fired.cue    =    program[next_step].cue;
                                 Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_cue_fired, sizeof(msg_cue_fired), &msg_descriptor);
-                               
+
                             }
 
                             next_step++;
-                            
+
                         }
-                        
+
                         FireTest_Clear();
-                        
+
                     }
                     break;
                 default:
                     break;
             }
-        }   
+        }
     } // while (true)
 } // main()
 
@@ -230,7 +230,7 @@ void FireTest_Clear(void)
     // de-assert the reset/clear signal
     PIN_COUNTER_CLEAR_O = 0;
     Sleep(2);
-        
+
 } // FireTest_Clear()
 
 
@@ -240,7 +240,7 @@ void FireTest_Assert_Fire(void)
     if (1)
     {
         uint8_t i = 0;
-        
+
         for (i = 0; i < CLOCKS_TO_FIRE; i++)
         {
             PIN_FIRE_CLK_O = 0;
@@ -261,7 +261,7 @@ void FireTest_Assert_Fire(void)
 void FireTest_Assert_Test(void)
 {
     uint8_t i = 0;
-    
+
     for (i = 0; i < CLOCKS_TO_TEST; i++)
     {
         PIN_TEST_CLK_O = 0;
@@ -275,16 +275,16 @@ void Cue_Select(SOCKET_ENUM_t socket, CUE_ENUM_t cue)
 {
     // make sure we don't immediately fire
     FireTest_Clear();
-    
+
     PIN_ADDRESS_CUEb0_O = cue & BIT0 ? 1 : 0;
     PIN_ADDRESS_CUEb1_O = cue & BIT1 ? 1 : 0;
     PIN_ADDRESS_CUEb2_O = cue & BIT2 ? 1 : 0;
     PIN_ADDRESS_CUEb3_O = cue & BIT3 ? 1 : 0;
-    
+
     PIN_ADDRESS_SOCKb0_O = socket & BIT0 ? 1 : 0;
     PIN_ADDRESS_SOCKb1_O = socket & BIT1 ? 1 : 0;
     PIN_ADDRESS_SOCKb2_O = socket & BIT2 ? 1 : 0;
-    
+
 } // Cue_Select()
 
 
@@ -292,20 +292,20 @@ bool Cue_Is_Present(void)
 {
     // will store whether the cue is present or not
     bool cue_is_present = false;
-    
+
     // assert the test signal
     FireTest_Assert_Test();
     Sleep(2);
-    
+
     // see if the cue is not empty
     cue_is_present = !PIN_CUE_EMPTY_I;
-    
+
     // de-assert the test signal
     FireTest_Clear();
-    
+
     // return the result
     return cue_is_present;
-    
+
 } // Cur_Is_Present()
 
 
@@ -313,22 +313,22 @@ void Cue_Scan_All(REMOTE_CUES_t * p_remote)
 {
     // will iterate through the sockets
     uint8_t socket = 0;
-    
+
     // assume all cues empty by clearing all memory
     memset(p_remote, 0, sizeof(REMOTE_CUES_t));
-    
+
     // iterate through the sockets
     for (socket = 0; socket < SOCKETS_NUM_OF; socket++)
     {
         // will iterate through the cues
         uint8_t cue;
-        
+
         // iterate through the cues
         for (cue = 0; cue < CUES_NUM_OF; cue++)
         {
             // select the cue
             Cue_Select(socket, cue);
-    
+
             // check if it is present or not
             if (Cue_Is_Present())
             {
@@ -350,22 +350,22 @@ void Task_Arming_Remote(void)
     {
         case FB_STATE_DISARMED:
             break;
-        
+
         case FB_STATE_RECEIVED_ARM_CMD:
             break;
-        
+
         case FB_STATE_SENDING_ARM_RESP:
             break;
-        
+
         case FB_STATE_WAITING_FOR_ARM_CONF:
             break;
-        
+
         case FB_STATE_SENDING_ARMED_CONF:
             break;
-        
+
         case FB_STATE_ARMED:
             break;
-        
+
         default:
             system_state = FB_STATE_DISARMED;
             break;

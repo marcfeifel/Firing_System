@@ -9,7 +9,7 @@ void Task_Echo(void)
     {
         // do stuff with it
         Msg_Enqueue_for_Xmit(Msg_Get_Sender(), Msg_Get_Payload_Ptr(), Msg_Get_Payload_Size(), &msg);
-        
+
     }
 } // Task_Echo()
 
@@ -17,11 +17,11 @@ void Task_Echo(void)
 static struct
 {
     uint8_t in_progress;
-    
+
     uint32_t start_ms;
-    
+
     uint32_t timeout_ms;
-    
+
 } m_ping_state;
 
 
@@ -34,7 +34,7 @@ void Ping(uint8_t dest, uint32_t timeout_ms)
 bool Ping_Complete(void)
 {
     return true;
-    
+
 } // Ping_Complete
 
 

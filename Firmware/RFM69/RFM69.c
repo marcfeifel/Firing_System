@@ -6,23 +6,23 @@
 // **********************************************************************************
 // License
 // **********************************************************************************
-// This program is free software; you can redistribute it 
-// and/or modify it under the terms of the GNU General    
-// Public License as published by the Free Software       
-// Foundation; either version 3 of the License, or        
-// (at your option) any later version.                    
-//                                                        
-// This program is distributed in the hope that it will   
-// be useful, but WITHOUT ANY WARRANTY; without even the  
-// implied warranty of MERCHANTABILITY or FITNESS FOR A   
-// PARTICULAR PURPOSE. See the GNU General Public        
-// License for more details.                              
-//                                                        
-// You should have received a copy of the GNU General    
+// This program is free software; you can redistribute it
+// and/or modify it under the terms of the GNU General
+// Public License as published by the Free Software
+// Foundation; either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will
+// be useful, but WITHOUT ANY WARRANTY; without even the
+// implied warranty of MERCHANTABILITY or FITNESS FOR A
+// PARTICULAR PURPOSE. See the GNU General Public
+// License for more details.
+//
+// You should have received a copy of the GNU General
 // Public License along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
-//                                                        
-// Licence can be viewed at                               
+//
+// Licence can be viewed at
 // http://www.gnu.org/licenses/gpl-3.0.txt
 //
 // Please maintain this license information along with authorship
@@ -49,7 +49,7 @@ static uint8_t _powerLevel;
 static bool _isRFM69HW;
 
 static uint8_t SPI_transfer(uint8_t out)
-{   
+{
   // clear the interrupt flag
   SPIF0 = 0;
 
@@ -60,7 +60,7 @@ static uint8_t SPI_transfer(uint8_t out)
   {
     // wait for the xfer to complete
   }
-  
+
   return SPI0DAT;
 }
 
@@ -68,35 +68,35 @@ static uint8_t SPI_transfer(uint8_t out)
 uint8_t const * RFM69_getDataPtr(void)
 {
     return DATA;
-    
+
 }
 
 
 uint8_t RFM69_getDataLen(void)
 {
     return DATALEN;
-    
+
 }
 
 
 uint8_t RFM69_getSenderID(void)
 {
     return SENDERID;
-    
+
 }
 
 
 uint8_t RFM69_getTargetID(void)
 {
     return TARGETID;
-    
+
 }
 
 
 int16_t RFM69_getRSSI(void)
 {
     return RSSI;
-    
+
 }
 
 void RFM69_sendFrame(uint8_t toAddress, const void* buffer, uint8_t size, bool requestACK/*=false*/, bool sendACK/*=false*/);
@@ -176,7 +176,7 @@ bool RFM69_initialize(/*uint8_t freqBand, uint8_t nodeID, uint8_t networkID*/)
 
   {
     uint8_t i = 0;
-     
+
     for (i = 0; CONFIG[i][0] != 255; i++)
       RFM69_writeReg(CONFIG[i][0], CONFIG[i][1]);
   }
@@ -296,7 +296,7 @@ bool RFM69_canSend()
 void RFM69_send(uint8_t toAddress, const void* buffer, uint8_t bufferSize, bool requestACK)
 {
   uint32_t now = 0;
-    
+
   RFM69_writeReg(REG_PACKETCONFIG2, (RFM69_readReg(REG_PACKETCONFIG2) & 0xFB) | RF_PACKET2_RXRESTART); // avoid RX deadlocks
   now = millis();
   while (!RFM69_canSend() && millis() - now < RF69_CSMA_LIMIT_MS) RFM69_receiveDone();
@@ -358,7 +358,7 @@ void RFM69_sendFrame(uint8_t toAddress, const void* buffer, uint8_t bufferSize, 
 {
   uint32_t txStart = 0;
   uint8_t CTLbyte = 0;
-    
+
   RFM69_setMode(RF69_MODE_STANDBY); // turn off receiver to prevent reception while filling fifo
   while ((RFM69_readReg(REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00); // wait for ModeReady
   RFM69_writeReg(REG_DIOMAPPING1, RF_DIOMAPPING1_DIO0_00); // DIO0 is "Packet Sent"
@@ -402,7 +402,7 @@ void RFM69_interruptHandler() {
   {
     uint8_t i = 0;
     uint8_t CTLbyte = 0;
-      
+
     //RSSI = readRSSI();
     RFM69_setMode(RF69_MODE_STANDBY);
     RFM69_select();
@@ -482,7 +482,7 @@ void RFM69_encrypt(const char* key) {
   if (key != 0)
   {
     uint8_t i = 0;
-      
+
     RFM69_select();
     SPI_transfer(REG_AESKEY1 | 0x80);
     for (i = 0; i < 16; i++)
@@ -509,7 +509,7 @@ int16_t RFM69_readRSSI(bool forceTrigger) {
 uint8_t RFM69_readReg(uint8_t addr)
 {
   uint8_t regval = 0;
-    
+
   RFM69_select();
   SPI_transfer(addr & 0x7F);
   regval = SPI_transfer(0);

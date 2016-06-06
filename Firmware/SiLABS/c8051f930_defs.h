@@ -47,7 +47,7 @@
 //    - 7 SEP 2007 (FB, errors found by KAB)
 //
 // Release 1.1
-//    -Corrected ADC0TK address from 0xBC to 0xBD 
+//    -Corrected ADC0TK address from 0xBC to 0xBD
 //    - 15 AUG 2007 (FB)
 //
 // Release 1.0
@@ -240,8 +240,8 @@ SFR16 (PCA0CP4, 0xFD);                 // PCA0 Module 4 Capture/Compare
 #define CAPTURE1  0x01                 // RTC address of CAPTURE1 register
 #define CAPTURE2  0x02                 // RTC address of CAPTURE2 register
 #define CAPTURE3  0x03                 // RTC address of CAPTURE3 register
-#define RTC0CN    0x04                 // RTC address of RTC0CN register                
-#define RTC0XCN   0x05                 // RTC address of RTC0XCN register 
+#define RTC0CN    0x04                 // RTC address of RTC0CN register
+#define RTC0XCN   0x05                 // RTC address of RTC0XCN register
 #define RTC0XCF   0x06                 // RTC address of RTC0XCF register
 #define RTC0PIN   0x07                 // RTC address of RTC0PIN register
 #define ALARM0    0x08                 // RTC address of ALARM0 register

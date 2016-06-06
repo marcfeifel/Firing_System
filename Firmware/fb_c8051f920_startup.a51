@@ -29,19 +29,19 @@ $NOMOD51
 ;     <i>       The IDATA space overlaps physically the DATA and BIT areas.
 IDATALEN        EQU     80H
 ;
-; <o> XDATASTART: XDATA memory start address <0x0-0xFFFF> 
+; <o> XDATASTART: XDATA memory start address <0x0-0xFFFF>
 ;     <i> The absolute start address of XDATA memory
-XDATASTART      EQU     0     
+XDATASTART      EQU     0
 ;
-; <o> XDATALEN: XDATA memory size <0x0-0xFFFF> 
+; <o> XDATALEN: XDATA memory size <0x0-0xFFFF>
 ;     <i> The length of XDATA memory in bytes.
-XDATALEN        EQU     4096      
+XDATALEN        EQU     4096
 ;
-; <o> PDATASTART: PDATA memory start address <0x0-0xFFFF> 
+; <o> PDATASTART: PDATA memory start address <0x0-0xFFFF>
 ;     <i> The absolute start address of PDATA memory
 PDATASTART      EQU     0H
 ;
-; <o> PDATALEN: PDATA memory size <0x0-0xFF> 
+; <o> PDATALEN: PDATA memory size <0x0-0xFF>
 ;     <i> The length of PDATA memory in bytes.
 PDATALEN        EQU     0H
 ;
@@ -59,26 +59,26 @@ PDATALEN        EQU     0H
 IBPSTACK        EQU     0       ; set to 1 if small reentrant is used.
 ;  <o> IBPSTACKTOP: End address of SMALL model stack <0x0-0xFF>
 ;     <i> Set the top of the stack to the highest location.
-IBPSTACKTOP     EQU     0xFF +1     ; default 0FFH+1  
+IBPSTACKTOP     EQU     0xFF +1     ; default 0FFH+1
 ; </h>
 ;
-; <h> Stack Space for reentrant functions in the LARGE model.      
+; <h> Stack Space for reentrant functions in the LARGE model.
 ;  <q> XBPSTACK: Enable LARGE model reentrant stack
 ;     <i> Stack space for reentrant functions in the LARGE model.
 XBPSTACK        EQU     0       ; set to 1 if large reentrant is used.
 ;  <o> XBPSTACKTOP: End address of LARGE model stack <0x0-0xFFFF>
 ;     <i> Set the top of the stack to the highest location.
-XBPSTACKTOP     EQU     0xFFFF +1   ; default 0FFFFH+1 
+XBPSTACKTOP     EQU     0xFFFF +1   ; default 0FFFFH+1
 ; </h>
 ;
-; <h> Stack Space for reentrant functions in the COMPACT model.    
+; <h> Stack Space for reentrant functions in the COMPACT model.
 ;  <q> PBPSTACK: Enable COMPACT model reentrant stack
 ;     <i> Stack space for reentrant functions in the COMPACT model.
 PBPSTACK        EQU     0       ; set to 1 if compact reentrant is used.
 ;
 ;   <o> PBPSTACKTOP: End address of COMPACT model stack <0x0-0xFFFF>
 ;     <i> Set the top of the stack to the highest location.
-PBPSTACKTOP     EQU     0xFF +1     ; default 0FFH+1  
+PBPSTACKTOP     EQU     0xFF +1     ; default 0FFH+1
 ; </h>
 ;</h>
 ;------------------------------------------------------------------------------
@@ -86,24 +86,24 @@ PBPSTACKTOP     EQU     0xFF +1     ; default 0FFH+1
 ;  Memory Page for Using the Compact Model with 64 KByte xdata RAM
 ;  <e>Compact Model Page Definition
 ;
-;  <i>Define the XDATA page used for PDATA variables. 
+;  <i>Define the XDATA page used for PDATA variables.
 ;  <i>PPAGE must conform with the PPAGE set in the linker invocation.
 ;
 ; Enable pdata memory page initalization
 PPAGEENABLE     EQU     0       ; set to 1 if pdata object are used.
 ;
-; <o> PPAGE number <0x0-0xFF> 
+; <o> PPAGE number <0x0-0xFF>
 ; <i> uppermost 256-byte address of the page used for PDATA variables.
 PPAGE           EQU     0
 ;
-; <o> SFR address which supplies uppermost address byte <0x0-0xFF> 
+; <o> SFR address which supplies uppermost address byte <0x0-0xFF>
 ; <i> most 8051 variants use P2 as uppermost address byte
 PPAGE_SFR       DATA    0A0H
 ;
 ; </e>
 ;------------------------------------------------------------------------------
 
-; Standard SFR Symbols 
+; Standard SFR Symbols
 ACC     DATA    0E0H
 B       DATA    0F0H
 SP      DATA    81H
@@ -191,7 +191,7 @@ ENDIF
 ; This code is required if you use L51_BANK.A51 with Banking Mode 4
 ;<h> Code Banking
 ; <q> Select Bank 0 for L51_BANK.A51 Mode 4
-#if 0   
+#if 0
 ;     <i> Initialize bank mechanism to code bank 0 when using L51_BANK.A51 with Banking Mode 4.
 EXTRN CODE (?B_SWITCH0)
                 CALL    ?B_SWITCH0      ; init bank mechanism to code bank 0

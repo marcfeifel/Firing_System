@@ -6,8 +6,6 @@ extern "C" {
 #endif // __cplusplus
 
 #include "compiler_defs.h"
-#include "stdint.h"
-#include "stdbool.h"
 #include "c8051f930_defs.h"
 
 // definition for the master device

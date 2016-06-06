@@ -12,8 +12,6 @@
 #define HIGH 1
 #define LOW 0
 
-typedef uint16_t CRC16_t;
-
 #define BIT(_bit) (1 << (_bit))
 #define BIT_SET(_val, _bit) ((_val) |= BIT(_bit))
 #define BIT_CLR(_val, _bit) ((_val) &= ~BIT(_bit))
@@ -29,7 +27,7 @@ typedef uint16_t CRC16_t;
 #define BIT6 0x40
 #define BIT7 0x80
 
-typedef enum 
+typedef enum
 {
     CUE0,
     CUE1,
@@ -48,10 +46,10 @@ typedef enum
     CUE14,
     CUE15,
     CUES_NUM_OF
-    
+
 } CUE_ENUM_t;
 
-typedef enum 
+typedef enum
 {
     SOCKET0,
     SOCKET1,
@@ -62,14 +60,20 @@ typedef enum
     SOCKET6,
     SOCKET7,
     SOCKETS_NUM_OF
-    
+
 } SOCKET_ENUM_t;
+
+typedef uint8_t encoded_cue_t;
+
+#define ENCODE_CUE(_socket, _cue) (((_socket) << 4) & 0xF)) | ((_cue) & 0x0F))
+#define GET_CUE(_encoded_cue)     ((_encoded_cue) & 0x0F)
+#define GET_SOCKET(_encoded_cue)  (((_encoded_cue) >> 4) & 0x0F)
 
 // structure which holds a single bit about a socket's cues
 typedef uint16_t SOCKET_t;
 
 // structure which holds a single bit about a remote module's sockets' cues
-typedef struct 
+typedef struct
 {
     SOCKET_t sockets[SOCKETS_NUM_OF];
 

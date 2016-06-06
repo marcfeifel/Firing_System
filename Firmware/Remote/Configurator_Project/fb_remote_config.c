@@ -71,7 +71,7 @@ void Port_IO_Init()
 void Oscillator_Init()
 {
     char i;
-    
+
     FLSCL     = 0x40;
     REG0CN    |= 0x10;  // Enable OSCBIAS bit in voltage regulator
     for (i = 0; i < 14; i++);  // Wait 4us before enabling oscillator
