@@ -190,7 +190,7 @@ bool RFM69_initialize(/*uint8_t freqBand, uint8_t nodeID, uint8_t networkID*/)
   while ((RFM69_readReg(REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00); // wait for ModeReady
 
 //  _address = nodeID;
-  _address = NODEID;
+  _address = NODEID_LOCAL;
   return true;
 }
 

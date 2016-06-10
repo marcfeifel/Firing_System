@@ -309,7 +309,7 @@
             <InterruptVectorAddress>0</InterruptVectorAddress>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>NODEID_LOCAL=NODEID_MASTER</Define>
               <Undefine></Undefine>
               <IncludePath>.;..;..\..;..\..\Silabs\;..\..\RFM69</IncludePath>
             </VariousControls>

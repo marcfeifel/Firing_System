@@ -9,7 +9,9 @@ extern "C" {
 #include "c8051f930_defs.h"
 
 // definition for the slave device
-#define NODEID    NODEID_REMOTE0
+//#define NODEID_LOCAL    NODEID_REMOTE1
+//#define NODEID_LOCAL    NODEID_REMOTE2
+//#define NODEID_LOCAL    NODEID_REMOTE3
 #define NETWORKID 1
 
 /* GPIO assignments */

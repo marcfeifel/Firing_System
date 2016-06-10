@@ -6,7 +6,7 @@
 #include "fb_tasks.h"
 
 // how long to assert power when firing a cue
-#define FB_FIRE_HOLD_TIME_MS   5
+#define FB_FIRE_HOLD_TIME_MS   50
 
 // minimum pulse-width is 5ns
 #define FB_74HC393_DELAY()     do { NOP(); NOP(); NOP(); NOP(); } while (0)
@@ -92,15 +92,25 @@ void main(void)
     // initialize the message module
     Msg_Init();
 
+    Cue_Select(0, 1);
+    FireTest_Assert_Test();
+    FireTest_Assert_Fire();
+
     // super loop
     while (true)
     {
-#if 0 // HW debug
+#if 1 // HW debug
+        static uint32_t time = 1000;
         static uint8_t cue = 0;
 
-        Cue_Select(0, (cue++)&0x0F);
-        FireTest_Assert_Test();
-        FireTest_Assert_Fire();
+        if (millis_expired(time))
+        { 
+            time += 1000;
+//            Cue_Select(0, (cue++)&0x0F);
+            Cue_Select(0, 0);
+            FireTest_Assert_Test();
+            FireTest_Assert_Fire();
+        }
 #endif // 0/1
         // process any incoming and outgoing messages
         Msg_Run();
@@ -119,115 +129,133 @@ void main(void)
         {
             const FB_MSG_BASE_t * payload = Msg_Get_Payload_Ptr();
 
-            if (RF69_BROADCAST_ADDR == RFM69_getTargetID())
+            // is it from the master?
+            if (NODEID_MASTER == RFM69_getSenderID())
             {
-                Cue_Select(0, 0);
-                FireTest_Assert_Test();
-                FireTest_Assert_Fire();
+                // take the time-stamp and apply a correction using it
+                millis_correct(payload->time_ms);
+                
             }
-            
-            switch (payload->id)
+            else
             {
-                case FB_MSG_PING:
-                    {
-                        static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
-                        static FB_MSG_PONG_t               msg_pong = {0};
+                // do nothing
+            }
 
-                        msg_pong.id = FB_MSG_PONG;
-                        msg_pong.rssi = Msg_Get_RSSI();
-                        Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_pong, sizeof(msg_pong), &msg_descriptor);
-
-                    }
-                    break;
-                case FB_MSG_PONG:
-                    {
-                        // do something about receiving a pong
-                    }
-                    break;
-                case FB_MSG_ACK:
-                    break;
-                case FB_MSG_NACK:
-                    break;
-                case FB_MSG_CMD_SCAN_ALL_CUES:
-                    {
-                        static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
-                        static FB_MSG_RESP_SCAN_ALL_CUES_t msg_report = {0};
-
-                        Cue_Scan_All(&msg_report.cues_present);
-
-                        msg_report.base.id = FB_MSG_RESP_SCAN_ALL_CUES;
-                        msg_report.base.rssi = Msg_Get_RSSI();
-                        Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_report, sizeof(msg_report), &msg_descriptor);
-
-                    }
-                    break;
-                case FB_MSG_CMD_FIRE_CUE:
-/*                    {
-                        const FB_MSG_CMD_FIRE_CUE_t * fire_cue_cmd = (FB_MSG_CMD_FIRE_CUE_t*)payload;
-
-                        FireTest_Clear();
-                        Cue_Select(fire_cue_cmd->socket, fire_cue_cmd->cue);
-                        FireTest_Assert_Test();
-                        FireTest_Assert_Fire();
-                        Sleep(5);
-                        FireTest_Clear();
-
+            if (NODEID_BROADCAST == RFM69_getTargetID())
+            {
+                switch (payload->id)
+                {
+                    case FB_MSG_SYSTEM_RESET:
+                        Reset_MCU();
+                        break;
+                    
+                    default:
+                        //do nothing
+                        break;
+                }
+            }
+            else if (NODEID_LOCAL == RFM69_getTargetID())
+            {
+                switch (payload->id)
+                {
+                    case FB_MSG_PING:
                         {
                             static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
-                            static FB_MSG_CUE_FIRED_t          msg_cue_fired = {0};
+                            static FB_MSG_PONG_t               msg_pong = {0};
 
-                            msg_cue_fired.base.id   = FB_MSG_CUE_FIRED;
-                            msg_cue_fired.base.rssi = Msg_Get_RSSI();
-                            msg_cue_fired.socket = fire_cue_cmd->socket;
-                            msg_cue_fired.cue    = fire_cue_cmd->cue;
-                            Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_cue_fired, sizeof(msg_cue_fired), &msg_descriptor);
+                            Msg_Enqueue_for_Xmit(FB_MSG_PONG, Msg_Get_Sender(), &msg_pong, sizeof(msg_pong), &msg_descriptor);
 
                         }
-
-                    }
-                    break;*/
-                case FB_MSG_CMD_FIRE_PROGRAM:
-                    {
-                        uint32_t next_event_time_ms = millis();
-                        uint32_t next_step = 0;
-
-                        while ((program[next_step].socket != SOCKETS_NUM_OF) && (program[next_step].cue != CUES_NUM_OF))
+                        break;
+                    case FB_MSG_PONG:
                         {
-                            next_event_time_ms += program[next_step].delay_ms;
+                            // do something about receiving a pong
+                        }
+                        break;
+                    case FB_MSG_ACK:
+                        break;
+                    case FB_MSG_NACK:
+                        break;
+                    case FB_MSG_CMD_SCAN_ALL_CUES:
+                        {
+                            static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
+                            static FB_MSG_RESP_SCAN_ALL_CUES_t msg_report = {0};
 
-                            while (millis() < next_event_time_ms)
-                            {
-                                // loop
-                            }
+                            Cue_Scan_All(&msg_report.cues_present);
+
+                            Msg_Enqueue_for_Xmit(FB_MSG_RESP_SCAN_ALL_CUES, Msg_Get_Sender(), &msg_report, sizeof(msg_report), &msg_descriptor);
+
+                        }
+                        break;
+                    case FB_MSG_CMD_FIRE_CUE:
+    /*                    {
+                            const FB_MSG_CMD_FIRE_CUE_t * fire_cue_cmd = (FB_MSG_CMD_FIRE_CUE_t*)payload;
 
                             FireTest_Clear();
-                            Cue_Select(program[next_step].socket, program[next_step].cue);
+                            Cue_Select(fire_cue_cmd->socket, fire_cue_cmd->cue);
                             FireTest_Assert_Test();
                             FireTest_Assert_Fire();
                             Sleep(5);
+                            FireTest_Clear();
 
                             {
                                 static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
                                 static FB_MSG_CUE_FIRED_t          msg_cue_fired = {0};
 
-                                msg_cue_fired.base.id   = FB_MSG_CUE_FIRED;
-                                msg_cue_fired.base.rssi = Msg_Get_RSSI();
-                                msg_cue_fired.socket =    program[next_step].socket;
-                                msg_cue_fired.cue    =    program[next_step].cue;
+                                Msg_Header_Fill(FB_MSG_CUE_FIRED, (FB_MSG_BASE_t*)&msg_cue_fired);
+                                msg_cue_fired.socket = fire_cue_cmd->socket;
+                                msg_cue_fired.cue    = fire_cue_cmd->cue;
                                 Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_cue_fired, sizeof(msg_cue_fired), &msg_descriptor);
 
                             }
 
-                            next_step++;
+                        }
+                        break;*/
+                    case FB_MSG_CMD_FIRE_PROGRAM:
+                        {
+                            uint32_t next_event_time_ms = millis();
+                            uint32_t next_step = 0;
+
+                            while ((program[next_step].socket != SOCKETS_NUM_OF) && (program[next_step].cue != CUES_NUM_OF))
+                            {
+                                next_event_time_ms += program[next_step].delay_ms;
+
+                                while (millis() < next_event_time_ms)
+                                {
+                                    // loop
+                                }
+
+                                FireTest_Clear();
+                                Cue_Select(program[next_step].socket, program[next_step].cue);
+                                FireTest_Assert_Test();
+                                FireTest_Assert_Fire();
+                                Sleep(5);
+
+                                {
+                                    static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
+                                    static FB_MSG_CUE_FIRED_t          msg_cue_fired = {0};
+
+                                    msg_cue_fired.socket =    program[next_step].socket;
+                                    msg_cue_fired.cue    =    program[next_step].cue;
+                                    Msg_Enqueue_for_Xmit(FB_MSG_CUE_FIRED, Msg_Get_Sender(), &msg_cue_fired, sizeof(msg_cue_fired), &msg_descriptor);
+
+                                }
+
+                                next_step++;
+
+                            }
+
+                            FireTest_Clear();
 
                         }
-
-                        FireTest_Clear();
-
-                    }
-                    break;
-                default:
-                    break;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                // message isn't for me!
             }
         }
     } // while (true)

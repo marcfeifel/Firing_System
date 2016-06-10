@@ -5,6 +5,9 @@
 
 typedef enum
 {
+    FB_MSG_SYSTEM_RESET,
+    FB_MSG_SYSTEM_SYNC,
+    
     FB_MSG_PING,
     FB_MSG_PONG,
 
@@ -28,6 +31,8 @@ typedef enum
 typedef struct
 {
     FB_MSG_ID_ENUM_t id;
+    
+    uint32_t        time_ms;
 
     int16_t         rssi;
 
@@ -44,6 +49,12 @@ typedef struct
 
 } FB_MSG_CUE_t;
 
+
+// reset remotes
+typedef FB_MSG_BASE_t FB_MSG_SYSTEM_RESET_t;
+
+// sync
+typedef FB_MSG_BASE_t FB_MSG_SYSTEM_SYNC_t;
 
 // ping and pong
 typedef FB_MSG_BASE_t FB_MSG_PING_t;
@@ -122,7 +133,8 @@ uint8_t Msg_Get_Sender(void);
 uint8_t Msg_Get_Payload_Size(void);
 void const * Msg_Get_Payload_Ptr(void);
 int16_t Msg_Get_RSSI(void);
-void Msg_Enqueue_for_Xmit(uint8_t dest, void const * payload, uint8_t payload_size, FB_MSG_XMIT_DESCRIPTOR * p_message);
+void Msg_Enqueue_for_Xmit(FB_MSG_ID_ENUM_t id, uint8_t dest, void const * payload, uint8_t payload_size, FB_MSG_XMIT_DESCRIPTOR * p_message);
 bool Msg_Xmit_Is_Complete(FB_MSG_XMIT_DESCRIPTOR const * p_message);
+
 
 #endif // FB_MESSAGE_H_INCLUDED

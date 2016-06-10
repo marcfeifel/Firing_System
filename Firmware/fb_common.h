@@ -3,11 +3,11 @@
 
 #include "fb_c51_target.h"
 
-#define NODEID_MASTER  2
-#define NODEID_REMOTE0 3
-//#define NODEID_REMOTE1 4
-//#define NODEID_REMOTE2 5
-//#define NODEID_REMOTE3 6
+#define NODEID_BROADCAST RF69_BROADCAST_ADDR
+#define NODEID_MASTER    2
+#define NODEID_REMOTE1   3
+#define NODEID_REMOTE2   4
+#define NODEID_REMOTE3   5
 
 #define HIGH 1
 #define LOW 0
@@ -89,8 +89,11 @@ void noInterrupts(void);
 
 bool millis_expired(uint32_t timer_ms);
 uint32_t millis(void);
-
+void millis_correct(uint32_t reference_millis);
+    
 void Sleep(uint32_t millis);
+
+void Reset_MCU(void);
 
 bool Ping(uint32_t target, uint32_t timeout_ms, uint16_t * p_response_time_ms, uint16_t * p_rssi);
 void Ping_Handler(void);

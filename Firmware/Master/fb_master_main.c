@@ -4,6 +4,8 @@
 #include "fb_messages.h"
 #include "rfm69.h"
 
+#define NODEID_TARGET NODEID_REMOTE1
+
 typedef enum
 {
     KEYSWITCH_STATE_OFF,
@@ -56,6 +58,30 @@ void main(void)
     printf("Start.\r\n");
 
     Msg_Init();
+
+    do
+    {
+        FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
+        FB_MSG_SYSTEM_RESET_t       msg_reset = {0};
+        uint16_t i;
+        
+        // reset all remotes
+        for (i = 0; i < 10; i++)
+        {
+
+            Msg_Enqueue_for_Xmit(FB_MSG_SYSTEM_RESET, RF69_BROADCAST_ADDR, &msg_reset, sizeof(msg_reset), &msg_descriptor);
+            
+            printf("Sending reset command %d...\r\n", i);
+            
+            while (!Msg_Xmit_Is_Complete(&msg_descriptor))
+            {
+                Msg_Run();
+            }
+            
+            Sleep(100);
+            
+        }    
+    } while (0);
 
     printf("Super loop started.\r\n");
 
@@ -110,12 +136,13 @@ void main(void)
                 case FB_MSG_PING:
                     {
                         static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
-                        static FB_MSG_PONG_t               msg_pong = {FB_MSG_PONG};
+                        static FB_MSG_PONG_t               msg_pong = {0};
 
-                         Msg_Enqueue_for_Xmit(Msg_Get_Sender(), &msg_pong, sizeof(msg_pong), &msg_descriptor);
+                         Msg_Enqueue_for_Xmit(FB_MSG_PONG, Msg_Get_Sender(), &msg_pong, sizeof(msg_pong), &msg_descriptor);
 
                     }
                     break;
+                    
                 case FB_MSG_PONG:
                     {
                         pong_received = true;
@@ -124,6 +151,7 @@ void main(void)
                         ping_tx_rssi = payload->rssi;
                     }
                     break;
+                    
                 case FB_MSG_CUE_FIRED:
                     {
                         const FB_MSG_CUE_FIRED_t * msg_fired = (FB_MSG_CUE_FIRED_t*)payload;
@@ -133,8 +161,8 @@ void main(void)
                         printf("Socket %d, cue %d fired.\r\n", (uint16_t)msg_fired->socket, (uint16_t)msg_fired->cue);
 
                     }
-
                     break;
+                    
                 case FB_MSG_RESP_SCAN_ALL_CUES:
                     {
                         const FB_MSG_RESP_SCAN_ALL_CUES_t * p_resp_scan = (FB_MSG_RESP_SCAN_ALL_CUES_t*)payload;
@@ -163,6 +191,7 @@ void main(void)
                         }
                     }
                     break;
+                    
                 default:
                     break;
             }
@@ -205,9 +234,7 @@ void main(void)
                     static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
                     static FB_MSG_PING_t               msg_ping = {0};
 
-                    msg_ping.id = FB_MSG_PING;
-                    msg_ping.rssi = Msg_Get_RSSI();
-                    Msg_Enqueue_for_Xmit(NODEID_REMOTE0, &msg_ping, sizeof(msg_ping), &msg_descriptor);
+                    Msg_Enqueue_for_Xmit(FB_MSG_PING, NODEID_TARGET, &msg_ping, sizeof(msg_ping), &msg_descriptor);
 
                     ping_timer = millis() + 500;
 
@@ -223,9 +250,7 @@ void main(void)
 
                 printf("Scan request sent.\r\n");
 
-                msg_scan_req.id = FB_MSG_CMD_SCAN_ALL_CUES;
-                msg_scan_req.rssi = Msg_Get_RSSI();
-                Msg_Enqueue_for_Xmit(NODEID_REMOTE0, &msg_scan_req, sizeof(msg_scan_req), &msg_descriptor);
+                Msg_Enqueue_for_Xmit(FB_MSG_CMD_SCAN_ALL_CUES, NODEID_TARGET, &msg_scan_req, sizeof(msg_scan_req), &msg_descriptor);
 
                 ping_timer = millis() + 10000;
 
@@ -269,11 +294,9 @@ void main(void)
                 {
                     printf("Fire command sent for socket %d, cue %d.\r\n", local_socket, local_cue);
 
-                    msg_cmd_fire.base.id = FB_MSG_CMD_FIRE_CUE;
-                    msg_cmd_fire.base.rssi = Msg_Get_RSSI();
                     msg_cmd_fire.socket = local_socket;
                     msg_cmd_fire.cue = local_cue;
-                    Msg_Enqueue_for_Xmit(NODEID_REMOTE0, &msg_cmd_fire, sizeof(msg_cmd_fire), &msg_descriptor);
+                    Msg_Enqueue_for_Xmit(FB_MSG_CMD_FIRE_CUE, NODEID_TARGET, &msg_cmd_fire, sizeof(msg_cmd_fire), &msg_descriptor);
 
                     ping_timer = millis() + 2000;
 
@@ -284,6 +307,10 @@ void main(void)
                     }
                 }
             }
+        }
+        else if ('r' == mode)
+        {
+            Reset_MCU();
         }
         else
         {

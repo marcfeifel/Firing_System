@@ -1,8 +1,9 @@
 #include "fb_common.h"
+#include "fb_messages.h"
 #include "RFM69.h"
 
 // used by the millisecond timer
-static volatile uint32_t _millis = 0;
+static volatile uint32_t m_millis = 0;
 
 // used by the RFM69 ISR handler
 static volatile bool RFM69_DIO0_last = LOW;
@@ -24,7 +25,7 @@ uint32_t millis(void)
     ET2 = 0;
 
     // get the count
-    millis = _millis;
+    millis = m_millis;
 
     // restore the interrupt enable
     ET2 = old_ET2;
@@ -33,6 +34,19 @@ uint32_t millis(void)
     return millis;
 
 } // millis()
+
+
+void millis_correct(uint32_t reference_millis)
+{
+    bool old_ET2 = ET2;
+    
+    ET2 = 0;
+    
+    m_millis = (m_millis + reference_millis) >> 1;
+    
+    ET2 = old_ET2;
+    
+} // millis_correct()
 
 
 bool millis_expired(uint32_t timer_ms)
@@ -71,9 +85,19 @@ void Sleep(uint32_t ms)
 } // Sleep()
 
 
+void Reset_MCU(void)
+{
+    RSTSRC |= BIT4;
+    while (1)
+    {
+    }
+} // Reset()
+
+
 // handle timer interrupts
 INTERRUPT(timer2_ISR, INTERRUPT_TIMER2)
 {
+    
     // get this bit
     bool RFM69_DIO0_this = PIN_RFM69HW_DIO0_I;
 
@@ -81,8 +105,28 @@ INTERRUPT(timer2_ISR, INTERRUPT_TIMER2)
     TF2H = 0;
 
     // increment the counter
-    _millis++;
+    m_millis++;
+    
+#ifdef NODEID_LOCAL
+#if NODEID_LOCAL==NODEID_REMOTE3
+    // intentionally skew the clock
+    do
+    {
+        static uint8_t skew = 0;
 
+        if (!skew++)
+        {
+            m_millis++;
+        }
+        else
+        {
+            // do nothing
+        }
+        
+    } while (0);
+#endif
+#endif
+    
     // if was low and now is high, then ISR is pending
     if (!RFM69_DIO0_last && RFM69_DIO0_this)
     {
@@ -111,7 +155,6 @@ INTERRUPT(timer2_ISR, INTERRUPT_TIMER2)
     {
         // do nothing
     }
-
 } // timer2_ISR()
 
 

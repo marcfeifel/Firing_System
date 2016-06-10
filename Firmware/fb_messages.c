@@ -8,6 +8,7 @@ static bool msg_received = false;
 
 static void Msg_Run_Xmit(void);
 static void Msg_Run_Recv(void);
+static void Msg_Header_Fill(FB_MSG_ID_ENUM_t id, FB_MSG_BASE_t * p_msg);
 
 void Msg_Init(void)
 {
@@ -15,6 +16,8 @@ void Msg_Init(void)
     RFM69_construct(true);
 
     RFM69_initialize();
+    
+    RFM69_promiscuous(true);
 
 } // Msg_Init()
 
@@ -70,8 +73,10 @@ int16_t Msg_Get_RSSI(void)
 } // Msg_Get_RSSI()
 
 
-void Msg_Enqueue_for_Xmit(uint8_t dest, void const * payload, uint8_t payload_size, FB_MSG_XMIT_DESCRIPTOR * p_message)
+void Msg_Enqueue_for_Xmit(FB_MSG_ID_ENUM_t id, uint8_t dest, void const * payload, uint8_t payload_size, FB_MSG_XMIT_DESCRIPTOR * p_message)
 {
+    Msg_Header_Fill(id, (FB_MSG_BASE_t*)payload);
+    
     // be sure that the descriptor is initialized correctly
     p_message->transmit_complete = false;
     p_message->p_next_message = NULL;
@@ -164,3 +169,12 @@ static void Msg_Run_Recv(void)
 
     }
 } // Msg_Run_Recv()
+
+
+static void Msg_Header_Fill(FB_MSG_ID_ENUM_t id, FB_MSG_BASE_t * p_msg)
+{
+    p_msg->id = id;
+    p_msg->time_ms = millis();
+    p_msg->rssi = Msg_Get_RSSI();
+    
+} // Msg_Header_Fill()

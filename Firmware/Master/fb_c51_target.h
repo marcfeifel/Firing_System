@@ -9,7 +9,7 @@ extern "C" {
 #include "c8051f930_defs.h"
 
 // definition for the master device
-#define NODEID    NODEID_MASTER
+//#define NODEID_LOCAL    NODEID_MASTER
 #define NETWORKID 1
 
 /* GPIO assignments */

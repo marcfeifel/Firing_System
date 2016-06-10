@@ -2,18 +2,6 @@
 
 static FB_MSG_XMIT_DESCRIPTOR msg = {0};
 
-void Task_Echo(void)
-{
-    // message received?
-    if (Msg_Received())
-    {
-        // do stuff with it
-        Msg_Enqueue_for_Xmit(Msg_Get_Sender(), Msg_Get_Payload_Ptr(), Msg_Get_Payload_Size(), &msg);
-
-    }
-} // Task_Echo()
-
-
 static struct
 {
     uint8_t in_progress;
