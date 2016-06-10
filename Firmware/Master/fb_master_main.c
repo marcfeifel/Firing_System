@@ -171,7 +171,7 @@ void main(void)
 
                         scan_results = p_resp_scan->cues_present;
 
-                        printf("Scan response:\r\n");
+                        printf("Scan response from remote-%d:\r\n", (uint16_t)Msg_Get_Sender() - NODEID_REMOTE1 + 1);
                         printf("RSSI: %d\r\n", p_resp_scan->base.rssi);
                         for (socket = 0; socket < SOCKETS_NUM_OF; socket++)
                         {
@@ -216,9 +216,11 @@ void main(void)
         {
             if (ping_timer < millis())
             {
+                static uint16_t ping_target = NODEID_REMOTE1;
+                
                 if (pong_received)
                 {
-                    printf("Pong time: %3dms, RxRSSI: %3ddBm, TxRSSI: %3ddBm\r\n", ping_response_time_ms, ping_rx_rssi, ping_tx_rssi);
+                    printf("Pong - Time: %3dms, RxRSSI: %3ddBm, TxRSSI: %3ddBm\r\n", ping_response_time_ms, ping_rx_rssi, ping_tx_rssi);
                 }
                 else
                 {
@@ -226,15 +228,22 @@ void main(void)
                 }
 
                 pong_received = false;
+                
+                if (NODEID_REMOTE1 == ping_target)
+                    ping_target = NODEID_REMOTE2;
+                else if (NODEID_REMOTE2 == ping_target)
+                    ping_target = NODEID_REMOTE3;
+                else
+                    ping_target = NODEID_REMOTE1;
 
-                printf("Ping... ");
+                printf("Ping remote-%d... ", ping_target - NODEID_REMOTE1 + 1);
 
                 ping_sent = millis();
                 {
                     static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
                     static FB_MSG_PING_t               msg_ping = {0};
 
-                    Msg_Enqueue_for_Xmit(FB_MSG_PING, NODEID_TARGET, &msg_ping, sizeof(msg_ping), &msg_descriptor);
+                    Msg_Enqueue_for_Xmit(FB_MSG_PING, ping_target, &msg_ping, sizeof(msg_ping), &msg_descriptor);
 
                     ping_timer = millis() + 500;
 
@@ -243,68 +252,63 @@ void main(void)
         }
         else if ('q' == mode)
         {
+            static uint16_t ping_target = NODEID_MASTER;
+
             if (ping_timer < millis())
             {
-                static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
-                static FB_MSG_CMD_SCAN_ALL_CUES_t  msg_scan_req = {0};
+                if (NODEID_MASTER == ping_target)
+                    ping_target = NODEID_REMOTE1;
+                else if (NODEID_REMOTE1 == ping_target)
+                    ping_target = NODEID_REMOTE2;
+                else if (NODEID_REMOTE2 == ping_target)
+                    ping_target = NODEID_REMOTE3;
+                else
+                {
+                    ping_target = NODEID_MASTER;
+                    mode = ' ';
+                }
 
-                printf("Scan request sent.\r\n");
+                if (NODEID_MASTER != ping_target)
+                {
+                    static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
+                    static FB_MSG_CMD_SCAN_ALL_CUES_t  msg_scan_req = {0};
 
-                Msg_Enqueue_for_Xmit(FB_MSG_CMD_SCAN_ALL_CUES, NODEID_TARGET, &msg_scan_req, sizeof(msg_scan_req), &msg_descriptor);
+                    printf("Scan request sent to remote-%d.\r\n", ping_target - NODEID_REMOTE1 + 1);
 
-                ping_timer = millis() + 10000;
+                    Msg_Enqueue_for_Xmit(FB_MSG_CMD_SCAN_ALL_CUES, ping_target, &msg_scan_req, sizeof(msg_scan_req), &msg_descriptor);
 
+                    ping_timer = millis() + 2000;
+                }
             }
         }
         else if ('f' == mode)
         {
-            static uint16_t cue_index = 0;
-
-            if (mode_changed)
-            {
-                cue_index = 0;
-            }
+            static uint16_t ping_target = NODEID_MASTER;
 
             if (ping_timer < millis())
             {
-                static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
-                static FB_MSG_CMD_FIRE_CUE_t       msg_cmd_fire = {0};
-
-                static uint16_t local_socket = 0;
-                static uint16_t local_cue = 0;
-
-                while (cue_index < 128)
+                if (NODEID_MASTER == ping_target)
+                    ping_target = NODEID_REMOTE1;
+                else if (NODEID_REMOTE1 == ping_target)
+                    ping_target = NODEID_REMOTE2;
+                else if (NODEID_REMOTE2 == ping_target)
+                    ping_target = NODEID_REMOTE3;
+                else
                 {
-                    local_socket = cue_index >> 4;
-                    local_cue = cue_index & 0x0F;
-
-                    cue_index++;
-
-                    if (BIT_IS_SET(scan_results.sockets[local_socket], local_cue))
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        // do nothing
-                    }
+                    ping_target = NODEID_MASTER;
+                    mode = ' ';
                 }
 
-                if (cue_index <= 128)
+                if (NODEID_MASTER != ping_target)
                 {
-                    printf("Fire command sent for socket %d, cue %d.\r\n", local_socket, local_cue);
+                    static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
+                    static FB_MSG_CMD_FIRE_CUE_t       msg_cmd_fire = {0};
 
-                    msg_cmd_fire.socket = local_socket;
-                    msg_cmd_fire.cue = local_cue;
-                    Msg_Enqueue_for_Xmit(FB_MSG_CMD_FIRE_CUE, NODEID_TARGET, &msg_cmd_fire, sizeof(msg_cmd_fire), &msg_descriptor);
+                    printf("Fire-all request sent to remote-%d.\r\n", ping_target - NODEID_REMOTE1 + 1);
+
+                    Msg_Enqueue_for_Xmit(FB_MSG_CMD_FIRE_ALL, ping_target, &msg_cmd_fire, sizeof(msg_cmd_fire), &msg_descriptor);
 
                     ping_timer = millis() + 2000;
-
-                    if (128 == cue_index)
-                    {
-                        printf("Done firing\r\n");
-                        cue_index++;
-                    }
                 }
             }
         }

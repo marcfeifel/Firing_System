@@ -100,6 +100,8 @@ void Msg_Enqueue_for_Xmit(FB_MSG_ID_ENUM_t id, uint8_t dest, void const * payloa
         while (NULL != p_iterator->p_next_message)
         {
             // loop until we find the end of the list
+            p_iterator = p_iterator->p_next_message;
+            
         }
 
         // put it at the end of the queue

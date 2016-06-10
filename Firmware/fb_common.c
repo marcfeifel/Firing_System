@@ -2,6 +2,8 @@
 #include "fb_messages.h"
 #include "RFM69.h"
 
+//#define ENABLE_CLOCK_SKEWING
+
 // used by the millisecond timer
 static volatile uint32_t m_millis = 0;
 
@@ -107,6 +109,7 @@ INTERRUPT(timer2_ISR, INTERRUPT_TIMER2)
     // increment the counter
     m_millis++;
     
+#ifdef ENABLE_CLOCK_SKEWING
 #ifdef NODEID_LOCAL
 #if NODEID_LOCAL==NODEID_REMOTE3
     // intentionally skew the clock
@@ -124,6 +127,7 @@ INTERRUPT(timer2_ISR, INTERRUPT_TIMER2)
         }
         
     } while (0);
+#endif
 #endif
 #endif
     
