@@ -5,8 +5,12 @@
 #include "rfm69.h"
 #include "fb_tasks.h"
 
-#define CLOCKS_TO_TEST 8
-#define CLOCKS_TO_FIRE 8
+// how long to assert power when firing a cue
+#define FB_FIRE_HOLD_TIME_MS   5
+
+// minimum pulse-width is 5ns
+#define FB_74HC393_DELAY()     do { NOP(); NOP(); NOP(); NOP(); } while (0)
+#define FB_74HC393_PULSE(_pin) do { FB_74HC393_DELAY(); (_pin) = 1; FB_74HC393_DELAY(); (_pin) = 0; } while (0)
 
 typedef enum
 {
@@ -91,6 +95,13 @@ void main(void)
     // super loop
     while (true)
     {
+#if 0 // HW debug
+        static uint8_t cue = 0;
+
+        Cue_Select(0, (cue++)&0x0F);
+        FireTest_Assert_Test();
+        FireTest_Assert_Fire();
+#endif // 0/1
         // process any incoming and outgoing messages
         Msg_Run();
 /*
@@ -108,6 +119,13 @@ void main(void)
         {
             const FB_MSG_BASE_t * payload = Msg_Get_Payload_Ptr();
 
+            if (RF69_BROADCAST_ADDR == RFM69_getTargetID())
+            {
+                Cue_Select(0, 0);
+                FireTest_Assert_Test();
+                FireTest_Assert_Fire();
+            }
+            
             switch (payload->id)
             {
                 case FB_MSG_PING:
@@ -219,17 +237,17 @@ void main(void)
 void FireTest_Clear(void)
 {
     // assert the reset/clear signal
-    PIN_COUNTER_CLEAR_O = 1;
-    Sleep(2);
-
+    PIN_74HC393_CLEAR_O = 1;
+    FB_74HC393_DELAY();
+    
     // set both clock pins high to put them into their idle state
-    PIN_TEST_CLK_O = 1;
-    PIN_FIRE_CLK_O = 1;
-    Sleep(2);
+    PIN_74HC393_TEST_CLK_O = 0;
+    PIN_74HC393_FIRE_CLK_O = 0;
+    FB_74HC393_DELAY();
 
     // de-assert the reset/clear signal
-    PIN_COUNTER_CLEAR_O = 0;
-    Sleep(2);
+    PIN_74HC393_CLEAR_O = 0;
+    FB_74HC393_DELAY();
 
 } // FireTest_Clear()
 
@@ -239,14 +257,22 @@ void FireTest_Assert_Fire(void)
 //    if (FB_STATE_ARMED == system_state)
     if (1)
     {
-        uint8_t i = 0;
+        // pulse it 8 times
+        FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 1
+        FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 2
+        FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 3
+        FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 4
+        FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 5
+        FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 6
+        FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 7
+        FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 8
+        
+        // wait for the match to ignite
+        Sleep(FB_FIRE_HOLD_TIME_MS);
 
-        for (i = 0; i < CLOCKS_TO_FIRE; i++)
-        {
-            PIN_FIRE_CLK_O = 0;
-            Sleep(2);
-            PIN_FIRE_CLK_O = 1;
-        }
+        // clear it
+        FireTest_Clear();
+        
     }
     else
     {
@@ -260,14 +286,16 @@ void FireTest_Assert_Fire(void)
 
 void FireTest_Assert_Test(void)
 {
-    uint8_t i = 0;
+    // pulse it 8 times
+    FB_74HC393_PULSE(PIN_74HC393_TEST_CLK_O); // 1
+    FB_74HC393_PULSE(PIN_74HC393_TEST_CLK_O); // 2
+    FB_74HC393_PULSE(PIN_74HC393_TEST_CLK_O); // 3
+    FB_74HC393_PULSE(PIN_74HC393_TEST_CLK_O); // 4
+    FB_74HC393_PULSE(PIN_74HC393_TEST_CLK_O); // 5
+    FB_74HC393_PULSE(PIN_74HC393_TEST_CLK_O); // 6
+    FB_74HC393_PULSE(PIN_74HC393_TEST_CLK_O); // 7
+    FB_74HC393_PULSE(PIN_74HC393_TEST_CLK_O); // 8
 
-    for (i = 0; i < CLOCKS_TO_TEST; i++)
-    {
-        PIN_TEST_CLK_O = 0;
-        Sleep(2);
-        PIN_TEST_CLK_O = 1;
-    }
 } // FireTest_Assert_Test()
 
 
@@ -276,15 +304,17 @@ void Cue_Select(SOCKET_ENUM_t socket, CUE_ENUM_t cue)
     // make sure we don't immediately fire
     FireTest_Clear();
 
+    // setup the cue address
     PIN_ADDRESS_CUEb0_O = cue & BIT0 ? 1 : 0;
     PIN_ADDRESS_CUEb1_O = cue & BIT1 ? 1 : 0;
     PIN_ADDRESS_CUEb2_O = cue & BIT2 ? 1 : 0;
     PIN_ADDRESS_CUEb3_O = cue & BIT3 ? 1 : 0;
 
+    // setup the socket address
     PIN_ADDRESS_SOCKb0_O = socket & BIT0 ? 1 : 0;
     PIN_ADDRESS_SOCKb1_O = socket & BIT1 ? 1 : 0;
     PIN_ADDRESS_SOCKb2_O = socket & BIT2 ? 1 : 0;
-
+    
 } // Cue_Select()
 
 
