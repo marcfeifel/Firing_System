@@ -110,21 +110,6 @@ typedef struct
 } FB_MSG_KEEP_ALIVE_t, FB_MSG_CMD_SET_TIME_t, FB_MSG_RESP_SET_TIME_t;
 
 
-typedef struct _FB_MSG_XMIT_DESCRIPTOR
-{
-    uint8_t         dest;
-
-    uint8_t         payload_size;
-
-    void const    * payload;
-
-    uint8_t         transmit_complete;
-
-    struct _FB_MSG_XMIT_DESCRIPTOR * p_next_message;
-
-} FB_MSG_XMIT_DESCRIPTOR;
-
-
 void Msg_Init(void);
 void Msg_Run(void);
 bool Msg_Received(void);
@@ -133,8 +118,8 @@ uint8_t Msg_Get_Sender(void);
 uint8_t Msg_Get_Payload_Size(void);
 void const * Msg_Get_Payload_Ptr(void);
 int16_t Msg_Get_RSSI(void);
-void Msg_Enqueue_for_Xmit(FB_MSG_ID_ENUM_t id, uint8_t dest, void const * payload, uint8_t payload_size, FB_MSG_XMIT_DESCRIPTOR * p_message);
-bool Msg_Xmit_Is_Complete(FB_MSG_XMIT_DESCRIPTOR const * p_message);
+void Msg_Enqueue_for_Xmit(FB_MSG_ID_ENUM_t id, uint8_t dest, void const * payload, uint8_t payload_size);
+bool Msg_Xmit_Is_Complete(void);
 
 
 #endif // FB_MESSAGE_H_INCLUDED

@@ -3,11 +3,8 @@
 #include "RFM69.h"
 #include "fb_messages.h"
 
-static FB_MSG_XMIT_DESCRIPTOR * p_xmit_queue = NULL;
 static bool msg_received = false;
 
-static void Msg_Run_Xmit(void);
-static void Msg_Run_Recv(void);
 static void Msg_Header_Fill(FB_MSG_ID_ENUM_t id, FB_MSG_BASE_t * p_msg);
 
 void Msg_Init(void)
@@ -24,10 +21,16 @@ void Msg_Init(void)
 
 void Msg_Run(void)
 {
-    Msg_Run_Recv();
+    if (RFM69_receiveDone())
+    {
+        msg_received = true;
 
-    Msg_Run_Xmit();
+    }
+    else
+    {
+        msg_received = false;
 
+    }
 } // Msg_Run()
 
 
@@ -73,104 +76,22 @@ int16_t Msg_Get_RSSI(void)
 } // Msg_Get_RSSI()
 
 
-void Msg_Enqueue_for_Xmit(FB_MSG_ID_ENUM_t id, uint8_t dest, void const * payload, uint8_t payload_size, FB_MSG_XMIT_DESCRIPTOR * p_message)
+void Msg_Enqueue_for_Xmit(FB_MSG_ID_ENUM_t id, uint8_t dest, void const * payload, uint8_t payload_size)
 {
+    
     Msg_Header_Fill(id, (FB_MSG_BASE_t*)payload);
     
-    // be sure that the descriptor is initialized correctly
-    p_message->transmit_complete = false;
-    p_message->p_next_message = NULL;
-    p_message->dest = dest;
-    p_message->payload = payload;
-    p_message->payload_size = payload_size;
+    // send
+    RFM69_send(dest, payload, payload_size, false);
 
-    // if the queue is empty...
-    if (NULL == p_xmit_queue)
-    {
-        // then just store this as the head
-        p_xmit_queue = p_message;
-
-    }
-    else
-    {
-        // else the queue is not empty...
-        FB_MSG_XMIT_DESCRIPTOR * p_iterator = p_xmit_queue;
-
-        // find the end of the queue
-        while (NULL != p_iterator->p_next_message)
-        {
-            // loop until we find the end of the list
-            p_iterator = p_iterator->p_next_message;
-            
-        }
-
-        // put it at the end of the queue
-        p_iterator->p_next_message = p_message;
-
-    }
 } // Msg_Enqueue_for_Xmit()
 
 
-bool Msg_Xmit_Is_Complete(FB_MSG_XMIT_DESCRIPTOR const * p_message)
+bool Msg_Xmit_Is_Complete(void)
 {
-    return p_message->transmit_complete;
+    return true;
 
 } // Msg_Xmit_Complete()
-
-
-static void Msg_Run_Xmit(void)
-{
-    // is the queue populated?
-    if (NULL != p_xmit_queue)
-    {
-        // can we send?
-        if (RFM69_canSend())
-        {
-            // send
-            RFM69_send(p_xmit_queue->dest, p_xmit_queue->payload, p_xmit_queue->payload_size, false);
-
-            // indicate message is transmitted
-            p_xmit_queue->transmit_complete = true;
-
-            // is there another message?
-            if (NULL != p_xmit_queue->p_next_message)
-            {
-                // yes - move it to the head
-                p_xmit_queue = p_xmit_queue->p_next_message;
-
-            }
-            else
-            {
-                // no - set the pointer to NULL
-                p_xmit_queue = NULL;
-
-            }
-        }
-        else
-        {
-            // do nothing
-        }
-    }
-    else
-    {
-        // do nothing
-    }
-} // Msg_Run_Xmit()
-
-
-static void Msg_Run_Recv(void)
-{
-    if (RFM69_receiveDone())
-    {
-        msg_received = true;
-
-    }
-    else
-    {
-        msg_received = false;
-
-    }
-} // Msg_Run_Recv()
 
 
 static void Msg_Header_Fill(FB_MSG_ID_ENUM_t id, FB_MSG_BASE_t * p_msg)

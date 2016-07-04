@@ -26,8 +26,6 @@ static uint32_t m_firing_times_ms[128] = { 0 };
 
 void main(void)
 {
-    FB_MSG_XMIT_DESCRIPTOR msg = {0};
-
     // initialize the C8051F920
     Init_Device();
     
@@ -115,10 +113,9 @@ void main(void)
                 {
                     case FB_MSG_PING:
                         {
-                            static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
-                            static FB_MSG_PONG_t               msg_pong = {0};
+                            FB_MSG_PONG_t               msg_pong = {0};
 
-                            Msg_Enqueue_for_Xmit(FB_MSG_PONG, Msg_Get_Sender(), &msg_pong, sizeof(msg_pong), &msg_descriptor);
+                            Msg_Enqueue_for_Xmit(FB_MSG_PONG, Msg_Get_Sender(), &msg_pong, sizeof(msg_pong));
 
                         }
                         break;
@@ -133,12 +130,11 @@ void main(void)
                         break;
                     case FB_MSG_CMD_SCAN_ALL_CUES:
                         {
-                            static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
-                            static FB_MSG_RESP_SCAN_ALL_CUES_t msg_report = {0};
+                            FB_MSG_RESP_SCAN_ALL_CUES_t msg_report = {0};
 
                             fb_Remote_Cue_Scan_All(&msg_report.cues_present);
 
-                            Msg_Enqueue_for_Xmit(FB_MSG_RESP_SCAN_ALL_CUES, Msg_Get_Sender(), &msg_report, sizeof(msg_report), &msg_descriptor);
+                            Msg_Enqueue_for_Xmit(FB_MSG_RESP_SCAN_ALL_CUES, Msg_Get_Sender(), &msg_report, sizeof(msg_report));
 
                         }
                         break;
