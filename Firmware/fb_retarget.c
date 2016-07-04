@@ -4,8 +4,8 @@ static bit first_pass_complete = 0;
 
 void retarget_init(void)
 {
-    // set TI0 to one so that the first "put" call will succeed
-    TI = 1;
+    // clear TI
+    TI = 0;
 
     // clear RI so that we don't indicate we've received anything
     RI = 0;
@@ -59,6 +59,9 @@ char putchar(char c)
     if (!first_pass_complete)
         retarget_init();
 
+    // move the byte into the transmit butter
+    SBUF = c;
+    
     // for now, this blocks until a byte gets sent
     while (!TI)
     {
@@ -67,9 +70,6 @@ char putchar(char c)
     
     // clear it
     TI = 0;
-    
-    // move the byte into the transmit butter
-    SBUF = c;
     
     // a byte was successfully moved into the transmit buffer
     return c;

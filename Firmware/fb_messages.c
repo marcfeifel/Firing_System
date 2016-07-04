@@ -1,7 +1,5 @@
-#include <stdio.h>
-
-#include "RFM69.h"
 #include "fb_messages.h"
+#include "RFM69.h"
 
 static bool msg_received = false;
 
@@ -14,24 +12,38 @@ void Msg_Init(void)
 
     RFM69_initialize();
     
-    RFM69_promiscuous(true);
+    RFM69_promiscuous(false);
 
 } // Msg_Init()
 
 
-void Msg_Run(void)
+bool Msg_Run(uint32_t timeout_ms)
 {
-    if (RFM69_receiveDone())
+    timeout_ms += millis();
+    
+    do
     {
-        msg_received = true;
+        if (RFM69_receiveDone())
+        {
+            msg_received = true;
 
-    }
-    else
-    {
-        msg_received = false;
+        }
+        else
+        {
+            msg_received = false;
 
-    }
+        }
+    } while (!msg_received && (millis() < timeout_ms));
+    
+    return msg_received;
 } // Msg_Run()
+
+
+void Msg_ACK(void)
+{
+    RFM69_sendACK(NULL, 0);
+
+} // Msg_ACK()
 
 
 bool Msg_Received(void)
@@ -43,12 +55,12 @@ bool Msg_Received(void)
 
 bool Msg_Is_For_Me(void)
 {
-    return msg_received;
+    return RFM69_getTargetID() == NODEID_LOCAL;
 
 } // Msg_Is_For_Me()
 
 
-uint8_t Msg_Get_Sender(void)
+uint8_t Msg_Get_Sender_ID(void)
 {
     return RFM69_getSenderID();
 
@@ -76,28 +88,33 @@ int16_t Msg_Get_RSSI(void)
 } // Msg_Get_RSSI()
 
 
-void Msg_Enqueue_for_Xmit(FB_MSG_ID_ENUM_t id, uint8_t dest, void const * payload, uint8_t payload_size)
+bool Msg_Send(FB_MSG_ID_ENUM_t id, uint8_t dest, void const * payload, uint8_t payload_size, uint32_t retry_timeout_ms)
 {
+    bool success = true;
     
     Msg_Header_Fill(id, (FB_MSG_BASE_t*)payload);
     
     // send
-    RFM69_send(dest, payload, payload_size, false);
+    if (retry_timeout_ms)
+    {
+        // 3 retries, 40ms per retry
+        success = RFM69_sendWithRetry(dest, payload, payload_size, 3, retry_timeout_ms);
+    }
+    else
+    {
+        RFM69_send(dest, payload, payload_size, false);
+        
+    }
+    
+    return success;
 
 } // Msg_Enqueue_for_Xmit()
-
-
-bool Msg_Xmit_Is_Complete(void)
-{
-    return true;
-
-} // Msg_Xmit_Complete()
 
 
 static void Msg_Header_Fill(FB_MSG_ID_ENUM_t id, FB_MSG_BASE_t * p_msg)
 {
     p_msg->id = id;
-    p_msg->time_ms = millis();
-    p_msg->rssi = Msg_Get_RSSI();
     
+    p_msg->rssi = Msg_Get_RSSI();
+
 } // Msg_Header_Fill()

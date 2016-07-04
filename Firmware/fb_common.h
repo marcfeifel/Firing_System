@@ -71,6 +71,11 @@ typedef enum
 
 } SOCKET_ENUM_t;
 
+
+#define STATUS_ARMED_KEY        0x01 // the "key" is armed
+#define STATUS_ARMED_KEEP_ALIVE 0x02 // the keep-alive is armed
+typedef uint8_t status_word_t;
+
 typedef uint8_t encoded_cue_t;
 
 #define MAKE_PIN(_socket, _cue)   ((((_socket) & 0x07) << 4) | ((_cue) & 0x0F))
@@ -102,12 +107,7 @@ void Sleep(uint32_t millis);
 
 void Reset_MCU(void);
 
-bool Ping(uint32_t target, uint32_t timeout_ms, uint16_t * p_response_time_ms, uint16_t * p_rssi);
-void Ping_Handler(void);
-void Pong_Handler(void);
-
-void Disbatcher(void);
-void Pong(void);
+uint16_t Remote_NodeID_to_Integer(uint8_t nodeid);
 
 void Task_1ms_Low_Priority_Handler(void);
 void Task_1ms_High_Priority_Handler(void);

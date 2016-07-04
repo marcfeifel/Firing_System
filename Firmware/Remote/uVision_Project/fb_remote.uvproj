@@ -408,6 +408,11 @@
               <FileType>1</FileType>
               <FilePath>..\fb_remote_program_run.c</FilePath>
             </File>
+            <File>
+              <FileName>fb_messages_remote.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_messages_remote.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -814,6 +819,11 @@
               <FileType>1</FileType>
               <FilePath>..\fb_remote_program_run.c</FilePath>
             </File>
+            <File>
+              <FileName>fb_messages_remote.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_messages_remote.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -1219,6 +1229,11 @@
               <FileName>fb_remote_program_run.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fb_remote_program_run.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_messages_remote.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_messages_remote.c</FilePath>
             </File>
           </Files>
         </Group>

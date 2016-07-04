@@ -136,18 +136,18 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>136</LineNumber>
+          <LineNumber>113</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>-16772567</Address>
+          <Address>-16771104</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>C:\Users\MarcF\Desktop\Git Repos\Firing_System\Firmware\Remote\uVision_Project\FB_REMOTE_MAIN.C</Filename>
+          <Filename>FB_MESSAGES_REMOTE.C</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\slave\FB_REMOTE_MAIN\134</Expression>
+          <Expression>\\slave\FB_MESSAGES_REMOTE\113</Expression>
         </Bp>
       </Breakpoint>
       <MemoryWindow1>
@@ -628,6 +628,18 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\fb_remote_program_run.c</PathWithFileName>
       <FilenameWithoutPath>fb_remote_program_run.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>2</GroupNumber>
+      <FileNumber>9</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\fb_messages_remote.c</PathWithFileName>
+      <FilenameWithoutPath>fb_messages_remote.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

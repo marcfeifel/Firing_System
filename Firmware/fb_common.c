@@ -116,41 +116,6 @@ INTERRUPT(timer3_ISR, INTERRUPT_TIMER3)
 } // timer2_ISR()
 
 
-bool Ping(uint32_t target, uint32_t timeout_ms, uint16_t * p_response_time_ms, uint16_t * p_rssi)
-{
-    // will hold the timestamp for the end of the timeout period
-    uint32_t ping_started_ms = 0;
-    uint32_t ping_ended_ms = 0;
-
-    // assume we didn't receive the pong
-    bool pong_received = false;
-
-    // setup the end of the timeout window
-    ping_started_ms = millis();
-
-    // send a ping
-    RFM69_send(target, "Ping", 4, false);
-
-    // loop until pong is received or we time out
-    do
-    {
-        // find out when we started
-        ping_ended_ms = millis();
-
-        // TODO - need to actually check for a "pong" and such
-        pong_received = RFM69_receiveDone();
-
-    } while (!pong_received && ((ping_started_ms + timeout_ms) > ping_ended_ms));
-
-    *p_rssi = RFM69_getRSSI();
-    *p_response_time_ms = ping_ended_ms - ping_started_ms;
-
-    // return whether we received a pong or not
-    return pong_received;
-
-} // Ping()
-
-
 void RFM69_ISR_Handler(void)
 {
     // get this bit
@@ -185,3 +150,10 @@ void RFM69_ISR_Handler(void)
         // do nothing
     }
 } // RFM69_ISR_Handler()
+
+
+uint16_t Remote_NodeID_to_Integer(uint8_t nodeid)
+{
+    return nodeid - NODEID_REMOTE_BASE;
+    
+} //  Remote_NodeID_to_Integer()
