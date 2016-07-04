@@ -20,6 +20,11 @@ void Timer_Init()
     TMR2RLH   = 0xF8;
     TMR2L     = 0x06;
     TMR2H     = 0xF8;
+    TMR3CN    = 0x04;
+    TMR3RLL   = 0x06;
+    TMR3RLH   = 0xF8;
+    TMR3L     = 0x03;
+    TMR3H     = 0xFC;
 }
 
 void SPI_Init()
@@ -81,6 +86,8 @@ void Oscillator_Init()
 
 void Interrupts_Init()
 {
+    IP        = 0x30;
+    EIE1      = 0x80;
     IE        = 0xA0;
 }
 

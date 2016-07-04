@@ -3,7 +3,6 @@
 #include "fb_messages.h"
 #include "fb_common.h"
 #include "rfm69.h"
-#include "fb_tasks.h"
 
 #include "fb_remote_cue.h"
 #include "fb_remote_program_run.h"
@@ -160,34 +159,6 @@ void main(void)
 } // main()
 
 
-void Task_Arming_Remote(void)
-{
-    switch (system_state)
-    {
-        case FB_STATE_DISARMED:
-            break;
-
-        case FB_STATE_RECEIVED_ARM_CMD:
-            break;
-
-        case FB_STATE_SENDING_ARM_RESP:
-            break;
-
-        case FB_STATE_WAITING_FOR_ARM_CONF:
-            break;
-
-        case FB_STATE_SENDING_ARMED_CONF:
-            break;
-
-        case FB_STATE_ARMED:
-            break;
-
-        default:
-            system_state = FB_STATE_DISARMED;
-            break;
-    }
-} // Task_Arming_Remote()
-
 bool fb_Remote_Is_Armed(void)
 {
     return true;
@@ -195,8 +166,14 @@ bool fb_Remote_Is_Armed(void)
 } // fb_Remote_Is_Armed()
 
 
-void Task_1ms_Handler(void)
+void Task_1ms_High_Priority_Handler(void)
 {
     fb_Remote_Program_Run_Handler_ms();
     
-} // Task_1ms_Handler()
+} // Task_1ms_High_Priority_Handler()
+
+
+void Task_1ms_Low_Priority_Handler(void)
+{
+    // do nothing for now
+} // Task_1ms_Low_Priority_Handler()

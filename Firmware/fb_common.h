@@ -97,7 +97,6 @@ void noInterrupts(void);
 
 bool millis_expired(uint32_t timer_ms);
 uint32_t millis(void);
-void millis_correct(uint32_t reference_millis);
 
 void Sleep(uint32_t millis);
 
@@ -109,5 +108,8 @@ void Pong_Handler(void);
 
 void Disbatcher(void);
 void Pong(void);
+
+void Task_1ms_Low_Priority_Handler(void);
+void Task_1ms_High_Priority_Handler(void);
 
 #endif // FB_COMMON_H_INCLUDED

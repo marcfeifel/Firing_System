@@ -41,19 +41,6 @@ uint32_t millis(void)
 } // millis()
 
 
-void millis_correct(uint32_t reference_millis)
-{
-    bool old_ET2 = ET2;
-    
-    ET2 = 0;
-    
-    m_millis = (m_millis + reference_millis) >> 1;
-    
-    ET2 = old_ET2;
-    
-} // millis_correct()
-
-
 bool millis_expired(uint32_t timer_ms)
 {
     return millis() > timer_ms ? true : false;
@@ -100,6 +87,7 @@ void Reset_MCU(void)
 
 
 // handle timer interrupts
+// 1ms high-priority interrupts
 INTERRUPT(timer2_ISR, INTERRUPT_TIMER2)
 {
     // clear the flag
@@ -108,31 +96,22 @@ INTERRUPT(timer2_ISR, INTERRUPT_TIMER2)
     // increment the counter
     m_millis++;
     
-#ifdef ENABLE_CLOCK_SKEWING
-#ifdef NODEID_LOCAL
-#if NODEID_LOCAL==NODEID_REMOTE3
-    // intentionally skew the clock
-    do
-    {
-        static uint8_t skew = 0;
+    Task_1ms_High_Priority_Handler();
+    
+} // timer2_ISR()
 
-        if (!skew++)
-        {
-            m_millis++;
-        }
-        else
-        {
-            // do nothing
-        }
-        
-    } while (0);
-#endif
-#endif
-#endif
-    
-    Task_1ms_Handler();
-    
+
+// handle timer interrupts
+// 1ms low-priority interrupts
+INTERRUPT(timer3_ISR, INTERRUPT_TIMER3)
+{
+    // clear the flag
+    TMR3CN &= ~0x80;
+
+    // call the handler
     RFM69_ISR_Handler();
+    
+    Task_1ms_Low_Priority_Handler();
     
 } // timer2_ISR()
 

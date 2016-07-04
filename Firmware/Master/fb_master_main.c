@@ -336,6 +336,11 @@ KEYSWITCH_STATE_t Get_Keyswitch_State(void)
 } // Get_Keyswitch_State()
 
 
-void Task_1ms_Handler(void)
+void Task_1ms_Low_Priority_Handler(void)
 {
-} // Task_1ms_Handler()
+} // Task_1ms_Low_Priority_Handler()
+
+
+void Task_1ms_High_Priority_Handler(void)
+{
+} // Task_1ms_High_Priority_Handler()
