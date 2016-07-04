@@ -10,6 +10,7 @@
 #define NODEID_REMOTE0       NODEID_REMOTE_BASE
 #define NODEID_REMOTE1       (NODEID_REMOTE0 + 1)
 #define NODEID_REMOTE2       (NODEID_REMOTE1 + 1)
+#define NODEID_REMOTE_LAST   NODEID_REMOTE2
 
 // the number of firing 'pins' per remote
 #define PINS_NUM_OF    (SOCKETS_NUM_OF * CUES_NUM_OF)

@@ -15,23 +15,7 @@ typedef enum
 
 } KEYSWITCH_STATE_t;
 
-typedef enum
-{
-    FB_STATE_DISARMED,
-    FB_STATE_KEY_TURNED,
-    FB_STATE_CONFIRMING_KEY_TURN,
-    FB_STATE_SENDING_ARM_CMD,
-    FB_STATE_WAITING_FOR_ARM_RESP,
-    FB_STATE_SENDING_ARM_CONF,
-    FB_STATE_WAITING_FOR_ARMED_CONF,
-    FB_STATE_ARMED
-
-} FB_STATES_MASTER_ARMING_t;
-
-
 KEYSWITCH_STATE_t Get_Keyswitch_State(void);
-
-static FB_STATES_MASTER_ARMING_t system_state = FB_STATE_DISARMED;
 
 static uint8_t mode = 0;
 static bool mode_changed = false;
@@ -229,14 +213,14 @@ void main(void)
 
                 pong_received = false;
                 
-                if (NODEID_REMOTE1 == ping_target)
-                    ping_target = NODEID_REMOTE2;
-                else if (NODEID_REMOTE2 == ping_target)
-                    ping_target = NODEID_REMOTE3;
-                else
+                if (NODEID_REMOTE0 == ping_target)
                     ping_target = NODEID_REMOTE1;
+                else if (NODEID_REMOTE1 == ping_target)
+                    ping_target = NODEID_REMOTE2;
+                else
+                    ping_target = NODEID_REMOTE0;
 
-                printf("Ping remote-%d... ", ping_target - NODEID_REMOTE1 + 1);
+                printf("Ping remote-%d... ", ping_target - NODEID_REMOTE_BASE);
 
                 ping_sent = millis();
                 {
@@ -257,11 +241,11 @@ void main(void)
             if (ping_timer < millis())
             {
                 if (NODEID_MASTER == ping_target)
+                    ping_target = NODEID_REMOTE0;
+                else if (NODEID_REMOTE0 == ping_target)
                     ping_target = NODEID_REMOTE1;
                 else if (NODEID_REMOTE1 == ping_target)
                     ping_target = NODEID_REMOTE2;
-                else if (NODEID_REMOTE2 == ping_target)
-                    ping_target = NODEID_REMOTE3;
                 else
                 {
                     ping_target = NODEID_MASTER;
@@ -273,7 +257,7 @@ void main(void)
                     static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
                     static FB_MSG_CMD_SCAN_ALL_CUES_t  msg_scan_req = {0};
 
-                    printf("Scan request sent to remote-%d.\r\n", ping_target - NODEID_REMOTE1 + 1);
+                    printf("Scan request sent to remote-%d.\r\n", ping_target - NODEID_REMOTE_BASE);
 
                     Msg_Enqueue_for_Xmit(FB_MSG_CMD_SCAN_ALL_CUES, ping_target, &msg_scan_req, sizeof(msg_scan_req), &msg_descriptor);
 
@@ -283,33 +267,21 @@ void main(void)
         }
         else if ('f' == mode)
         {
-            static uint16_t ping_target = NODEID_MASTER;
 
             if (ping_timer < millis())
             {
-                if (NODEID_MASTER == ping_target)
-                    ping_target = NODEID_REMOTE1;
-                else if (NODEID_REMOTE1 == ping_target)
-                    ping_target = NODEID_REMOTE2;
-                else if (NODEID_REMOTE2 == ping_target)
-                    ping_target = NODEID_REMOTE3;
-                else
-                {
-                    ping_target = NODEID_MASTER;
-                    mode = ' ';
-                }
+                static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
+                static FB_MSG_CMD_FIRE_CUE_t       msg_cmd_fire = {0};
 
-                if (NODEID_MASTER != ping_target)
-                {
-                    static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
-                    static FB_MSG_CMD_FIRE_CUE_t       msg_cmd_fire = {0};
 
-                    printf("Fire-all request sent to remote-%d.\r\n", ping_target - NODEID_REMOTE1 + 1);
+                printf("Fire-all request sent.\r\n");
 
-                    Msg_Enqueue_for_Xmit(FB_MSG_CMD_FIRE_ALL, ping_target, &msg_cmd_fire, sizeof(msg_cmd_fire), &msg_descriptor);
+                Msg_Enqueue_for_Xmit(FB_MSG_CMD_FIRE_ALL, RF69_BROADCAST_ADDR, &msg_cmd_fire, sizeof(msg_cmd_fire), &msg_descriptor);
 
-                    ping_timer = millis() + 2000;
-                }
+                ping_timer = millis() + 2000;
+
+                mode = ' ';
+                
             }
         }
         else if ('r' == mode)
@@ -364,36 +336,6 @@ KEYSWITCH_STATE_t Get_Keyswitch_State(void)
 } // Get_Keyswitch_State()
 
 
-void Task_Arming_Master(void)
+void Task_1ms_Handler(void)
 {
-    switch (system_state)
-    {
-        case FB_STATE_DISARMED:
-            break;
-
-        case FB_STATE_KEY_TURNED:
-            break;
-
-        case FB_STATE_CONFIRMING_KEY_TURN:
-            break;
-
-        case FB_STATE_SENDING_ARM_CMD:
-            break;
-
-        case FB_STATE_WAITING_FOR_ARM_RESP:
-            break;
-
-        case FB_STATE_SENDING_ARM_CONF:
-            break;
-
-        case FB_STATE_WAITING_FOR_ARMED_CONF:
-            break;
-
-        case FB_STATE_ARMED:
-            break;
-
-        default:
-            system_state = FB_STATE_DISARMED;
-            break;
-    }
-} // Task_Arming_Master()
+} // Task_1ms_Handler()

@@ -13,13 +13,17 @@ static struct
     uint8_t running;
 
     // how far into the show are we?
-    uint32_t run_time_ms;
+    // this is the value that should be synchronized across all remotes
+    uint32_t show_time_ms;
 
     // have the pins been fired?
     uint8_t pin_fired[PINS_NUM_OF];
 
-    // if a pin is being fired, how much longer until we deassert it?
-    uint32_t fire_deassert_time_ms;
+    // when this counter gets to 0, deassert the fire signal
+    // this value is used instead of show_time_ms in case
+    // show_times_ms gets a correction forward which would
+    // make the firing time too short
+    uint32_t fire_deassert_timer_ms;
 
     // pointer to the firing times for all the pins
     uint32_t const * p_pin_firing_times_ms;
@@ -45,6 +49,12 @@ void fb_Remote_Program_Run_Set_Run(bool running)
 } // fb_Remote_Program_Run_Set_Run()
 
 
+void fb_Remote_Program_Run_Update_Show_Time(uint32_t global_show_time_ms)
+{
+    m_state.show_time_ms = (m_state.show_time_ms + global_show_time_ms) >> 1;
+    
+} // fb_Remote_Program_Run_Update_Show_Time()
+
 
 void fb_Remote_Program_Run_Handler_ms(void)
 {
@@ -52,7 +62,11 @@ void fb_Remote_Program_Run_Handler_ms(void)
     {
         if (fb_Remote_Cue_Fire_is_Asserted())
         {
-            if (m_state.run_time_ms >= m_state.fire_deassert_time_ms)        
+            // decrement the counter
+            m_state.fire_deassert_timer_ms--;
+            
+            // if it's zero, then time to deassert it
+            if (!m_state.fire_deassert_timer_ms)        
             {
                 // 'fire' signal held long enough - release it
                 fb_Remote_Cue_Clear_FireTest();
@@ -73,7 +87,7 @@ void fb_Remote_Program_Run_Handler_ms(void)
 
                 while (!cue_found && (PINS_NUM_OF > pin))
                 {
-                    if (!m_state.pin_fired[pin] && (m_state.run_time_ms >= m_state.p_pin_firing_times_ms[pin]))
+                    if (!m_state.pin_fired[pin] && (m_state.show_time_ms >= m_state.p_pin_firing_times_ms[pin]))
                     {
                         // select the cue
                         fb_Remote_Cue_Select(GET_SOCKET(pin), GET_CUE(pin));
@@ -83,7 +97,7 @@ void fb_Remote_Program_Run_Handler_ms(void)
                         fb_Remote_Cue_Assert_Fire();
 
                         // set the time when the firing signal should be de-asserted
-                        m_state.fire_deassert_time_ms = m_state.run_time_ms + fb_Remote_Cue_Fire_Time_ms();
+                        m_state.fire_deassert_timer_ms = fb_Remote_Cue_Fire_Time_ms();
                         
                         // indicate the cue has been fired
                         m_state.pin_fired[pin] = true;
@@ -108,6 +122,6 @@ void fb_Remote_Program_Run_Handler_ms(void)
     } // if (running)
     
     // increment the show's run time
-    m_state.run_time_ms++;
+    m_state.show_time_ms++;
 
 } // fb_Remote_Program_Run_Handler_ms()

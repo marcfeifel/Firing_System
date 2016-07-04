@@ -23,7 +23,7 @@ typedef enum
 static REMOTE_CUES_t cues_present = { 0 };
 static FB_REMOTE_STATES_ARMING_t system_state = FB_STATE_DISARMED;
 
-static code uint32_t m_firing_times_ms[128] = { 1000, 2000, 3000, 4000, 5000 };
+static uint32_t m_firing_times_ms[128] = { 0 };
 
 void main(void)
 {
@@ -31,11 +31,16 @@ void main(void)
 
     // initialize the C8051F920
     Init_Device();
-
+    
+    {
+        uint32_t i;
+        for (i = 0; i < 128; i++)
+             m_firing_times_ms[i] = i * 15000;
+    }
+    
     // clear the fire and test signals
     fb_Remote_Cue_Init();
     fb_Remote_Program_Run_Init(m_firing_times_ms);
-    fb_Remote_Program_Run_Set_Run(true);
     
     // initialize the message module
     Msg_Init();
@@ -77,7 +82,7 @@ void main(void)
             if (NODEID_MASTER == RFM69_getSenderID())
             {
                 // take the time-stamp and apply a correction using it
-                millis_correct(payload->time_ms);
+                fb_Remote_Program_Run_Update_Show_Time(payload->time_ms);
 
             }
             else
@@ -91,6 +96,13 @@ void main(void)
                 {
                     case FB_MSG_SYSTEM_RESET:
                         Reset_MCU();
+                        break;
+
+                    case FB_MSG_CMD_FIRE_ALL:
+                        {
+                            fb_Remote_Program_Run_Init(m_firing_times_ms);
+                            fb_Remote_Program_Run_Set_Run(true);
+                        }
                         break;
 
                     default:
@@ -129,32 +141,6 @@ void main(void)
 
                             Msg_Enqueue_for_Xmit(FB_MSG_RESP_SCAN_ALL_CUES, Msg_Get_Sender(), &msg_report, sizeof(msg_report), &msg_descriptor);
 
-                        }
-                        break;
-                    case FB_MSG_CMD_FIRE_ALL:
-                        {
-                            SOCKET_ENUM_t socket;
-                            CUE_ENUM_t cue;
-
-                            for (socket = SOCKET0; socket < SOCKETS_NUM_OF; socket++)
-                            {
-                                for (cue = CUE0; cue < CUES_NUM_OF; cue++)
-                                {
-                                    fb_Remote_Cue_Select(socket, cue);
-                                    fb_Remote_Cue_Assert_Test();
-                                    fb_Remote_Cue_Assert_Fire();
-                                }
-                            }
-
-                            {
-                                static FB_MSG_XMIT_DESCRIPTOR      msg_descriptor = {0};
-                                static FB_MSG_CUE_FIRED_t          msg_cue_fired = {0};
-
-                                msg_cue_fired.socket =    0;
-                                msg_cue_fired.cue    =    0;
-                                Msg_Enqueue_for_Xmit(FB_MSG_CUE_FIRED, Msg_Get_Sender(), &msg_cue_fired, sizeof(msg_cue_fired), &msg_descriptor);
-
-                            }
                         }
                         break;
 
