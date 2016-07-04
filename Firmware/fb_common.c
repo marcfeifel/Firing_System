@@ -12,6 +12,9 @@ static volatile bool RFM69_DIO0_last = LOW;
 static volatile bool RFM69_ISR_Enabled = false;
 static volatile bool RFM69_ISR_Pending = false;
 
+void Task_1ms_Handler(void);
+void RFM69_ISR_Handler(void);
+
 // get the number of milliseconds since power-on
 uint32_t millis(void)
 {
@@ -99,10 +102,6 @@ void Reset_MCU(void)
 // handle timer interrupts
 INTERRUPT(timer2_ISR, INTERRUPT_TIMER2)
 {
-    
-    // get this bit
-    bool RFM69_DIO0_this = PIN_RFM69HW_DIO0_I;
-
     // clear the flag
     TF2H = 0;
 
@@ -131,34 +130,10 @@ INTERRUPT(timer2_ISR, INTERRUPT_TIMER2)
 #endif
 #endif
     
-    // if was low and now is high, then ISR is pending
-    if (!RFM69_DIO0_last && RFM69_DIO0_this)
-    {
-        // indicate an interrupt is pending
-        RFM69_ISR_Pending = true;
-    }
-    else
-    {
-        // do nothing
-    }
-
-    // store the present state of DIO0
-    RFM69_DIO0_last = RFM69_DIO0_this;
-
-    // if ISR is enabled and ISR is pending, call handler
-    if (RFM69_ISR_Enabled && RFM69_ISR_Pending)
-    {
-        // call the handler
-        RFM69_interruptHandler();
-
-        // clear the pending flag
-        RFM69_ISR_Pending = false;
-
-    }
-    else
-    {
-        // do nothing
-    }
+    Task_1ms_Handler();
+    
+    RFM69_ISR_Handler();
+    
 } // timer2_ISR()
 
 
@@ -195,3 +170,39 @@ bool Ping(uint32_t target, uint32_t timeout_ms, uint16_t * p_response_time_ms, u
     return pong_received;
 
 } // Ping()
+
+
+void RFM69_ISR_Handler(void)
+{
+    // get this bit
+    bool RFM69_DIO0_this = PIN_RFM69HW_DIO0_I;
+
+    // if was low and now is high, then ISR is pending
+    if (!RFM69_DIO0_last && RFM69_DIO0_this)
+    {
+        // indicate an interrupt is pending
+        RFM69_ISR_Pending = true;
+    }
+    else
+    {
+        // do nothing
+    }
+
+    // store the present state of DIO0
+    RFM69_DIO0_last = RFM69_DIO0_this;
+
+    // if ISR is enabled and ISR is pending, call handler
+    if (RFM69_ISR_Enabled && RFM69_ISR_Pending)
+    {
+        // call the handler
+        RFM69_interruptHandler();
+
+        // clear the pending flag
+        RFM69_ISR_Pending = false;
+
+    }
+    else
+    {
+        // do nothing
+    }
+} // RFM69_ISR_Handler()

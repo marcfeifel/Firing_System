@@ -3,11 +3,18 @@
 
 #include "fb_c51_target.h"
 
-#define NODEID_BROADCAST RF69_BROADCAST_ADDR
-#define NODEID_MASTER    2
-#define NODEID_REMOTE1   3
-#define NODEID_REMOTE2   4
-#define NODEID_REMOTE3   5
+#define NODEID_BROADCAST     RF69_BROADCAST_ADDR
+#define NODEID_MASTER        2
+
+#define NODEID_REMOTE_BASE   3
+#define NODEID_REMOTE0       NODEID_REMOTE_BASE
+#define NODEID_REMOTE1       (NODEID_REMOTE0 + 1)
+#define NODEID_REMOTE2       (NODEID_REMOTE1 + 1)
+
+// the number of firing 'pins' per remote
+#define PINS_NUM_OF    (SOCKETS_NUM_OF * CUES_NUM_OF)
+
+#define FB_REMOTE_ARMED_MAGIC_NUMBER 0x12345678
 
 #define HIGH 1
 #define LOW 0
@@ -65,9 +72,9 @@ typedef enum
 
 typedef uint8_t encoded_cue_t;
 
-#define ENCODE_CUE(_socket, _cue) (((_socket) << 4) & 0xF)) | ((_cue) & 0x0F))
-#define GET_CUE(_encoded_cue)     ((_encoded_cue) & 0x0F)
-#define GET_SOCKET(_encoded_cue)  (((_encoded_cue) >> 4) & 0x0F)
+#define MAKE_PIN(_socket, _cue)   ((((_socket) & 0x07) << 4) | ((_cue) & 0x0F))
+#define GET_CUE(_pin)     ((_pin) & 0x0F)
+#define GET_SOCKET(_pin)  (((_pin) >> 4) & 0x07)
 
 // structure which holds a single bit about a socket's cues
 typedef uint16_t SOCKET_t;
@@ -90,7 +97,7 @@ void noInterrupts(void);
 bool millis_expired(uint32_t timer_ms);
 uint32_t millis(void);
 void millis_correct(uint32_t reference_millis);
-    
+
 void Sleep(uint32_t millis);
 
 void Reset_MCU(void);
