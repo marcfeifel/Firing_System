@@ -2,55 +2,72 @@
 #include "fb_flash.h"
 #include "fb_crc.h"
 
-#define FB_PROGRAM_NAME_LEN      64
-
-typedef struct _FB_PROGRAM_t
-{
-    uint8_t name[FB_PROGRAM_NAME_LEN];
-
-    struct
-    {
-        // time the element is to be fired
-        uint32_t      firing_time_ms;
-
-        // cue to be fired
-        encoded_cue_t encoded_cue;
-
-    } elements[CUES_NUM_OF * SOCKETS_NUM_OF];
-
-    CRC16_t crc;
-
-} FB_PROGRAM_t;
+#include "fb_messages.h"
 
 // first block used
 #define FB_PROGRAM_FLASH_BLOCK_FIRST    DEVICE_FLASH_BLOCK_NUM(FB_PROGRAM_FLASH_ADDRESS)
 
 // number of blocks used
-#define FB_PROGRAM_FLASH_BLOCKS_NUM_OF  DEVICE_FLASH_MIN_BLOCKS(sizeof(FB_PROGRAM_t))
+#define FB_PROGRAM_FLASH_BLOCKS_NUM_OF  DEVICE_FLASH_MIN_BLOCKS(512)
 
 // size of the area allocated, in bytes
 #define FB_PROGRAM_FLASH_SIZE           (FB_PROGRAM_FLASH_BLOCKS_NUM_OF * DEVICE_BLOCK_SIZE)
 
 // base address of the area allocated
-#define FB_PROGRAM_FLASH_ADDRESS        (DEVICE_FLASH_SIZE_USABLE - FB_PROGRAM_FLASH_SIZE)
+#define FB_PROGRAM_FLASH_ADDRESS        (DEVICE_FLASH_SIZE_USABLE - 1024)
 
 // allocate the space in flash
-LOCATED_VARIABLE_NO_INIT(the_program_raw[FB_PROGRAM_FLASH_SIZE], uint8_t, SEG_CODE, FB_PROGRAM_FLASH_ADDRESS);
+LOCATED_VARIABLE_NO_INIT(the_program_raw[1024], uint8_t, SEG_CODE, FB_PROGRAM_FLASH_ADDRESS);
 
 // pointer used to read the program - a pointer into flash
-VARIABLE_SEGMENT_POINTER(p_the_program_read, FB_PROGRAM_t, SEG_CODE) = &the_program_raw;
+VARIABLE_SEGMENT_POINTER(p_firing_times_ms_flash, uint32_t, SEG_CODE) = &the_program_raw;
 
-void blah(void)
+static uint32_t m_firing_times_ms[128] = {0};
+
+
+void fb_Remote_Program_Load(uint32_t * p_firing_times_ms)
 {
-    uint32_t dummy_first = *(uint32_t*)p_the_program_read;
-    dummy_first++;
+    uint8_t pin;
+    
+    for (pin = 0; pin < 128; pin++)
+    {
+        p_firing_times_ms[pin] = p_firing_times_ms_flash[pin];
+        
+    }
+} // fb_Remote_Program_Load()
 
+
+void Msg_Remote_Program_Handle(void)
+{
+    FB_MSG_REMOTE_PROGRAM_t * program = (FB_MSG_REMOTE_PROGRAM_t*)Msg_Get_Payload_Ptr();
+    
+    m_firing_times_ms[program->pin] = program->firing_time_ms;
+
+    Msg_ACK();
+
+} // Msg_Remote_Program_Handle()
+
+
+void Msg_Remote_Program_Commit_Handle(void)
+{
+    bool success = true;
+    
+    uint8_t pin;
+    
     fb_Flash_Erase_Blocks(FB_PROGRAM_FLASH_BLOCK_FIRST, FB_PROGRAM_FLASH_BLOCKS_NUM_OF);
 
-    fb_Flash_Write(the_program_raw, &dummy_first, sizeof(dummy_first));
+    fb_Flash_Write(the_program_raw, m_firing_times_ms, 512);
 
-    while (dummy_first)
+    for (pin = 0; pin < 128; pin++)
     {
-        dummy_first++;
+        if (m_firing_times_ms[pin] != p_firing_times_ms_flash[pin])
+            success = false;
+        
     }
-}
+    
+    if (success)
+        Msg_ACK();
+    
+    Reset_MCU();
+    
+} // Msg_Remote_Program_Commit_Handle()

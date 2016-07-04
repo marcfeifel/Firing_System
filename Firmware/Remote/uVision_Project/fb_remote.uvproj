@@ -383,6 +383,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\RFM69\RFM69.c</FilePath>
             </File>
+            <File>
+              <FileName>fb_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -412,6 +417,11 @@
               <FileName>fb_messages_remote.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fb_messages_remote.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_remote_program_store.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_remote_program_store.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -794,6 +804,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\RFM69\RFM69.c</FilePath>
             </File>
+            <File>
+              <FileName>fb_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -823,6 +838,11 @@
               <FileName>fb_messages_remote.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fb_messages_remote.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_remote_program_store.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_remote_program_store.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1205,6 +1225,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\RFM69\RFM69.c</FilePath>
             </File>
+            <File>
+              <FileName>fb_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1234,6 +1259,11 @@
               <FileName>fb_messages_remote.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fb_messages_remote.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_remote_program_store.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_remote_program_store.c</FilePath>
             </File>
           </Files>
         </Group>

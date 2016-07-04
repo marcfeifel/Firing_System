@@ -18,8 +18,11 @@ typedef enum
     
     FB_MSG_KEEP_ALIVE,
     
-//    FB_MSG_CMD_SCAN_ALL_CUES,
-//    FB_MSG_RESP_SCAN_ALL_CUES,
+    FB_MSG_REMOTE_PROGRAM_COMMIT,
+    FB_MSG_REMOTE_PROGRAM,
+    
+    FB_MSG_REMOTE_SCAN_REQUEST,
+    FB_MSG_REMOTE_SCAN_RESPONSE,
 
 //    FB_MSG_CMD_FIRE_PROGRAM,
 
@@ -68,18 +71,31 @@ typedef struct
 {
     FB_MSG_BASE_t base;
     
+    uint32_t show_time_ms;
+    
     status_word_t status_word;
 } FB_MSG_KEEP_ALIVE_t;
 
-// scan all cues and response
-/*typedef FB_MSG_BASE_t FB_MSG_CMD_SCAN_ALL_CUES_t;
+
+typedef FB_MSG_BASE_t FB_MSG_REMOTE_PROGRAM_COMMIT_t;
+typedef struct
+{
+    FB_MSG_BASE_t base;
+    
+    uint32_t firing_time_ms;
+
+    uint8_t pin;
+} FB_MSG_REMOTE_PROGRAM_t;
+
+    // scan all cues and response
+typedef FB_MSG_BASE_t FB_MSG_REMOTE_SCAN_REQUEST_t;
 typedef struct
 {
     FB_MSG_BASE_t   base;
 
-    REMOTE_CUES_t   cues_present;
+    REMOTE_CUES_t   cues;
 
-} FB_MSG_RESP_SCAN_ALL_CUES_t;*/
+} FB_MSG_REMOTE_SCAN_RESPONSE_t;
 
 
 // single-cue firing command and response
@@ -118,6 +134,12 @@ typedef struct
     
     status_word_t status_word;
     
+    uint8_t next_cue;
+
+    uint8_t next_socket;
+    
+    uint8_t cues_remaining;
+    
 } FB_MSG_REMOTE_STATUS_RESPONSE_t;
 typedef FB_MSG_BASE_t FB_MSG_REMOTE_STATUS_REQUEST_t;
 
@@ -151,6 +173,16 @@ void Msg_Remote_Disarm_Handle(void);
 
 void Msg_Remote_Status_Request(uint8_t dest, uint32_t timeout_ms);
 void Msg_Remote_Status_Request_Handle(void);
+
+void Msg_Remote_Program(uint8_t dest, uint32_t * firing_times_ms);
+void Msg_Remote_Program_Handle(void);
+
+void Msg_Remote_Program_Commit(uint8_t dest);
+void Msg_Remote_Program_Commit_Handle(void);
+
+void Msg_Remote_Scan_Request(uint8_t dest, uint32_t timeout_ms);
+void Msg_Remote_Scan_Request_Handle(void);
+    
 
 void Msg_Unexpected_Message(void);
 

@@ -3,6 +3,8 @@
 #include <stdio.h>
 
 bool System_Is_Armed(void);
+bool System_Show_Is_Running(void);
+uint32_t System_Get_Show_Time_ms(void);
 
 void Msg_Ping(uint8_t dest, uint32_t timeout_ms)
 {
@@ -66,11 +68,14 @@ void Msg_Remote_Status_Request(uint8_t dest, uint32_t timeout_ms)
         {
             FB_MSG_REMOTE_STATUS_RESPONSE_t * p_status_response = (FB_MSG_REMOTE_STATUS_RESPONSE_t*)p_base;
             
-            printf("0x%02X, RT: %7.2f, ST: %7.2f, NC: %6.2f\r\n", 
+            printf("0x%02X RT:%7.2fs ST:%7.2fs NC:%6.2fs s:%d c:%2d r:%3d\r\n", 
                    (uint16_t)p_status_response->status_word,
                    p_status_response->remote_time_ms / 1000.0f,
                    p_status_response->show_time_ms / 1000.0f,
-                   p_status_response->time_to_next_cue_ms / 1000.0f);
+                   p_status_response->time_to_next_cue_ms / 1000.0f,
+                   (uint16_t)p_status_response->next_socket,
+                   (uint16_t)p_status_response->next_cue,
+                   (uint16_t)p_status_response->cues_remaining);
             
 
         }
@@ -126,7 +131,10 @@ void Msg_Keep_Alive(uint8_t dest)
 {
     FB_MSG_KEEP_ALIVE_t keep_alive = {0};
     
-    keep_alive.status_word |= System_Is_Armed() ? (STATUS_ARMED_KEY | STATUS_ARMED_KEEP_ALIVE) : 0;
+    keep_alive.status_word |= System_Is_Armed()        ? (STATUS_ARMED_KEY | STATUS_ARMED_KEEP_ALIVE) : 0;
+    keep_alive.status_word |= System_Show_Is_Running() ? STATUS_SHOW_IS_RUNNING                       : 0;
+    
+    keep_alive.show_time_ms = System_Get_Show_Time_ms();
     
     Msg_Send(FB_MSG_KEEP_ALIVE, dest, &keep_alive, sizeof(keep_alive), 0);
     
@@ -147,6 +155,108 @@ void Msg_Remote_Disarm(uint8_t dest, uint32_t timeout_ms)
         printf("Disarm sent to remote-%d... ACK not received.\r\n", Remote_NodeID_to_Integer(dest));
     }
 } // Msg_Remote_Disarm()
+
+
+
+void Msg_Remote_Program_Commit(uint8_t dest)
+{
+    bool success;
+        
+    FB_MSG_REMOTE_PROGRAM_COMMIT_t program_commit = {0};
+    
+    printf("Committing program to remote-%d: ", Remote_NodeID_to_Integer(dest));
+
+    success = Msg_Send(FB_MSG_REMOTE_PROGRAM_COMMIT, dest, &program_commit, sizeof(program_commit), 500);
+    
+    printf("%s\r\n", success ? "success" : "fail");
+
+}
+
+
+void Msg_Remote_Program(uint8_t dest, uint32_t * firing_times_ms)
+{
+    uint16_t pin;
+
+    printf("Programming remote-%d\r\n", Remote_NodeID_to_Integer(dest));
+    
+    for (pin = 0; pin < PINS_NUM_OF; pin++)
+    {
+        bool program_success;
+        
+        FB_MSG_REMOTE_PROGRAM_t program = {0};
+        
+        program.pin = pin;
+        program.firing_time_ms = firing_times_ms[pin];
+        
+        program_success = Msg_Send(FB_MSG_REMOTE_PROGRAM, dest, &program, sizeof(program), 150);
+        
+        printf("Pin %3d - %6ldms: %s\r\n", pin, firing_times_ms[pin], program_success ? "success" : "fail");
+        
+    }
+} // Msg_Remote_Program()
+
+
+void Msg_Remote_Scan_Request(uint8_t dest, uint32_t timeout_ms)
+{
+    // the message
+    FB_MSG_REMOTE_SCAN_REQUEST_t scan_request = {0};
+
+    printf("Remote-%d scan response:\r\n", Remote_NodeID_to_Integer(dest));
+    
+    // send the message
+    Msg_Send(FB_MSG_REMOTE_SCAN_REQUEST, dest, &scan_request, sizeof(scan_request), 0);
+    
+    // wait for a while to get a response
+    if (Msg_Run(timeout_ms))
+    {
+        FB_MSG_BASE_t * p_base = (FB_MSG_BASE_t*)Msg_Get_Payload_Ptr();
+
+        // if the message is for me, and it's from the right destination...
+        if (Msg_Is_For_Me() && (Msg_Get_Sender_ID() == dest) && (p_base->id == FB_MSG_REMOTE_SCAN_RESPONSE))
+        {
+            FB_MSG_REMOTE_SCAN_RESPONSE_t * p_scan_response = (FB_MSG_REMOTE_SCAN_RESPONSE_t*)p_base;
+            
+            REMOTE_CUES_t * p_cues = &p_scan_response->cues;
+            
+            do
+            {
+                uint16_t socket;
+                
+                for (socket = 0; socket < 8; socket++)
+                {
+                    uint16_t cue;
+
+                    printf("Socket %d: ", socket);
+                    
+                    for (cue = 0; cue < 16; cue++)
+                    {
+                        if (p_cues->sockets[socket] & 0x00001)
+                            printf("Q%02d ", cue);
+                        else
+                            printf("    ");
+                        
+                        p_cues->sockets[socket] >>= 1;
+                        
+                    }
+                    
+                    printf("\r\n");
+                    
+                }
+            } while (0);
+
+        }
+        else
+        {
+            Msg_Unexpected_Message();
+            
+        }
+    } 
+    else
+    {
+        // we didn't receive a message back
+        printf("Silence.\r\n");
+    }
+} // Msg_Remote_Status_Request()
 
 
 void Msg_Unexpected_Message(void)

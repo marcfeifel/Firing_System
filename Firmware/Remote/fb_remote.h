@@ -12,6 +12,8 @@ bool fb_Remote_Arming_Key_Is_Set(void);
 bool fb_Remote_Arming_Flag_Is_Set(void);
 void fb_Remote_Disarm(void);
 
+void fb_Keep_Alive_Received(void);
+    
 #ifdef __cplusplus
 }
 #endif // __cplusplus

@@ -51,9 +51,90 @@ void fb_Remote_Program_Run_Set_Run(bool running)
 
 void fb_Remote_Program_Run_Update_Show_Time(uint32_t global_show_time_ms)
 {
-    m_state.show_time_ms = (m_state.show_time_ms + global_show_time_ms) >> 1;
-    
+    if (m_state.running)
+    {
+        Task_1ms_High_Priority_Disable();
+        
+        m_state.show_time_ms = (m_state.show_time_ms + global_show_time_ms) >> 1;
+        
+        Task_1ms_High_Priority_Enable();
+    }
 } // fb_Remote_Program_Run_Update_Show_Time()
+
+
+bool fb_Remote_Program_Run_Is_Running(void)
+{
+    return m_state.running;
+    
+} // fb_Remote_Program_Run_Is_Running()
+
+
+uint32_t fb_Remote_Program_Run_Get_Show_Time_ms(void)
+{
+    uint32_t show_time_ms_latched;
+    
+    Task_1ms_High_Priority_Disable();
+    
+    show_time_ms_latched = m_state.show_time_ms;
+    
+    Task_1ms_High_Priority_Enable();
+
+    return show_time_ms_latched;
+    
+} // fb_Remote_Program_Run_Get_Show_Time_ms()
+
+
+void fb_Remote_Program_Run_To_Next_Cue_Info(uint32_t * p_time_ms, uint8_t * p_pin, uint8_t * p_cues_remaining)
+{
+    // start with the largest possible number
+    uint32_t closest_ms = (uint32_t)-1;
+    uint8_t  closest_pin = 0;
+    uint8_t  cues_remaining = 0;
+    
+    // will iterate through the pins
+    uint8_t pin;
+
+    // get the current time
+    uint32_t now = fb_Remote_Program_Run_Get_Show_Time_ms();
+    
+    for (pin = 0; pin < PINS_NUM_OF; pin++)
+    {
+        // if the pin hasn't been fired...
+        if (!m_state.pin_fired[pin])
+        {
+            if (CUE_EMPTY != m_state.p_pin_firing_times_ms[pin])
+            {
+                // get the delta until it does get fired...
+                uint32_t time_until_ms = m_state.p_pin_firing_times_ms[pin] - now;
+        
+                if (time_until_ms < closest_ms)
+                {
+                    // and keep the smaller of the two
+                    closest_ms = time_until_ms;
+                    
+                    closest_pin = pin;
+                    
+                }            
+
+                cues_remaining++;
+                
+            }
+            else
+            {
+                // do nothing
+            }
+        }
+        else
+        {
+            // do nothing
+        }
+    } // for (pin)
+    
+    *p_time_ms = closest_ms;
+    *p_pin     = closest_pin;
+    *p_cues_remaining = cues_remaining;
+    
+} // fb_Remote_Program_Run_Time_To_Next_Cue()
 
 
 void fb_Remote_Program_Run_Handler_ms(void)
@@ -119,9 +200,9 @@ void fb_Remote_Program_Run_Handler_ms(void)
                 // do nothing
             } // if (running && armed)
         } // if (run_time > fire_deassert)
-    } // if (running)
-    
-    // increment the show's run time
-    m_state.show_time_ms++;
 
+        // increment the show's run time
+        m_state.show_time_ms++;
+
+    } // if (running)
 } // fb_Remote_Program_Run_Handler_ms()

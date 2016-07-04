@@ -13,16 +13,16 @@ static uint32_t m_firing_times_ms[128] = { 0 };
 static bool m_armed_flag = false;
 static uint32_t m_arming_key = 0;
 
+static uint32_t m_keep_alive_received_ms;
+
+void fb_Remote_Program_Load(uint32_t * p_firing_times_ms);
+
 void main(void)
 {
     // initialize the C8051F920
     Init_Device();
-    
-    {
-        uint32_t i;
-        for (i = 0; i < 128; i++)
-             m_firing_times_ms[i] = i * 15000;
-    }
+
+    fb_Remote_Program_Load(m_firing_times_ms);
     
     // clear the fire and test signals
     fb_Remote_Cue_Init();
@@ -38,6 +38,13 @@ void main(void)
         Msg_Run(0);
 
         Msg_Disbatch();
+        
+        if (millis() > (m_keep_alive_received_ms + 10000))
+        {
+            Msg_Init();
+            
+            m_keep_alive_received_ms = millis();
+        }
 
     } // while (true)
 } // main()
@@ -84,6 +91,13 @@ void fb_Remote_Disarm(void)
     m_arming_key = 0;
     
 } // fb_Remote_Disarm()
+
+
+void fb_Keep_Alive_Received(void)
+{
+    m_keep_alive_received_ms = millis();
+    
+} // fb_Keep_Alive_Received()
 
 
 void Task_1ms_High_Priority_Handler(void)

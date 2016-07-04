@@ -27,9 +27,6 @@ void fb_Flash_Erase_Blocks(uint16_t first_block, uint16_t num_blocks)
     // loop through the blocks
     while (num_blocks--)
     {
-        // store the present interrupt state
-        bool IE_prev = IE;
-
         // disable interrupts
         IE = 0;
 
@@ -48,7 +45,7 @@ void fb_Flash_Erase_Blocks(uint16_t first_block, uint16_t num_blocks)
         PSEE_CLR();
 
         // restore the previos interrupt state
-        IE = IE_prev;
+        IE = 1;
 
         // because we are erasing in 512B chunks for future-proofness,
         // need to actually increment by half-blocks
@@ -72,9 +69,6 @@ void fb_Flash_Write(void * p_dest, void * p_src, uint32_t len)
         // get the byte and store it in the data segment, and update the pointer
         SEGMENT_VARIABLE(byte_to_commit, uint8_t, SEG_XDATA) = *(p_read++);
 
-        // store the present interrupt state
-        bool IE_prev = IE;
-
         // disable interrupts
         IE = 0;
 
@@ -91,7 +85,7 @@ void fb_Flash_Write(void * p_dest, void * p_src, uint32_t len)
         PSWE_CLR();
 
         // restore the previos interrupt state
-        IE = IE_prev;
+        IE = 1;
 
         // move to the next byte (don't update this variable during the flash write - bad things could happen)
         p_write++;

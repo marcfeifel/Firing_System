@@ -1,6 +1,8 @@
 #include "fb_messages.h"
 
 #include "fb_remote.h"
+#include "fb_remote_program_run.h"
+#include "fb_remote_cue.h"
 
 void Msg_Disbatch(void)
 {
@@ -33,8 +35,16 @@ void Msg_Disbatch(void)
                     Msg_Remote_Status_Request_Handle();
                     break;
                 
-                case FB_MSG_KEEP_ALIVE:
-                    Msg_Keep_Alive_Handle();
+                case FB_MSG_REMOTE_PROGRAM_COMMIT:
+                    Msg_Remote_Program_Commit_Handle();
+                    break;
+                
+                case FB_MSG_REMOTE_PROGRAM:
+                    Msg_Remote_Program_Handle();
+                    break;
+                
+                case FB_MSG_REMOTE_SCAN_REQUEST:
+                    Msg_Remote_Scan_Request_Handle();
                     break;
                 
                 default:
@@ -46,6 +56,10 @@ void Msg_Disbatch(void)
             // broadcast messages
             switch (p_base->id)
             {
+                case FB_MSG_KEEP_ALIVE:
+                    Msg_Keep_Alive_Handle();
+                    break;
+                
                 default:
                     break;
             }
@@ -66,6 +80,20 @@ void Msg_Keep_Alive_Handle(void)
     {
         fb_Remote_Set_Armed_Flag(false);
     }
+    
+    if (keep_alive->status_word & STATUS_SHOW_IS_RUNNING)
+    {
+        fb_Remote_Program_Run_Set_Run(true);
+    }
+    else
+    {
+        fb_Remote_Program_Run_Set_Run(false);
+    }
+    
+    fb_Remote_Program_Run_Update_Show_Time(keep_alive->show_time_ms);
+    
+    fb_Keep_Alive_Received();
+    
 } // Msg_Keep_Alive_Handle()
 
 
@@ -113,12 +141,40 @@ void Msg_Remote_Status_Request_Handle(void)
     FB_MSG_REMOTE_STATUS_RESPONSE_t status_response = {0};
     
     status_response.remote_time_ms = millis();
-    status_response.show_time_ms = 0;
-    status_response.time_to_next_cue_ms = 0;
+    status_response.show_time_ms = fb_Remote_Program_Run_Get_Show_Time_ms();
+    
+    do
+    {
+        uint8_t next_pin;
+        uint32_t time_to_next_pin_ms;
+        uint8_t cues_remaining;
+    
+        fb_Remote_Program_Run_To_Next_Cue_Info(&time_to_next_pin_ms,
+                                               &next_pin,
+                                               &cues_remaining);
+        
+        status_response.time_to_next_cue_ms = time_to_next_pin_ms;
+        status_response.next_cue = GET_CUE(next_pin);
+        status_response.next_socket = GET_SOCKET(next_pin);
+        status_response.cues_remaining = cues_remaining;
+        
+    } while (0);
 
-    status_response.status_word |= fb_Remote_Arming_Flag_Is_Set() ? STATUS_ARMED_KEEP_ALIVE : 0;
-    status_response.status_word |= fb_Remote_Arming_Key_Is_Set()  ? STATUS_ARMED_KEY        : 0;
+    status_response.status_word |= fb_Remote_Arming_Flag_Is_Set()     ? STATUS_ARMED_KEEP_ALIVE : 0;
+    status_response.status_word |= fb_Remote_Arming_Key_Is_Set()      ? STATUS_ARMED_KEY        : 0;
+    status_response.status_word |= fb_Remote_Program_Run_Is_Running() ? STATUS_SHOW_IS_RUNNING  : 0;
     
     Msg_Send(FB_MSG_REMOTE_STATUS_RESPONSE, Msg_Get_Sender_ID(), &status_response, sizeof(status_response), false);
+
+} // Msg_Remote_Status_Request_Handle()
+
+
+void Msg_Remote_Scan_Request_Handle(void)
+{
+    FB_MSG_REMOTE_SCAN_RESPONSE_t scan_response = {0};
+    
+    fb_Remote_Cue_Scan_All(&scan_response.cues);
+    
+    Msg_Send(FB_MSG_REMOTE_SCAN_RESPONSE, Msg_Get_Sender_ID(), &scan_response, sizeof(scan_response), false);
 
 } // Msg_Remote_Status_Request_Handle()

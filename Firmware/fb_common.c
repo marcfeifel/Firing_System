@@ -15,6 +15,23 @@ static volatile bool RFM69_ISR_Pending = false;
 void Task_1ms_Handler(void);
 void RFM69_ISR_Handler(void);
 
+
+void Task_1ms_High_Priority_Disable(void)
+{
+    // disable interrupt
+    ET2 = 0;
+
+} // Task_1ms_High_Priority_Disable()
+
+
+void Task_1ms_High_Priority_Enable(void)
+{
+    // restore the interrupt enable
+    ET2 = 1;
+
+} // Task_1ms_High_Priority_Enable()
+
+
 // get the number of milliseconds since power-on
 uint32_t millis(void)
 {
@@ -23,17 +40,14 @@ uint32_t millis(void)
     // will store the count
     uint32_t millis = 0;
 
-    // store the previous interrupt-enable state
-    bool old_ET2 = ET2;
-
     // disable interrupt
-    ET2 = 0;
-
+    Task_1ms_High_Priority_Disable();
+    
     // get the count
     millis = m_millis;
 
     // restore the interrupt enable
-    ET2 = old_ET2;
+    Task_1ms_High_Priority_Enable();
 
     // return the count
     return millis;
