@@ -72,7 +72,7 @@ void Msg_Remote_Status_Request(uint8_t dest, uint32_t timeout_ms)
                    (uint16_t)p_status_response->status_word,
                    p_status_response->remote_time_ms / 1000.0f,
                    p_status_response->show_time_ms / 1000.0f,
-                   p_status_response->time_to_next_cue_ms / 1000.0f,
+                   (int32_t)p_status_response->time_to_next_cue_ms / 1000.0f,
                    (uint16_t)p_status_response->next_socket,
                    (uint16_t)p_status_response->next_cue,
                    (uint16_t)p_status_response->cues_remaining);
@@ -186,7 +186,7 @@ void Msg_Remote_Program(uint8_t dest, uint32_t * firing_times_ms)
         FB_MSG_REMOTE_PROGRAM_t program = {0};
         
         program.pin = pin;
-        program.firing_time_ms = firing_times_ms[pin];
+        program.firing_time_ms = firing_times_ms[pin] + 10000; // show will always start 10s late in order to ensure sync time
         
         program_success = Msg_Send(FB_MSG_REMOTE_PROGRAM, dest, &program, sizeof(program), 150);
         

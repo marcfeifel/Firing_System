@@ -21,6 +21,10 @@ static bool m_show_is_running = false;
 static KEYSWITCH_STATE_t Get_Keyswitch_State(void);
 static void Update_Keyswitch_State(void);
 
+static code uint32_t m_program[128][3] = {
+    #include "program.inc."
+};
+
 static struct
 {
     KEYSWITCH_STATE_t keyswitch_state_prev;
@@ -96,24 +100,24 @@ void main(void)
                     printf("Download a new show?");
                     if (Get_Confirmation())
                     {
-                        uint32_t the_show[128] = {0};
-                        memset(the_show, 0xFF, sizeof(the_show));
+                        uint8_t i;
+                        uint32_t the_show[128];
                         
+                        for (i = 0; i < 128; i++)
+                        {
+                            the_show[i] = m_program[i][0];
+                        }
                         Msg_Remote_Program(NODEID_REMOTE0, the_show);
 
+                        for (i = 0; i < 128; i++)
                         {
-                            uint32_t i;
-                            memset(the_show, 0xFF, sizeof(the_show));
-                            for (i = 0; i < 128; i++)
-                                 the_show[i] = (uint32_t)((uint32_t)127 * (uint32_t)1500) - i * 1500 + 10000;
+                            the_show[i] = m_program[i][1];
                         }
                         Msg_Remote_Program(NODEID_REMOTE1, the_show);
   
+                        for (i = 0; i < 128; i++)
                         {
-                            uint32_t i;
-                            memset(the_show, 0xFF, sizeof(the_show));
-                            for (i = 0; i < 128; i++)
-                                 the_show[i] = i * 1500 + 10000;
+                            the_show[i] = m_program[i][2];
                         }
                         Msg_Remote_Program(NODEID_REMOTE2, the_show);
                     }
