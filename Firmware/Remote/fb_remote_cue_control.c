@@ -59,13 +59,10 @@ bool fb_Remote_Cue_Assert_Fire(void)
         FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 2
         FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 3
         FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 4
-#if NODEID_LOCAL != NODEID_REMOTE0
-        // remote 0 has an issue with the HW - only pulse it 4 times
         FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 5
         FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 6
         FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 7
         FB_74HC393_PULSE(PIN_74HC393_FIRE_CLK_O); // 8
-#endif
 
         // fire was indeed asserted
         m_state.fire_asserted = true;
