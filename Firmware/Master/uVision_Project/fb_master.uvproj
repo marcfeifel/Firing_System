@@ -410,6 +410,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>Program</GroupName>
+          <Files>
+            <File>
+              <FileName>program.inc</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\program.inc</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>
