@@ -1,0 +1,229 @@
+Ignition Event Time,Effect Name,Module ,Socket,Cue
+10.85,Gumball Rally,0,3,15
+10.85,Gumball Rally,1,0,15
+10.85,Gumball Rally,1,2,15
+10.85,Gumball Rally,1,4,15
+10.85,Gumball Rally,2,1,15
+78.74,CRITICAL ACCLAIM MINE,0,5,9
+78.74,CRITICAL ACCLAIM MINE,2,5,9
+82.09,CRITICAL ACCLAIM MINE,0,5,8
+82.09,CRITICAL ACCLAIM MINE,2,5,8
+82.11,Smokin Hot,0,0,5
+82.11,Smokin Hot,2,4,2
+99.81,American Trucker (World Class),0,1,3
+99.81,American Trucker (World Class),2,3,9
+118.04,Grizzly Attack,0,4,5
+118.04,Grizzly Attack,2,0,1
+127.86,Lemon Mine,0,1,6
+127.86,Lemon Mine,2,3,2
+130.86,Red Palm 12s (Full Blown),0,3,10
+130.86,Red Palm 12s (Full Blown),2,1,2
+146.1,RED STROBE,1,1,7
+150.55,RED STROBE,1,3,2
+168.51,Eye of the Storm (United Pyro),0,3,6
+168.51,Eye of the Storm (United Pyro),2,1,4
+184.68,Boss (World Class),1,2,0
+204.6,Plat Pro 4,0,2,4
+204.6,Plat Pro 4,2,2,7
+229.37,RED STROBE,1,1,8
+229.37,RED STROBE,1,3,3
+235.28,Red Palm 12s (Full Blown),1,1,3
+235.28,Red Palm 12s (Full Blown),1,3,8
+255.44,Mortar B Placeholder,0,5,0
+258.45,Mortar Placeholder,1,6,0
+261.86,Military Tank,0,1,1
+261.86,Military Tank,2,3,5
+277.58,Screech of Victory,1,1,9
+277.58,Screech of Victory,1,3,5
+277.68,CRITICAL ACCLAIM MINE,0,5,5
+277.68,CRITICAL ACCLAIM MINE,2,5,3
+298.42,Mortar C Placeholder,1,5,0
+301.01,Home Team,0,4,8
+301.01,HOME TEAM,2,0,2
+317.67,RED STROBE,1,0,5
+317.67,RED STROBE,1,4,0
+329.35,Crackling Mine (Full Blown),0,4,6
+329.35,Crackling Mine (Full Blown),2,0,3
+336.29,Bustin,0,1,10
+336.29,Bustin,2,3,8
+363.37,Colorful Carnie (WW),0,2,0
+363.37,Colorful Carnie (WW),2,2,5
+372.76,Not in My Yard (World Class),0,3,8
+372.76,Not in My Yard (World Class),2,1,8
+379.13,Black Ops,1,2,8
+379.13,Mortar,1,6,5
+379.13,Mortar,2,5,6
+401.05,Greeen,1,1,2
+401.05,Greeen,1,3,0
+406.37,Mortar Placeholder,1,5,1
+407.62,Mortar Placeholder,0,5,1
+408.6,Mortar Placeholder,1,6,1
+415.9,Crackling Dragon Eggs (Full Blown),2,0,4
+420.78,Crackling Dragon Eggs (Full Blown),0,4,2
+458.49,Future War,0,3,0
+458.49,Future War,1,0,7
+458.49,Future War,1,2,10
+458.49,Future War,2,1,3
+458.54,Future War,1,4,5
+517.42,Gold Diggin Blonde (United Pyro),0,3,7
+517.42,Gold Diggin Blonde (United Pyro),2,1,9
+558.66,Home Free Because Brave,0,4,11
+558.66,Home Free Because Brave,2,0,6
+591.56,GREEN PEONY FINAL,1,2,6
+606.82,Big Gun (World Class),0,3,4
+606.87,Big Gun (World Class),2,1,1
+632.61,One Bad Mother-in-law,0,3,3
+632.61,One Bad Mother-in-law,2,1,10
+653.23,Colorful Carnie (WW) GOES WITH SCREAM,0,3,1
+653.23,Colorful Carnie (WW) GOES WITH SCREAM,2,1,5
+665.91,American Trucker,0,0,0
+665.91,American Trucker,2,4,1
+682.16,Blast from the Past (United Pyro),1,2,9
+693.97,mortar placeholder,2,5,0
+709.2,We've Got Your 6,0,2,9
+709.2,We've Got Your 6,2,2,9
+729.87,Trucking Home,1,0,4
+729.87,Trucking Home,1,4,1
+755.86,Home Free Because Brave,1,3,12
+767.62,Home Free Because Brave,1,1,5
+789.75,Treasure Hunter,0,2,1
+789.75,Treasure Hunter,2,2,2
+807.47,Lemon Mine,1,0,0
+807.47,Lemon Mine,1,4,3
+816.2,Thin Blue Line,0,2,10
+816.2,Thin Blue Line,2,2,10
+844.63,Imminent Danger (United Pyro),0,2,3
+855.93,Imminent Danger (United Pyro),2,2,6
+865.6,Red Palm 12s (Full Blown),0,1,5
+865.6,Red Palm 12s (Full Blown),2,3,10
+885.38,Crackling Dragon Eggs (Full Blown),0,0,4
+885.38,Crackling Dragon Eggs (Full Blown),1,0,9
+885.38,Crackling Dragon Eggs (Full Blown),1,4,6
+885.38,Crackling Dragon Eggs (Full Blown),2,4,0
+916.08,Fame & Fortune,1,0,11
+916.08,Fame & Fortune,1,4,7
+935.9,Rifle Range Ahead,1,0,8
+935.9,Rifle Range Ahead,1,4,10
+953.93,Lemon Mine,1,0,3
+965.31,16 Shot Willow,0,2,2
+965.31,16 Shot Willow,2,2,12
+978.42,Above the Law,0,3,9
+978.42,Above the Law,2,1,6
+994.96,Mortar Placeholder,1,6,2
+998.85,BIG BAD FOUNTAIN (3 MINUTES),1,2,13
+1008.84,HOME TEAM,0,0,8
+1008.84,HOME TEAM,2,4,4
+1028.69,Stuntin,0,1,9
+1028.69,Stuntin,2,3,6
+1036.11,A Taste of Heat,1,1,1
+1041.06,A Taste of Heat,1,3,4
+1071.16,MORTAR PLACEHOLDER,2,5,4
+1071.75,Bustin,0,0,9
+1071.75,Bustin,2,4,7
+1084.6,Loyalty,0,3,5
+1084.6,Loyalty,2,1,7
+1106.15,Thin Blue Line,1,1,0
+1106.15,Thin Blue Line,1,3,1
+1141.57,Yikes!,0,2,7
+1141.57,Yikes!,2,2,8
+1160.66,American Trucker INITIAL ATTEMPT,0,0,6
+1160.66,American Trucker INITIAL ATTEMPT,2,4,6
+1165.99,Flicker,1,2,11
+1178.57,Smokin Hot,0,1,7
+1178.57,Smokin Hot,2,3,7
+1214.9,Rings (Wolverine West),1,2,3
+1247.74,Dangerous Mind,0,4,0
+1247.74,Dangerous Mind,2,0,9
+1269.06,Actual Peacock,0,1,2
+1269.06,Actual Peacock,2,3,11
+1272.45,A Taste of Heat,1,4,9
+1278.05,A Taste of Heat,1,0,1
+1314.43,America's King,0,3,2
+1314.43,America's King,2,1,0
+1339.93,12s Blue Peony (Full Blown),1,1,4
+1354.89,12s Blue Peony (Full Blown),1,3,6
+1372.42,Mortar Placeholder,2,5,5
+1378.28,Mortar,1,5,2
+1381.31,Mortar,1,5,4
+1386.2,Mortar,1,5,3
+1391.39,Screech of Victory,0,2,5
+1391.39,Screech of Victory,2,2,3
+1412.41,Sea to Shining Sea,1,1,10
+1412.41,Sea to Shining Sea,1,3,13
+1451.73,Lemon Mine,1,4,8
+1458.01,Military Tank,0,0,3
+1458.01,Military Tank,2,4,10
+1477.62,Crackling Mine (Full Blown),0,1,11
+1477.62,Crackling Mine (Full Blown),2,3,4
+1483.29,Loyalty,0,4,9
+1488,Loyalty,2,0,8
+1511.34,Peacock,1,0,2
+1511.34,Peacock,1,4,11
+1524.55,Crackling Dragon Eggs (Full Blown),0,4,4
+1524.57,Crackling Dragon Eggs (Full Blown),2,0,11
+1544.14,Greeen (World Class),0,2,11
+1544.14,Greeen (World Class),2,2,1
+1560.55,Peacock,0,0,7
+1560.55,Peacock,2,4,3
+1573.54,Actual Wild Time,0,1,4
+1573.54,Actual Wild Time,2,3,3
+1591.64,16 Shot Willow,1,0,10
+1591.64,16 Shot Willow,1,4,4
+1636.67,Mortar C Placeholder,1,6,4
+1639.56,Mortar B Placeholder,1,5,9
+1641.34,Mortar C Placeholder,1,6,6
+1644.25,Mortar B Placeholder,1,5,5
+1656.16,CRITICAL ACCLAIM MINE,2,5,2
+1657.06,CRITICAL ACCLAIM MINE,0,5,4
+1657.79,Mortar B Placeholder,1,5,8
+1666.15,Femme Fatale,0,0,2
+1666.26,Femme Fatale,2,4,9
+1685.44,RAINBOW CRUNCH,1,2,14
+1686,Mortar A Placeholder,0,5,2
+1686,Mortar B Placeholder,1,5,6
+1690.14,Eye of the Storm (United Pyro),1,2,7
+1711.37,Mortar A Placeholder,0,5,7
+1713.2,Mortar D Placeholder,2,5,7
+1714.69,CRITICAL ACCLAIM MINE,0,5,3
+1716.39,CRITICAL ACCLAIM MINE,2,5,1
+1726.98,Rifle Range Ahead,2,0,7
+1738.45,Rifle Range Ahead,0,4,12
+1751.01,Not in My Yard (World Class),0,2,6
+1778.18,Not in My Yard (World Class),2,2,11
+1807.41,Imminent Danger (United Pyro),0,0,10
+1814.08,Red Palm 12s (Full Blown),0,1,0
+1819.32,Red Palm 12s (Full Blown),2,3,1
+1819.5,Imminent Danger (United Pyro),2,4,8
+1839.85,12s Blue Peony (Full Blown),1,3,7
+1855.18,12s Blue Peony (Full Blown),1,1,6
+1866.16,Fame & Fortune,1,2,12
+1888.54,Grizzly Attack,1,4,2
+1895.91,Grizzly Attack,1,0,6
+1912.85,Lemon Mine,0,2,12
+1912.85,Lemon Mine,2,2,4
+1923.88,Unfair Advantage,1,2,2
+1929.99,Eye of the Storm (United Pyro),0,1,8
+1929.99,Eye of the Storm (United Pyro),2,3,0
+1950,Mortar A Placeholder,0,5,6
+1950,Mortar B Placeholder,1,5,7
+1968.71,16 Shot Willow,0,0,1
+1968.71,16 Shot Willow,0,4,1
+1968.71,16 Shot Willow,2,0,5
+1968.71,16 Shot Willow,2,4,5
+1983.91,Thug,1,2,5
+1987.42,Terminal Frost (United Pyro),1,2,4
+1991.57,RED STROBE,0,4,3
+1991.57,RED STROBE,2,0,0
+2010.71,A Taste of Heat,0,4,7
+2010.71,A Taste of Heat,2,0,10
+2016.8,Nite Fighter (United Pyro),1,2,1
+2020.76,Big Gun (World Class),0,2,8
+2020.76,Big Gun (World Class),2,2,0
+2022.83,Grizzly Attack,0,4,10
+2022.83,Grizzly Attack,2,0,12
+2044,Mortar C Placeholder,1,6,3
+2044,Mortar C Placeholder,1,6,7
+2044,Mortar C Placeholder,1,6,8
+2044,Mortar C Placeholder,1,6,9
+2048.61,FINALE RACK,1,3,14
+2048.61,FINALE RACK,1,8,14
