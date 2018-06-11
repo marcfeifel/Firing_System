@@ -21,7 +21,7 @@ static bool m_show_is_running = false;
 static KEYSWITCH_STATE_t Get_Keyswitch_State(void);
 static void Update_Keyswitch_State(void);
 
-static code uint32_t m_program[128][3] = {
+static code uint32_t m_program[128][6] = {
     #include "program.inc."
 };
 
@@ -91,6 +91,9 @@ void main(void)
                         Msg_Remote_Scan_Request(NODEID_REMOTE0, 1000);
                         Msg_Remote_Scan_Request(NODEID_REMOTE1, 1000);
                         Msg_Remote_Scan_Request(NODEID_REMOTE2, 1000);
+                        Msg_Remote_Scan_Request(NODEID_REMOTE3, 1000);
+                        Msg_Remote_Scan_Request(NODEID_REMOTE4, 1000);
+                        Msg_Remote_Scan_Request(NODEID_REMOTE5, 1000);
                     }
                     break;
                 
@@ -120,6 +123,24 @@ void main(void)
                             the_show[i] = m_program[i][2];
                         }
                         Msg_Remote_Program(NODEID_REMOTE2, the_show);
+  
+                        for (i = 0; i < 128; i++)
+                        {
+                            the_show[i] = m_program[i][3];
+                        }
+                        Msg_Remote_Program(NODEID_REMOTE3, the_show);
+  
+                        for (i = 0; i < 128; i++)
+                        {
+                            the_show[i] = m_program[i][4];
+                        }
+                        Msg_Remote_Program(NODEID_REMOTE4, the_show);
+  
+                        for (i = 0; i < 128; i++)
+                        {
+                            the_show[i] = m_program[i][5];
+                        }
+                        Msg_Remote_Program(NODEID_REMOTE5, the_show);
                     }
                     break;
                 
@@ -164,6 +185,9 @@ void main(void)
                         Msg_Remote_Program_Commit(NODEID_REMOTE0);
                         Msg_Remote_Program_Commit(NODEID_REMOTE1);
                         Msg_Remote_Program_Commit(NODEID_REMOTE2);
+                        Msg_Remote_Program_Commit(NODEID_REMOTE3);
+                        Msg_Remote_Program_Commit(NODEID_REMOTE4);
+                        Msg_Remote_Program_Commit(NODEID_REMOTE5);
                     }
                     break;
                 
@@ -175,6 +199,9 @@ void main(void)
                         Msg_Remote_Reset(NODEID_REMOTE0, 500);
                         Msg_Remote_Reset(NODEID_REMOTE1, 500);
                         Msg_Remote_Reset(NODEID_REMOTE2, 500);
+                        Msg_Remote_Reset(NODEID_REMOTE3, 500);
+                        Msg_Remote_Reset(NODEID_REMOTE4, 500);
+                        Msg_Remote_Reset(NODEID_REMOTE5, 500);
                         Reset_MCU();
                     }
                     break;
@@ -200,9 +227,15 @@ void main(void)
             Msg_Ping(NODEID_REMOTE0, 100);
             Msg_Ping(NODEID_REMOTE1, 100);
             Msg_Ping(NODEID_REMOTE2, 100);
+            Msg_Ping(NODEID_REMOTE3, 100);
+            Msg_Ping(NODEID_REMOTE4, 100);
+            Msg_Ping(NODEID_REMOTE5, 100);
             Msg_Remote_Status_Request(NODEID_REMOTE0, 100);
             Msg_Remote_Status_Request(NODEID_REMOTE1, 100);
             Msg_Remote_Status_Request(NODEID_REMOTE2, 100);
+            Msg_Remote_Status_Request(NODEID_REMOTE3, 100);
+            Msg_Remote_Status_Request(NODEID_REMOTE4, 100);
+            Msg_Remote_Status_Request(NODEID_REMOTE5, 100);
             printf("\r\n");
             
             Sleep(500);
@@ -265,6 +298,9 @@ static void Update_Keyswitch_State(void)
                 Msg_Remote_Arm(NODEID_REMOTE0, 100);
                 Msg_Remote_Arm(NODEID_REMOTE1, 100);
                 Msg_Remote_Arm(NODEID_REMOTE2, 100);
+                Msg_Remote_Arm(NODEID_REMOTE3, 100);
+                Msg_Remote_Arm(NODEID_REMOTE4, 100);
+                Msg_Remote_Arm(NODEID_REMOTE5, 100);
                 m_system_armed = true;
                 break;
 
@@ -276,6 +312,9 @@ static void Update_Keyswitch_State(void)
                 Msg_Remote_Disarm(NODEID_REMOTE0, 100);
                 Msg_Remote_Disarm(NODEID_REMOTE1, 100);
                 Msg_Remote_Disarm(NODEID_REMOTE2, 100);
+                Msg_Remote_Disarm(NODEID_REMOTE3, 100);
+                Msg_Remote_Disarm(NODEID_REMOTE4, 100);
+                Msg_Remote_Disarm(NODEID_REMOTE5, 100);
                 m_system_armed = false;
                 break;
 
