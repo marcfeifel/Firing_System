@@ -1,0 +1,14 @@
+Box 1 - 
+Column 1 & 2 appear to be shorted
+
+Box 2 -
+All appear empty
+
+Box 3 -
+Okay
+
+Merged logic-board from Box-1 with firing-board from Box-2 - Box 1 now appears okay.
+
+Box 2 has a short on the firing board, and appears to have an open on the logic board.
+
+Logic board had a dry pin (U3.8) - hit it with an iron and now it is functioning.
