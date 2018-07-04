@@ -2,7 +2,7 @@ import csv
 
 program = [-1] * 128 * 8
 
-with open('Rhapsody in Blue with all positions added 2018 july 2 12 am.csv', newline='') as csvfile:
+with open('sample.csv', newline='') as csvfile:
     spamreader = csv.DictReader(csvfile, dialect='excel')
     count = 1
     for row in spamreader:
