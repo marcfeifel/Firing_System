@@ -14,7 +14,7 @@
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 0 Cue 12 */
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 0 Cue 13 */
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 0 Cue 14 */
-{         3000,         3250,         3500,         3750,         4000,         4250 }, /* Socket 0 Cue 15 */
+{         4500,         4750,         5000,         5250,         5500,         5750 }, /* Socket 0 Cue 15 */
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 1 Cue 0 */
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 1 Cue 1 */
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 1 Cue 2 */
@@ -111,7 +111,7 @@
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 6 Cue 13 */
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 6 Cue 14 */
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 6 Cue 15 */
-{         4500,         4750,         5000,         5250,         5500,         5750 }, /* Socket 7 Cue 0 */
+{         1000,         1000,         1000,         1000,         1000,         1000 }, /* Socket 7 Cue 0 */
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 7 Cue 1 */
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 7 Cue 2 */
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 7 Cue 3 */
@@ -126,4 +126,4 @@
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 7 Cue 12 */
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 7 Cue 13 */
 { (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1, (uint32_t)-1 }, /* Socket 7 Cue 14 */
-{         4500,         4750,         5000,         5250,         5500,         5750 } /* Socket 7 Cue 15 */
+{         1000,         1000,         1000,         1000,         1000,         1000 } /* Socket 7 Cue 15 */
