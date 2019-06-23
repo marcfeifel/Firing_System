@@ -94,5 +94,7 @@ void RFM69_interruptHandler();
 uint8_t RFM69_SPI_transfer(uint8_t out);
 void RFM69_SPI_select();
 void RFM69_SPI_unselect();
+void RFM69_assert_reset();
+void RFM69_deassert_reset();
 
 #endif

@@ -364,19 +364,24 @@
           <GroupName>Common</GroupName>
           <Files>
             <File>
-              <FileName>fb_c8051f920_startup.a51</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\fb_c8051f920_startup.a51</FilePath>
-            </File>
-            <File>
               <FileName>fb_common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
-              <FileName>fb_flash.c</FileName>
+              <FileName>fb_common_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_flash.c</FilePath>
+              <FilePath>..\..\fb_common_c8051f920.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_flash_c8051f920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash_c8051f920.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_startup_c8051f920.a51</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\fb_startup_c8051f920.a51</FilePath>
             </File>
             <File>
               <FileName>fb_messages.c</FileName>
@@ -409,9 +414,9 @@
               <FilePath>..\Configurator_Project\fb_remote_config.c</FilePath>
             </File>
             <File>
-              <FileName>fb_remote_cue_control.c</FileName>
+              <FileName>fb_remote_cue_control_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\fb_remote_cue_control.c</FilePath>
+              <FilePath>..\fb_remote_cue_control_c8051f920.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_main.c</FileName>
@@ -790,19 +795,24 @@
           <GroupName>Common</GroupName>
           <Files>
             <File>
-              <FileName>fb_c8051f920_startup.a51</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\fb_c8051f920_startup.a51</FilePath>
-            </File>
-            <File>
               <FileName>fb_common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
-              <FileName>fb_flash.c</FileName>
+              <FileName>fb_common_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_flash.c</FilePath>
+              <FilePath>..\..\fb_common_c8051f920.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_flash_c8051f920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash_c8051f920.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_startup_c8051f920.a51</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\fb_startup_c8051f920.a51</FilePath>
             </File>
             <File>
               <FileName>fb_messages.c</FileName>
@@ -835,9 +845,9 @@
               <FilePath>..\Configurator_Project\fb_remote_config.c</FilePath>
             </File>
             <File>
-              <FileName>fb_remote_cue_control.c</FileName>
+              <FileName>fb_remote_cue_control_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\fb_remote_cue_control.c</FilePath>
+              <FilePath>..\fb_remote_cue_control_c8051f920.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_main.c</FileName>
@@ -1216,19 +1226,24 @@
           <GroupName>Common</GroupName>
           <Files>
             <File>
-              <FileName>fb_c8051f920_startup.a51</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\fb_c8051f920_startup.a51</FilePath>
-            </File>
-            <File>
               <FileName>fb_common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
-              <FileName>fb_flash.c</FileName>
+              <FileName>fb_common_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_flash.c</FilePath>
+              <FilePath>..\..\fb_common_c8051f920.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_flash_c8051f920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash_c8051f920.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_startup_c8051f920.a51</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\fb_startup_c8051f920.a51</FilePath>
             </File>
             <File>
               <FileName>fb_messages.c</FileName>
@@ -1261,9 +1276,9 @@
               <FilePath>..\Configurator_Project\fb_remote_config.c</FilePath>
             </File>
             <File>
-              <FileName>fb_remote_cue_control.c</FileName>
+              <FileName>fb_remote_cue_control_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\fb_remote_cue_control.c</FilePath>
+              <FilePath>..\fb_remote_cue_control_c8051f920.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_main.c</FileName>
@@ -1642,19 +1657,24 @@
           <GroupName>Common</GroupName>
           <Files>
             <File>
-              <FileName>fb_c8051f920_startup.a51</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\fb_c8051f920_startup.a51</FilePath>
-            </File>
-            <File>
               <FileName>fb_common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
-              <FileName>fb_flash.c</FileName>
+              <FileName>fb_common_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_flash.c</FilePath>
+              <FilePath>..\..\fb_common_c8051f920.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_flash_c8051f920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash_c8051f920.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_startup_c8051f920.a51</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\fb_startup_c8051f920.a51</FilePath>
             </File>
             <File>
               <FileName>fb_messages.c</FileName>
@@ -1687,9 +1707,9 @@
               <FilePath>..\Configurator_Project\fb_remote_config.c</FilePath>
             </File>
             <File>
-              <FileName>fb_remote_cue_control.c</FileName>
+              <FileName>fb_remote_cue_control_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\fb_remote_cue_control.c</FilePath>
+              <FilePath>..\fb_remote_cue_control_c8051f920.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_main.c</FileName>
@@ -2068,19 +2088,24 @@
           <GroupName>Common</GroupName>
           <Files>
             <File>
-              <FileName>fb_c8051f920_startup.a51</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\fb_c8051f920_startup.a51</FilePath>
-            </File>
-            <File>
               <FileName>fb_common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
-              <FileName>fb_flash.c</FileName>
+              <FileName>fb_common_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_flash.c</FilePath>
+              <FilePath>..\..\fb_common_c8051f920.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_flash_c8051f920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash_c8051f920.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_startup_c8051f920.a51</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\fb_startup_c8051f920.a51</FilePath>
             </File>
             <File>
               <FileName>fb_messages.c</FileName>
@@ -2113,9 +2138,9 @@
               <FilePath>..\Configurator_Project\fb_remote_config.c</FilePath>
             </File>
             <File>
-              <FileName>fb_remote_cue_control.c</FileName>
+              <FileName>fb_remote_cue_control_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\fb_remote_cue_control.c</FilePath>
+              <FilePath>..\fb_remote_cue_control_c8051f920.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_main.c</FileName>
@@ -2494,19 +2519,24 @@
           <GroupName>Common</GroupName>
           <Files>
             <File>
-              <FileName>fb_c8051f920_startup.a51</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\fb_c8051f920_startup.a51</FilePath>
-            </File>
-            <File>
               <FileName>fb_common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
-              <FileName>fb_flash.c</FileName>
+              <FileName>fb_common_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_flash.c</FilePath>
+              <FilePath>..\..\fb_common_c8051f920.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_flash_c8051f920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash_c8051f920.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_startup_c8051f920.a51</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\fb_startup_c8051f920.a51</FilePath>
             </File>
             <File>
               <FileName>fb_messages.c</FileName>
@@ -2539,9 +2569,9 @@
               <FilePath>..\Configurator_Project\fb_remote_config.c</FilePath>
             </File>
             <File>
-              <FileName>fb_remote_cue_control.c</FileName>
+              <FileName>fb_remote_cue_control_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\fb_remote_cue_control.c</FilePath>
+              <FilePath>..\fb_remote_cue_control_c8051f920.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_main.c</FileName>

@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "fb_common.h"
+#include "fb_master_hal.h"
 #include "fb_messages.h"
 #include "rfm69.h"
 
@@ -65,7 +66,7 @@ void main(void)
     // initialize the C8051F920
     Init_Device();
     // clear the CTS signal so the FTDI will transmit
-    PIN_UART_RTS_O = 0;
+    HAL_deassert_uart_rts();
 
 
     printf("Start.\r\n");
@@ -248,8 +249,8 @@ void main(void)
 static KEYSWITCH_STATE_t Get_Keyswitch_State(void)
 {
     // get the state of the pins
-    const bool pin_armed = PIN_SWITCH_ARMED_I;
-    const bool pin_test = PIN_SWITCH_TEST_I;
+    const bool pin_armed = HAL_get_pin_switch_armed();
+    const bool pin_test = HAL_get_pin_switch_test();
 
     // assume a faulted state
     KEYSWITCH_STATE_t state = KEYSWITCH_STATE_FAULT;

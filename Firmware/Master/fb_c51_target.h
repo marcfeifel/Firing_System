@@ -8,10 +8,6 @@ extern "C" {
 #include "compiler_defs.h"
 #include "c8051f930_defs.h"
 
-// definition for the master device
-//#define NODEID_LOCAL    NODEID_MASTER
-#define NETWORKID 1
-
 /* GPIO assignments */
 SBIT(PIN_SWITCH_TEST_I, P0, 0); // Switch Input - "Test"
 SBIT(PIN_SWITCH_ARMED_I, P0, 1); // Switch Input - "Armed" 

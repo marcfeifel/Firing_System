@@ -2,6 +2,8 @@
 
 #include "fb_common.h"
 
+#include "fb_c51_target.h"
+
 // PSCTL flash-control bits
 #define SFLE_SET() PSCTL |= BIT2
 #define SFLE_CLR() PSCTL &= ~BIT2

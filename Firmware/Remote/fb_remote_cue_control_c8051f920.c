@@ -5,6 +5,7 @@
 #include "fb_common.h"
 #include "fb_remote.h"
 #include "fb_remote_cue.h"
+#include "fb_c51_target.h"
 
 // how long to assert power when firing a cue
 #define FB_FIRE_HOLD_TIME_MS   4

@@ -364,14 +364,14 @@
           <GroupName>Common</GroupName>
           <Files>
             <File>
-              <FileName>fb_c8051f920_startup.a51</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\fb_c8051f920_startup.a51</FilePath>
-            </File>
-            <File>
               <FileName>fb_common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_common.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_common_c8051f920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_common_c8051f920.c</FilePath>
             </File>
             <File>
               <FileName>fb_messages.c</FileName>
@@ -382,6 +382,11 @@
               <FileName>fb_retarget.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_retarget.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_startup_c8051f920.a51</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\fb_startup_c8051f920.a51</FilePath>
             </File>
             <File>
               <FileName>RFM69.c</FileName>
@@ -402,6 +407,11 @@
               <FileName>fb_master_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Configurator_Project\fb_master_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_master_hal_c8051f920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_master_hal_c8051f920.c</FilePath>
             </File>
             <File>
               <FileName>fb_master_main.c</FileName>

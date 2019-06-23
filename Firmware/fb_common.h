@@ -1,7 +1,11 @@
 #ifndef FB_COMMON_H_INCLUDED
 #define FB_COMMON_H_INCLUDED
 
-#include "fb_c51_target.h"
+#include "compiler_defs.h"
+
+// definition for the master device
+//#define NODEID_LOCAL    NODEID_MASTER
+#define NETWORKID 1
 
 #define NODEID_BROADCAST     RF69_BROADCAST_ADDR
 #define NODEID_MASTER        2
