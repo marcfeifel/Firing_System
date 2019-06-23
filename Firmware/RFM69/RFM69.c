@@ -48,23 +48,6 @@ static bool _promiscuousMode;
 static uint8_t _powerLevel;
 static bool _isRFM69HW;
 
-static uint8_t SPI_transfer(uint8_t out)
-{
-  // clear the interrupt flag
-  SPIF0 = 0;
-
-  // write the address
-  SPI0DAT = out;
-
-  while (!SPIF0)
-  {
-    // wait for the xfer to complete
-  }
-
-  return SPI0DAT;
-}
-
-
 uint8_t const * RFM69_getDataPtr(void)
 {
     return DATA;
@@ -104,8 +87,8 @@ void RFM69_sendFrame(uint8_t toAddress, const void* buffer, uint8_t size, bool r
 void RFM69_receiveBegin();
 void RFM69_setMode(uint8_t mode);
 void RFM69_setHighPowerRegs(bool onOff);
-void RFM69_select();
-void RFM69_unselect();
+void RFM69_SPI_select();
+void RFM69_SPI_unselect();
 
 void RFM69_construct(/*uint8_t slaveSelectPin, uint8_t interruptPin,*/ bool isRFM69HW/*, uint8_t interruptNum*/)
 {
@@ -361,7 +344,7 @@ void RFM69_sendFrame(uint8_t toAddress, const void* buffer, uint8_t bufferSize, 
 
   RFM69_setMode(RF69_MODE_STANDBY); // turn off receiver to prevent reception while filling fifo
   while ((RFM69_readReg(REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00); // wait for ModeReady
-  RFM69_writeReg(REG_DIOMAPPING1, RF_DIOMAPPING1_DIO0_00); // DIO0 is "Packet Sent"
+  //RFM69_writeReg(REG_DIOMAPPING1, RF_DIOMAPPING1_DIO0_00); // DIO0 is "Packet Sent"
   if (bufferSize > RF69_MAX_DATA_LEN) bufferSize = RF69_MAX_DATA_LEN;
 
   // control byte
@@ -372,25 +355,25 @@ void RFM69_sendFrame(uint8_t toAddress, const void* buffer, uint8_t bufferSize, 
     CTLbyte = 0x40;
 
   // write to FIFO
-  RFM69_select();
-  SPI_transfer(REG_FIFO | 0x80);
-  SPI_transfer(bufferSize + 3);
-  SPI_transfer(toAddress);
-  SPI_transfer(_address);
-  SPI_transfer(CTLbyte);
+  RFM69_SPI_select();
+  RFM69_SPI_transfer(REG_FIFO | 0x80);
+  RFM69_SPI_transfer(bufferSize + 3);
+  RFM69_SPI_transfer(toAddress);
+  RFM69_SPI_transfer(_address);
+  RFM69_SPI_transfer(CTLbyte);
 
   {
     uint8_t i = 0;
     for (i = 0; i < bufferSize; i++)
-      SPI_transfer(((uint8_t*) buffer)[i]);
+      RFM69_SPI_transfer(((uint8_t*) buffer)[i]);
   }
-  RFM69_unselect();
+  RFM69_SPI_unselect();
 
   // no need to wait for transmit mode to be ready since its handled by the radio
   RFM69_setMode(RF69_MODE_TX);
   txStart = millis();
-  while (PIN_RFM69HW_DIO0_I == 0 && millis() - txStart < RF69_TX_LIMIT_MS); // wait for DIO0 to turn HIGH signalling transmission finish
-  //while (readReg(REG_IRQFLAGS2) & RF_IRQFLAGS2_PACKETSENT == 0x00); // wait for ModeReady
+  //while (PIN_RFM69HW_DIO0_I == 0 && millis() - txStart < RF69_TX_LIMIT_MS); // wait for DIO0 to turn HIGH signalling transmission finish
+  while ((RFM69_readReg(REG_IRQFLAGS2) & RF_IRQFLAGS2_PACKETSENT) == 0x00); // wait for transmission finish
   RFM69_setMode(RF69_MODE_STANDBY);
 }
 
@@ -405,34 +388,34 @@ void RFM69_interruptHandler() {
 
     //RSSI = readRSSI();
     RFM69_setMode(RF69_MODE_STANDBY);
-    RFM69_select();
-    SPI_transfer(REG_FIFO & 0x7F);
-    PAYLOADLEN = SPI_transfer(0);
+    RFM69_SPI_select();
+    RFM69_SPI_transfer(REG_FIFO & 0x7F);
+    PAYLOADLEN = RFM69_SPI_transfer(0);
     PAYLOADLEN = PAYLOADLEN > 66 ? 66 : PAYLOADLEN; // precaution
-    TARGETID = SPI_transfer(0);
+    TARGETID = RFM69_SPI_transfer(0);
     if(!(_promiscuousMode || TARGETID == _address || TARGETID == RF69_BROADCAST_ADDR) // match this node's address, or broadcast address or anything in promiscuous mode
        || PAYLOADLEN < 3) // address situation could receive packets that are malformed and don't fit this libraries extra fields
     {
       PAYLOADLEN = 0;
-      RFM69_unselect();
+      RFM69_SPI_unselect();
       RFM69_receiveBegin();
       //digitalWrite(4, 0);
       return;
     }
 
     DATALEN = PAYLOADLEN - 3;
-    SENDERID = SPI_transfer(0);
-    CTLbyte = SPI_transfer(0);
+    SENDERID = RFM69_SPI_transfer(0);
+    CTLbyte = RFM69_SPI_transfer(0);
 
     ACK_RECEIVED = CTLbyte & 0x80; // extract ACK-received flag
     ACK_REQUESTED = CTLbyte & 0x40; // extract ACK-requested flag
 
     for (i = 0; i < DATALEN; i++)
     {
-      DATA[i] = SPI_transfer(0);
+      DATA[i] = RFM69_SPI_transfer(0);
     }
     if (DATALEN < RF69_MAX_DATA_LEN) DATA[DATALEN] = 0; // add null at end of string
-    RFM69_unselect();
+    RFM69_SPI_unselect();
     RFM69_setMode(RF69_MODE_RX);
   }
   RSSI = RFM69_readRSSI(false);
@@ -458,15 +441,14 @@ void RFM69_receiveBegin() {
 bool RFM69_receiveDone() {
 //ATOMIC_BLOCK(ATOMIC_FORCEON)
 //{
-  noInterrupts(); // re-enabled in unselect() via setMode() or via receiveBegin()
+	RFM69_interruptHandler();
   if (_mode == RF69_MODE_RX && PAYLOADLEN > 0)
   {
-    RFM69_setMode(RF69_MODE_STANDBY); // enables interrupts
+    RFM69_setMode(RF69_MODE_STANDBY);
     return true;
   }
   else if (_mode == RF69_MODE_RX) // already in RX no payload yet
   {
-    interrupts(); // explicitly re-enable interrupts
     return false;
   }
   RFM69_receiveBegin();
@@ -483,11 +465,11 @@ void RFM69_encrypt(const char* key) {
   {
     uint8_t i = 0;
 
-    RFM69_select();
-    SPI_transfer(REG_AESKEY1 | 0x80);
+    RFM69_SPI_select();
+    RFM69_SPI_transfer(REG_AESKEY1 | 0x80);
     for (i = 0; i < 16; i++)
-      SPI_transfer(key[i]);
-    RFM69_unselect();
+      RFM69_SPI_transfer(key[i]);
+    RFM69_SPI_unselect();
   }
   RFM69_writeReg(REG_PACKETCONFIG2, (RFM69_readReg(REG_PACKETCONFIG2) & 0xFE) | (key ? 1 : 0));
 }
@@ -510,31 +492,19 @@ uint8_t RFM69_readReg(uint8_t addr)
 {
   uint8_t regval = 0;
 
-  RFM69_select();
-  SPI_transfer(addr & 0x7F);
-  regval = SPI_transfer(0);
-  RFM69_unselect();
+  RFM69_SPI_select();
+  RFM69_SPI_transfer(addr & 0x7F);
+  regval = RFM69_SPI_transfer(0);
+  RFM69_SPI_unselect();
   return regval;
 }
 
 void RFM69_writeReg(uint8_t addr, uint8_t value)
 {
-  RFM69_select();
-  SPI_transfer(addr | 0x80);
-  SPI_transfer(value);
-  RFM69_unselect();
-}
-
-// select the RFM69 transceiver (save SPI settings, set CS low)
-void RFM69_select() {
-  noInterrupts();
-  NSS0MD0 = LOW;
-}
-
-// unselect the RFM69 transceiver (set CS high, restore SPI settings)
-void RFM69_unselect() {
-  NSS0MD0 = HIGH;
-  interrupts();
+  RFM69_SPI_select();
+  RFM69_SPI_transfer(addr | 0x80);
+  RFM69_SPI_transfer(value);
+  RFM69_SPI_unselect();
 }
 
 // true  = disable filtering to capture all frames on network
@@ -568,17 +538,17 @@ void RFM69__readAllRegs()
 
   for (regAddr = 1; regAddr <= 0x4F; regAddr++)
   {
-    RFM69_select();
-    SPI_transfer(regAddr & 0x7F); // send address + r/w bit
-    regVal = SPI_transfer(0);
-    RFM69_unselect();
+    RFM69_SPI_select();
+    RFM69_SPI_transfer(regAddr & 0x7F); // send address + r/w bit
+    regVal = RFM69_SPI_transfer(0);
+    RFM69_SPI_unselect();
 
     printf("0x%02X", (uint16_t)regAddr);
     printf(" - ");
     printf("0x%02X", (uint16_t)regVal);
     printf("\r\n");
   }
-  RFM69_unselect();
+  RFM69_SPI_unselect();
 }
 
 uint8_t RFM69_readTemperature(uint8_t calFactor) // returns centigrade

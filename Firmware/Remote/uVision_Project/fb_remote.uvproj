@@ -374,6 +374,11 @@
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
+              <FileName>fb_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_messages.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_messages.c</FilePath>
@@ -384,9 +389,9 @@
               <FilePath>..\..\RFM69\RFM69.c</FilePath>
             </File>
             <File>
-              <FileName>fb_flash.c</FileName>
+              <FileName>RFM69_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_flash.c</FilePath>
+              <FilePath>..\..\RFM69\RFM69_c8051f920.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -394,14 +399,14 @@
           <GroupName>Remote</GroupName>
           <Files>
             <File>
+              <FileName>fb_messages_remote.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_messages_remote.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_remote_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Configurator_Project\fb_remote_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>fb_remote_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_remote_main.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_cue_control.c</FileName>
@@ -409,14 +414,14 @@
               <FilePath>..\fb_remote_cue_control.c</FilePath>
             </File>
             <File>
+              <FileName>fb_remote_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_remote_main.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_remote_program_run.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fb_remote_program_run.c</FilePath>
-            </File>
-            <File>
-              <FileName>fb_messages_remote.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_messages_remote.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_program_store.c</FileName>
@@ -795,6 +800,11 @@
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
+              <FileName>fb_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_messages.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_messages.c</FilePath>
@@ -805,9 +815,9 @@
               <FilePath>..\..\RFM69\RFM69.c</FilePath>
             </File>
             <File>
-              <FileName>fb_flash.c</FileName>
+              <FileName>RFM69_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_flash.c</FilePath>
+              <FilePath>..\..\RFM69\RFM69_c8051f920.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -815,14 +825,14 @@
           <GroupName>Remote</GroupName>
           <Files>
             <File>
+              <FileName>fb_messages_remote.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_messages_remote.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_remote_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Configurator_Project\fb_remote_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>fb_remote_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_remote_main.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_cue_control.c</FileName>
@@ -830,14 +840,14 @@
               <FilePath>..\fb_remote_cue_control.c</FilePath>
             </File>
             <File>
+              <FileName>fb_remote_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_remote_main.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_remote_program_run.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fb_remote_program_run.c</FilePath>
-            </File>
-            <File>
-              <FileName>fb_messages_remote.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_messages_remote.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_program_store.c</FileName>
@@ -990,7 +1000,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>-1</TargetSelection>
+          <TargetSelection>10</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -1216,6 +1226,11 @@
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
+              <FileName>fb_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_messages.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_messages.c</FilePath>
@@ -1226,9 +1241,9 @@
               <FilePath>..\..\RFM69\RFM69.c</FilePath>
             </File>
             <File>
-              <FileName>fb_flash.c</FileName>
+              <FileName>RFM69_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_flash.c</FilePath>
+              <FilePath>..\..\RFM69\RFM69_c8051f920.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1236,14 +1251,14 @@
           <GroupName>Remote</GroupName>
           <Files>
             <File>
+              <FileName>fb_messages_remote.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_messages_remote.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_remote_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Configurator_Project\fb_remote_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>fb_remote_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_remote_main.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_cue_control.c</FileName>
@@ -1251,14 +1266,14 @@
               <FilePath>..\fb_remote_cue_control.c</FilePath>
             </File>
             <File>
+              <FileName>fb_remote_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_remote_main.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_remote_program_run.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fb_remote_program_run.c</FilePath>
-            </File>
-            <File>
-              <FileName>fb_messages_remote.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_messages_remote.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_program_store.c</FileName>
@@ -1637,6 +1652,11 @@
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
+              <FileName>fb_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_messages.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_messages.c</FilePath>
@@ -1647,9 +1667,9 @@
               <FilePath>..\..\RFM69\RFM69.c</FilePath>
             </File>
             <File>
-              <FileName>fb_flash.c</FileName>
+              <FileName>RFM69_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_flash.c</FilePath>
+              <FilePath>..\..\RFM69\RFM69_c8051f920.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1657,14 +1677,14 @@
           <GroupName>Remote</GroupName>
           <Files>
             <File>
+              <FileName>fb_messages_remote.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_messages_remote.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_remote_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Configurator_Project\fb_remote_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>fb_remote_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_remote_main.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_cue_control.c</FileName>
@@ -1672,14 +1692,14 @@
               <FilePath>..\fb_remote_cue_control.c</FilePath>
             </File>
             <File>
+              <FileName>fb_remote_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_remote_main.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_remote_program_run.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fb_remote_program_run.c</FilePath>
-            </File>
-            <File>
-              <FileName>fb_messages_remote.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_messages_remote.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_program_store.c</FileName>
@@ -2058,6 +2078,11 @@
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
+              <FileName>fb_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_messages.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_messages.c</FilePath>
@@ -2068,9 +2093,9 @@
               <FilePath>..\..\RFM69\RFM69.c</FilePath>
             </File>
             <File>
-              <FileName>fb_flash.c</FileName>
+              <FileName>RFM69_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_flash.c</FilePath>
+              <FilePath>..\..\RFM69\RFM69_c8051f920.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2078,14 +2103,14 @@
           <GroupName>Remote</GroupName>
           <Files>
             <File>
+              <FileName>fb_messages_remote.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_messages_remote.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_remote_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Configurator_Project\fb_remote_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>fb_remote_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_remote_main.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_cue_control.c</FileName>
@@ -2093,14 +2118,14 @@
               <FilePath>..\fb_remote_cue_control.c</FilePath>
             </File>
             <File>
+              <FileName>fb_remote_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_remote_main.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_remote_program_run.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fb_remote_program_run.c</FilePath>
-            </File>
-            <File>
-              <FileName>fb_messages_remote.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_messages_remote.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_program_store.c</FileName>
@@ -2479,6 +2504,11 @@
               <FilePath>..\..\fb_common.c</FilePath>
             </File>
             <File>
+              <FileName>fb_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_flash.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_messages.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\fb_messages.c</FilePath>
@@ -2489,9 +2519,9 @@
               <FilePath>..\..\RFM69\RFM69.c</FilePath>
             </File>
             <File>
-              <FileName>fb_flash.c</FileName>
+              <FileName>RFM69_c8051f920.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\fb_flash.c</FilePath>
+              <FilePath>..\..\RFM69\RFM69_c8051f920.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2499,14 +2529,14 @@
           <GroupName>Remote</GroupName>
           <Files>
             <File>
+              <FileName>fb_messages_remote.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_messages_remote.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_remote_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Configurator_Project\fb_remote_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>fb_remote_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_remote_main.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_cue_control.c</FileName>
@@ -2514,14 +2544,14 @@
               <FilePath>..\fb_remote_cue_control.c</FilePath>
             </File>
             <File>
+              <FileName>fb_remote_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_remote_main.c</FilePath>
+            </File>
+            <File>
               <FileName>fb_remote_program_run.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\fb_remote_program_run.c</FilePath>
-            </File>
-            <File>
-              <FileName>fb_messages_remote.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_messages_remote.c</FilePath>
             </File>
             <File>
               <FileName>fb_remote_program_store.c</FileName>

@@ -103,9 +103,6 @@ void Init_Device(void);
 
 char _kbhit(void);
 
-void interrupts(void);
-void noInterrupts(void);
-
 bool millis_expired(uint32_t timer_ms);
 uint32_t millis(void);
 

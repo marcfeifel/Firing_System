@@ -388,20 +388,25 @@
               <FileType>1</FileType>
               <FilePath>..\..\RFM69\RFM69.c</FilePath>
             </File>
+            <File>
+              <FileName>RFM69_c8051f920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\RFM69\RFM69_c8051f920.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Master</GroupName>
           <Files>
             <File>
-              <FileName>fb_master_main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\fb_master_main.c</FilePath>
-            </File>
-            <File>
               <FileName>fb_master_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Configurator_Project\fb_master_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>fb_master_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\fb_master_main.c</FilePath>
             </File>
             <File>
               <FileName>fb_messages_master.c</FileName>

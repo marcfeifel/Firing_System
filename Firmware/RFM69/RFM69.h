@@ -71,7 +71,6 @@ void RFM69_sendACK(const void* buffer/* = ""*/, uint8_t bufferSize/*=0*/);
 uint32_t RFM69_getFrequency();
 void RFM69_setFrequency(uint32_t freqHz);
 void RFM69_encrypt(const char* key);
-void RFM69_setCS(uint8_t newSPISlaveSelect);
 int16_t RFM69_readRSSI(bool forceTrigger/*=false*/);
 void RFM69_promiscuous(bool onOff/*=true*/);
 void RFM69_setHighPower(bool onOFF/*=true*/); // has to be called after initialize() for RFM69HW
@@ -92,5 +91,8 @@ void RFM69_writeReg(uint8_t addr, uint8_t val);
 void RFM69__readAllRegs();
 
 void RFM69_interruptHandler();
+uint8_t RFM69_SPI_transfer(uint8_t out);
+void RFM69_SPI_select();
+void RFM69_SPI_unselect();
 
 #endif
