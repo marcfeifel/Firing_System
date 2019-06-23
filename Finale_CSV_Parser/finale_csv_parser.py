@@ -3,7 +3,7 @@ import csv
 program = [-1] * 128 * 8
 entries = [0] * 128 * 8
 
-with open('sample.csv', newline='') as csvfile:
+with open('program_2018_final_v02_minor_edit.csv', newline='') as csvfile:
     spamreader = csv.DictReader(csvfile, dialect='excel')
     count = 1
     duplicates = 0;
@@ -82,3 +82,18 @@ with open('sample.csv', newline='') as csvfile:
     print(duplicates, "duplicate cues with different firing times.")
     print(missing_data, "cues found with missing firing data.")
     print(added, "cues added to program.")
+
+    print("")
+    print("")
+    print("Expected scan response:")
+    for remote in range(0,6):
+        print("Remote-%d scan response:" % remote)
+        for socket in range(0,8):
+            print("Socket %d: " % socket, end='')
+            for cue in range(0,16):
+                index = remote*128 + socket*16 + cue
+                if program[index] == -1:
+                    print("    ", end='')
+                else:
+                    print("Q%02d " % (cue), end='')
+            print("")
