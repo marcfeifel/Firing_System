@@ -6,6 +6,9 @@
 #include "fb_messages.h"
 #include "rfm69.h"
 
+#define CON_ESC     "\x1B"
+#define CON_CLEAR_LINE  CON_ESC "[2K"
+
 typedef enum
 {
     KEYSWITCH_STATE_OFF,
@@ -45,7 +48,7 @@ bool Get_Confirmation(void)
     
     key_in = _getkey();
     
-    printf("\r\n");
+    printf("\r\n" CON_CLEAR_LINE);
     
     if (('Y' == key_in) || ('y' == key_in))
     {
@@ -69,11 +72,13 @@ void main(void)
     HAL_deassert_uart_rts();
 
 
-    printf("Start.\r\n");
+    printf("Start.\r\n" CON_CLEAR_LINE);
 
     Msg_Init();
 
-    printf("Super loop started.\r\n");
+    printf("Super loop started.\r\n" CON_CLEAR_LINE);
+
+    printf( "\x1B[2J" );
 
     while (1)
     {
@@ -208,21 +213,27 @@ void main(void)
                     break;
                     
                 default:
-                    printf("\r\n");
-                    printf("Options:\r\n");
-                    printf("'s' - scan all cues\r\n");
-                    printf("'d' - download a show\r\n");
-                    printf("'r' - start/continue a show\r\n");
-                    printf("'f' - advance 30 seconds into show\r\n");
-                    printf("'p' - pause a show\r\n");
-                    printf("'c' - commit a show to flash\r\n");
-                    printf("'0' - global reset\r\n");
-                    printf("\r\n");
+
+                    printf( "\x1B[0;0H" CON_CLEAR_LINE );
+
+                    printf("\r\n" CON_CLEAR_LINE);
+                    printf("Options:\r\n" CON_CLEAR_LINE);
+                    printf("'s' - scan all cues\r\n" CON_CLEAR_LINE);
+                    printf("'d' - download a show\r\n" CON_CLEAR_LINE);
+                    printf("'r' - start/continue a show\r\n" CON_CLEAR_LINE);
+                    printf("'f' - advance 30 seconds into show\r\n" CON_CLEAR_LINE);
+                    printf("'p' - pause a show\r\n" CON_CLEAR_LINE);
+                    printf("'c' - commit a show to flash\r\n" CON_CLEAR_LINE);
+                    printf("'0' - global reset\r\n" CON_CLEAR_LINE);
+                    printf("\r\n" CON_CLEAR_LINE);
                     break;
             }
         }
         else
         {
+            
+            printf( "\x1B[12;0H" CON_CLEAR_LINE );
+
             Msg_Keep_Alive(NODEID_BROADCAST);
 
             Msg_Ping(NODEID_REMOTE0, 100);
@@ -237,7 +248,7 @@ void main(void)
             Msg_Remote_Status_Request(NODEID_REMOTE3, 100);
             Msg_Remote_Status_Request(NODEID_REMOTE4, 100);
             Msg_Remote_Status_Request(NODEID_REMOTE5, 100);
-            printf("\r\n");
+            printf("\r\n" CON_CLEAR_LINE);
             
             Sleep(500);
         }
@@ -295,7 +306,7 @@ static void Update_Keyswitch_State(void)
         switch (keyswitch_state_this)
         {
             case KEYSWITCH_STATE_ARMED:
-                printf("System arming...\r\n");
+                printf("System arming...\r\n" CON_CLEAR_LINE);
                 Msg_Remote_Arm(NODEID_REMOTE0, 100);
                 Msg_Remote_Arm(NODEID_REMOTE1, 100);
                 Msg_Remote_Arm(NODEID_REMOTE2, 100);
@@ -309,7 +320,7 @@ static void Update_Keyswitch_State(void)
             case KEYSWITCH_STATE_TEST:
             case KEYSWITCH_STATE_FAULT:
             default:
-                printf("System disarming...\r\n");
+                printf("System disarming...\r\n" CON_CLEAR_LINE);
                 Msg_Remote_Disarm(NODEID_REMOTE0, 100);
                 Msg_Remote_Disarm(NODEID_REMOTE1, 100);
                 Msg_Remote_Disarm(NODEID_REMOTE2, 100);
