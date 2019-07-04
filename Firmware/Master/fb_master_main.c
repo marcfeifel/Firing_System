@@ -22,6 +22,8 @@ static uint32_t m_show_time_ms = 0;
 static bool m_system_armed = false;
 static bool m_show_is_running = false;
 
+static bool m_pinging = false;
+
 static KEYSWITCH_STATE_t Get_Keyswitch_State(void);
 static void Update_Keyswitch_State(void);
 
@@ -196,6 +198,10 @@ void main(void)
                         Msg_Remote_Program_Commit(NODEID_REMOTE5);
                     }
                     break;
+                case 'q':
+                case 'Q':
+                    m_pinging = !m_pinging;
+                    break;
                 
                 case '0':
                     // global reset
@@ -224,6 +230,7 @@ void main(void)
                     printf("'f' - advance 30 seconds into show\r\n" CON_CLEAR_LINE);
                     printf("'p' - pause a show\r\n" CON_CLEAR_LINE);
                     printf("'c' - commit a show to flash\r\n" CON_CLEAR_LINE);
+                    printf("'q' - query/ping remotes\r\n" CON_CLEAR_LINE);
                     printf("'0' - global reset\r\n" CON_CLEAR_LINE);
                     printf("\r\n" CON_CLEAR_LINE);
                     break;
@@ -231,25 +238,27 @@ void main(void)
         }
         else
         {
-            
-            printf( "\x1B[12;0H" CON_CLEAR_LINE );
 
             Msg_Keep_Alive(NODEID_BROADCAST);
 
-            Msg_Ping(NODEID_REMOTE0, 100);
-            Msg_Ping(NODEID_REMOTE1, 100);
-            Msg_Ping(NODEID_REMOTE2, 100);
-            Msg_Ping(NODEID_REMOTE3, 100);
-            Msg_Ping(NODEID_REMOTE4, 100);
-            Msg_Ping(NODEID_REMOTE5, 100);
-            Msg_Remote_Status_Request(NODEID_REMOTE0, 100);
-            Msg_Remote_Status_Request(NODEID_REMOTE1, 100);
-            Msg_Remote_Status_Request(NODEID_REMOTE2, 100);
-            Msg_Remote_Status_Request(NODEID_REMOTE3, 100);
-            Msg_Remote_Status_Request(NODEID_REMOTE4, 100);
-            Msg_Remote_Status_Request(NODEID_REMOTE5, 100);
-            printf("\r\n" CON_CLEAR_LINE);
-            
+            if ( m_pinging ) {
+                printf( "\x1B[12;0H" CON_CLEAR_LINE );
+
+                Msg_Ping(NODEID_REMOTE0, 100);
+                Msg_Ping(NODEID_REMOTE1, 100);
+                Msg_Ping(NODEID_REMOTE2, 100);
+                Msg_Ping(NODEID_REMOTE3, 100);
+                Msg_Ping(NODEID_REMOTE4, 100);
+                Msg_Ping(NODEID_REMOTE5, 100);
+                Msg_Remote_Status_Request(NODEID_REMOTE0, 100);
+                Msg_Remote_Status_Request(NODEID_REMOTE1, 100);
+                Msg_Remote_Status_Request(NODEID_REMOTE2, 100);
+                Msg_Remote_Status_Request(NODEID_REMOTE3, 100);
+                Msg_Remote_Status_Request(NODEID_REMOTE4, 100);
+                Msg_Remote_Status_Request(NODEID_REMOTE5, 100);
+                printf("\r\n" CON_CLEAR_LINE);
+            }
+                
             Sleep(500);
         }
     }
