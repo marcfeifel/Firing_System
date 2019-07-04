@@ -3,7 +3,7 @@ import csv
 program = [-1] * 128 * 8
 entries = [0] * 128 * 8
 
-with open('program_2018_final_v02_minor_edit.csv', newline='') as csvfile:
+with open('program_2019_final.csv', newline='') as csvfile:
     spamreader = csv.DictReader(csvfile, dialect='excel')
     count = 1
     duplicates = 0;
