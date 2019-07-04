@@ -203,9 +203,10 @@ void Msg_Remote_Program(uint8_t dest, uint32_t * firing_times_ms)
         
         program_success = Msg_Send(FB_MSG_REMOTE_PROGRAM, dest, &program, sizeof(program), 150);
         
-        printf("Pin %3d - %6ldms: %s\r\n" CON_CLEAR_LINE CON_RESET, pin, firing_times_ms[pin], program_success ? CON_GREEN "success" : CON_RED "fail");
+        printf( program_success ? CON_GREEN "*" : CON_RED "*");
         
     }
+    printf("\r\n" CON_CLEAR_LINE CON_RESET);
 } // Msg_Remote_Program()
 
 
