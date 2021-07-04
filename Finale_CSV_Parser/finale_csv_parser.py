@@ -1,9 +1,14 @@
+import sys
 import csv
+
+if len(sys.argv) < 2:
+    print("Parses a Finale CSV file.\n\nUsage: %s filename.csv" % sys.argv[0])
+    sys.exit(-1)
 
 program = [-1] * 128 * 8
 entries = [0] * 128 * 8
 
-with open('program_2020_final.csv', newline='') as csvfile:
+with open(sys.argv[1], newline='') as csvfile:
     spamreader = csv.DictReader(csvfile, dialect='excel')
     count = 1
     duplicates = 0;
