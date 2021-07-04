@@ -8,7 +8,7 @@
 #include "fb_c51_target.h"
 
 // how long to assert power when firing a cue
-#define FB_FIRE_HOLD_TIME_MS   4
+#define FB_FIRE_HOLD_TIME_MS   5
 
 // minimum pulse-width is 5ns
 #define FB_74HC393_DELAY()     do { NOP(); NOP(); NOP(); NOP(); } while (0)
