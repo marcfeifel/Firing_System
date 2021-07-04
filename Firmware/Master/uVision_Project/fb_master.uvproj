@@ -379,14 +379,14 @@
               <FilePath>..\..\fb_messages.c</FilePath>
             </File>
             <File>
-              <FileName>fb_retarget.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\fb_retarget.c</FilePath>
-            </File>
-            <File>
               <FileName>fb_startup_c8051f920.a51</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\fb_startup_c8051f920.a51</FilePath>
+            </File>
+            <File>
+              <FileName>fb_uart0_c8051f920.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\fb_uart0_c8051f920.c</FilePath>
             </File>
             <File>
               <FileName>RFM69.c</FileName>

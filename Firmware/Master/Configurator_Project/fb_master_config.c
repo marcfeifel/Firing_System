@@ -83,8 +83,8 @@ void Port_IO_Init()
 
 void Oscillator_Init()
 {
-    char i;
-
+    int i = 0;
+    
     FLSCL     = 0x40;
     REG0CN    |= 0x10;  // Enable OSCBIAS bit in voltage regulator
     for (i = 0; i < 14; i++);  // Wait 4us before enabling oscillator
@@ -97,7 +97,7 @@ void Interrupts_Init()
     IP        = 0x10;
     EIE1      = 0x80;
     EIP1      = 0x80;
-    IE        = 0xA0;
+    IE        = 0xB0;
 }
 
 // Initialization function for device,

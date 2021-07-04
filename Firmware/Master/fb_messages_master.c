@@ -199,7 +199,7 @@ void Msg_Remote_Program(uint8_t dest, uint32_t * firing_times_ms)
         FB_MSG_REMOTE_PROGRAM_t program = {0};
         
         program.pin = pin;
-        program.firing_time_ms = firing_times_ms[pin] + 10000; // show will always start 10s late in order to ensure sync time
+        program.firing_time_ms = firing_times_ms[pin];// + 10000; // show will always start 10s late in order to ensure sync time
         
         program_success = Msg_Send(FB_MSG_REMOTE_PROGRAM, dest, &program, sizeof(program), 150);
         
