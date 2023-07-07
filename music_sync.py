@@ -5,8 +5,8 @@ import wave
 import sys
 import serial
 
-#ser = serial.Serial(port='COM2', timeout=0, write_timeout=0)
-ser = serial.Serial(port='COM2')
+#ser = serial.Serial(port='COM1', timeout=0, write_timeout=0)
+ser = serial.Serial(port='COM1')
 
 CHUNK = 1024
 

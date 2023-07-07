@@ -23,22 +23,22 @@ with open(sys.argv[1], newline='') as csvfile:
             missing_data = missing_data + 1
             continue
 
-        if row['Module Address'] != '':
-            addr_module = int(row['Module Address'])
+        if row['REMOTE'] != '':
+            addr_module = int(row['REMOTE'])
         else:
             print("Row", count, " - Missing module address")
             missing_data = missing_data + 1
             continue
 
-        if row['Slat Address'] != '':
-            addr_slat = int(row['Slat Address'])
+        if row['SOCKET'] != '':
+            addr_slat = int(row['SOCKET'])
         else:
             print("Row", count, " - Missing slat address")
             missing_data = missing_data + 1
             continue
 
-        if row['Pin Address'] != '':
-            addr_pin = int(row['Pin Address'])
+        if row['CUE'] != '':
+            addr_pin = int(row['CUE'])
         else:
             print("Row", count, " - Missing pin address")
             missing_data = missing_data + 1
