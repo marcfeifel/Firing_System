@@ -1,0 +1,26 @@
+Notes:
+- Use "HHD Virtual Serial Port Tools" to "Splitted Ports" from COM3 (physical) to COM1 and COM2.
+- Use TeraTerm to connect to COM2 at 9600baud
+- "music_sync.py" script expects to use COM1 (though this is easily changed).
+
+- Prepare for the show
+-- Convert the Program to a CSV (note: to convert from mm:ss.sss to ss.sss, just multiple by 86400)
+-- Make sure columns are named appropriately (or update the script).
+-- Run the script "finale_csv_parser.py" and verify there are no duplicates.
+-- Compare the expected Scan Response to the Program map and inventory sheets to look for holes/unexpected entries.
+-- Copy the program portion over to a new ".inc" file and re-build the Master program.
+-- Flash the Master with the new program.
+-- "Download" the program from the Master to the Remotes - verify all are successful (green "*").
+-- "Commit" the program to flash - verify all Remotes respond.
+-- Verify all remotes are in Test mode.
+-- Scan all remotes and compare against expected Scan Response - fix discrepencies.
+
+- To start the show
+-- Ensure area is clear.
+-- Ensure Master in in Test.
+-- Ensure all remotes are Armed.
+-- System reset from PC.
+-- Verify communications.
+-- Turn key on Central box from Test to Armed - verify all remotes respond.
+-- Prepare to Run by entering "r" and verifying - the system is now armed.
+-- Execute the "music_sync.py" program - this starts the show.  The "time" parameter is in seconds - enter 0 to start the show from the beginning.

@@ -1,0 +1,10 @@
+Checklist
+- All six Remotes
+- Master
+- Seven antennae
+- USB-A to USB-A cable for Master
+- Headlamp
+- Mouse
+- SiLabs programming device
+- Philips-head screwdriver
+- Windows computer (properly configured)
