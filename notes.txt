@@ -1,4 +1,13 @@
 Notes:
+
+PC Login:
+- Login: John
+- PWord: Kaboom321
+
+Finale Login:
+- Login: workerbee1
+- PWord: Kaboom321
+
 - Use "HHD Virtual Serial Port Tools" to "Splitted Ports" from COM3 (physical) to COM1 and COM2.
 - Use TeraTerm to connect to COM2 at 9600baud
 - "music_sync.py" script expects to use COM1 (though this is easily changed).
