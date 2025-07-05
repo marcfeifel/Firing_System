@@ -8,3 +8,4 @@ Checklist
 - SiLabs programming device
 - Philips-head screwdriver
 - Windows computer (properly configured)
+- Earplugs
